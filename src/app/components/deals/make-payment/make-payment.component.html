@@ -1,0 +1,179 @@
+<div class="wrapper" [ngClass]="{ notary: notary }">
+  <app-deal-navbar [notary]="notary"></app-deal-navbar>
+
+  <!-- MAIN -->
+  <section *ngIf="transaction">
+    <aside class="allDetails">
+      <div class="paymentDetails">
+        <div class="info">
+          <!-- <div class="logo">
+            <img src="../../../../../assets/image/user-paid-unpaid/logo.png" alt="Company Logo">
+          </div> -->
+          <div class="company-name">
+            <div class="logo">
+              <!-- <img src="{{domSanitizer.bypassSecurityTrustUrl(transaction?.qrImage)}}" alt="Company Logo"> -->
+              <img [src]="transaction?.logo" alt="Company Logo" />
+            </div>
+            <!-- <h2>Congress Hotel</h2> -->
+            <h2>{{ transaction.merchantName }}</h2>
+          </div>
+          <!-- <div class="orderid">
+            <span>{{ "transactions.orderNumber" | translate }}</span>
+            {{ transaction?.transactionId }}
+          </div> -->
+        </div>
+        <div class="payment-and-qr hide-block-for-paid">
+          <div class="payment">
+            <div class="details">
+              <div
+                class="comment"
+                *ngIf="transaction.comment != '' || changeComment"
+              >
+                <span *ngIf="!changeComment">{{ transaction.comment }}</span>
+                <input
+                  *ngIf="changeComment"
+                  type="text"
+                  [(ngModel)]="newComment"
+                  placeholder="{{ 'deals.entercomment' | translate }}"
+                  (ngModelChange)="changeCommentFoo()"
+                />
+              </div>
+              <div class="amount" [ngClass]="{ 'amount-error': amountError }">
+                <span *ngIf="!changeValue">{{ transaction.amount }} AMD</span>
+                <input
+                  *ngIf="changeValue"
+                  type="text"
+                  [(ngModel)]="amount"
+                  suffix=" ֏"
+                  mask="separator.2"
+                  thousandSeparator=","
+                  placeholder="{{ 'deals.enteramount' | translate }}"
+                  (ngModelChange)="checkAmount()"
+                />
+              </div>
+            </div>
+            <div class="pay-button" [ngClass]="{ 'pay-gap': isPayxUser }">
+              <div class="btn-img" *ngIf="!isPayxUser">
+                <img
+                  src="../../../../../assets/image/user-paid-unpaid/credit-card.png"
+                  alt="Pay with card"
+                />
+              </div>
+              <button class="pay-btn" (click)="getUrlLink(0)">
+                <span>{{ "deals.pay" | translate }}</span>
+              </button>
+            </div>
+            <!-- <div class="apple-pay-btn">
+              <div class="apple-pay-button apple-pay-button-black" (click)="applePayClicked()">
+              </div>
+            </div> -->
+
+            <div class="card-logo">
+              <div class="arca">
+                <img src="../../../../assets/image/ArCapng.png" alt="Arca" />
+              </div>
+              <div class="visa">
+                <img
+                  src="../../../../../assets/image/user-paid-unpaid/vbv.png"
+                  alt="VisaMAstercard"
+                />
+              </div>
+            </div>
+          </div>
+          <div *ngIf="canGenerateQR" class="qrDetails">
+            <div class="qr">
+              <qr-code
+                *ngIf="transaction"
+                size="160"
+                value="{{ qrValue }}"
+                errorCorrectionLevel="M"
+              ></qr-code>
+            </div>
+            <div class="download-btn">
+              <button class="download" (click)="downloadQR()">
+                {{ "deals.downolad" | translate }}
+              </button>
+            </div>
+            <div class="scan-for-pay">
+              <span>{{ "deals.scanandpay" | translate }}</span>
+            </div>
+            <!-- <div class="qr-footer">
+              <span>
+                QR ՎՃԱՐԵՔ ՀԱՎԵԼՎԱԾՆԵՐՈՎ`
+              </span>
+              <div class="banks">
+                <div class="first">
+                  <div class="arca">
+                    <img src="../../../../../assets/image/user-paid-unpaid/arca.png" alt="arca">
+                  </div>
+                  <div class="abb">
+                    <img src="../../../../../assets/image/user-paid-unpaid/ABB.png" alt="abb">
+                  </div>
+                  <div class="ashb">
+                    <img src="../../../../../assets/image/user-paid-unpaid/ASHB.png" alt="ashb">
+                  </div>
+                </div>
+                <div class="second">
+                  <div class="evoca">
+                    <img src="../../../../../assets/image/user-paid-unpaid/Evoca.png" alt="evoca">
+                  </div>
+                  <div class="uni">
+                    <img src="../../../../../assets/image/user-paid-unpaid/Uni.png" alt="uni">
+                  </div>
+                  <div class="payx">
+                    <img src="../../../../../assets/image/user-paid-unpaid/logo.png" alt="payx">
+                  </div>
+                </div>
+              </div>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </aside>
+  </section>
+  <!-- FOOTER -->
+  <footer></footer>
+  <div class="loader" *ngIf="showLoader">
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+
+  <!-- <div class="modal fade" id="select-card" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content" *ngIf="cards">
+        <div class="modal-header my-modal-header">
+          <h4 class="modal-title" id="staticBackdropLabel" style="color: white;">ԸՆՏՐԵՔ ՔԱՐՏԸ</h4>
+          <button type="button" class="btn-close" #clodeDeleteModal data-bs-dismiss="modal" #closeCardSelection
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <ng-container *ngFor="let card of cards">
+            <input style="display: none;" type="radio" name="cars" [checked]="card.isDefaultCard"
+              id="card-input{{card.id}}">
+            <label style="cursor: pointer;" class="card" for="card-input{{card.id}}" (click)="selectedCardId=card.id">
+              <div class="card-body">
+                <h5 class="card-title">{{card.name == 'With out name' || card.name == undefined ? '' : card.name}}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{card.maskedPan.substring(0,4)}} **** ****
+                  {{card.maskedPan.substring(8,12)}}</h6>
+              </div>
+            </label>
+
+
+          </ng-container>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-myColor" (click)="getUrlLink(selectedCardId)">ՎՃԱՐԵԼ</button>
+          </div>
+        </div>
+      </div>
+    </div> -->
+</div>

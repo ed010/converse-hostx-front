@@ -1,0 +1,27 @@
+<div  class="wrapper center">
+  <div class='main center'>
+    <div class="main1 center">
+      <div class="main2">
+        <div>
+          <h1>
+            Please activate your account
+          </h1><br>
+        </div>
+        <div>
+          <code-input [isCodeHidden]="false"
+              [codeLength]="5"
+              (codeChanged)="onCodeChanged($event)"
+              (codeCompleted)="onCodeCompleted($event)"
+              inputmode='none'
+              >
+          </code-input>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="loader" *ngIf="loading">
+  <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+</div>

@@ -1,0 +1,284 @@
+.wrapper {
+  background-color: var(--uni--color);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  header {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 120px;
+    .left {
+      width: 100px;
+      height: 40px;
+      svg {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .right {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 25px;
+      .phone {
+        a {
+          color: #ffffff;
+          text-decoration: none;
+          width: 100%;
+        }
+      }
+      .lang {
+        position: relative;
+
+        color: #ffffff;
+        cursor: pointer;
+        &:focus-within > .n-lang {
+          display: block;
+        }
+
+        .current {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 5px;
+        }
+        .nested {
+          display: none;
+          position: absolute;
+          z-index: 999;
+          // width: 100%;
+          top: 120%;
+          background: #ffffff;
+          box-shadow: 0px 5px 12px rgba(0, 0, 0, 0.25);
+          border-radius: 10px;
+        }
+        .n-lang {
+          ul {
+            display: flex;
+            flex-direction: column;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+
+            li {
+              width: 100%;
+              height: 45px;
+              padding: 10px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              cursor: pointer;
+              text-align: center;
+              color: black;
+              transition: 0.2s;
+              &.active {
+                background: #f2f2f2;
+                color: #cccccc;
+                cursor: auto;
+              }
+              &:not(.n-lang ul li.active):hover {
+                background: #e6e6e6;
+              }
+            }
+            .en {
+              border-top-left-radius: 10px;
+              border-top-right-radius: 10px;
+            }
+
+            .am {
+              border-bottom-left-radius: 10px;
+              border-bottom-right-radius: 10px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  main {
+    position: absolute;
+    padding: 0 120px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    // height: 350px;
+    top: 50%;
+    transform: translate(0, -50%);
+
+    .left {
+      font-size: 45px;
+      //   max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      color: #ffffff;
+      font-weight: 600;
+    }
+    .right {
+      background-color: #ffffff;
+      width: 480px;
+      height: 100%;
+      border-radius: 20px;
+      padding: 32px;
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+        .top {
+          font-weight: 600;
+          font-size: 26px;
+        }
+        .middle {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          gap: 24px;
+          .field {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 4px;
+            color: #677482;
+            label {
+              font-size: 14px;
+              font-weight: 400;
+            }
+            input {
+              padding: 0 12px;
+              border: 1px solid #ccd6e6;
+              border-radius: 12px;
+              height: 48px;
+              outline: none;
+              font-size: 16px;
+              &:focus {
+                border-color: #6685ff;
+              }
+            }
+            .pp {
+              font-size: 14px;
+              font-weight: 400;
+              display: flex;
+              flex-direction: column;
+              &.wrong-password {
+                color: red;
+              }
+              .active {
+                color: #3f00ff;
+              }
+            }
+          }
+        }
+        .bottom {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+          button {
+            width: 100%;
+            // height: 50px;
+            background-color: #3f00ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px 24px;
+            border-radius: 12px;
+            color: white;
+            outline: none;
+            border: none;
+            transition: 0.3s;
+          }
+          .fg-p {
+            color: #3f00ff;
+            text-align: end;
+          }
+        }
+      }
+    }
+  }
+
+  footer {
+    width: 100%;
+    height: 225px;
+    background-image: url("../../../../assets/image/login/footer-frame.svg");
+    display: flex;
+    align-items: flex-end;
+    .bottom-text {
+      font-size: 16px;
+      font-weight: 400;
+      color: #ffffff;
+      display: flex;
+      justify-content: start;
+      gap: 5px;
+      padding: 0 120px;
+    }
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .wrapper {
+    main {
+      .left {
+        font-size: 35px;
+      }
+    }
+  }
+}
+@media screen and (max-width: 860px) {
+  .wrapper {
+    header {
+      padding: 12px 100px;
+    }
+    main {
+      padding: 0px 100px;
+    }
+    footer {
+      .bottom-text {
+        padding: 0 100px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .wrapper {
+    header {
+      padding: 12px 25px;
+      .right {
+        gap: 15px;
+      }
+    }
+    main {
+      padding: 0px 25px;
+      justify-content: center;
+
+      .left {
+        display: none;
+      }
+      .right {
+        background-color: #ffffff;
+        width: 480px;
+        height: 100%;
+        border-radius: 20px;
+        padding: 15px 12px;
+
+        form {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+        }
+      }
+    }
+    footer {
+      .bottom-text {
+        padding: 0 25px;
+      }
+    }
+  }
+}
+
+.flag {
+  width: 24px;
+  height: 24px;
+}

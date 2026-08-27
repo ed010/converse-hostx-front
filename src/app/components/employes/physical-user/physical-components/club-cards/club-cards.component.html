@@ -1,0 +1,148 @@
+<div class="wrapper">
+  <div class="club-cards">
+    <div class="main-card add-card" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+      <img src='../../../../../../assets/image/physical-img/plus-sign.png'>
+    </div>
+    <div *ngFor='let c of cards' class="main-card">
+      <div class="header">
+        <img src="{{c.imgData}}" alt="">
+      </div>
+      <div class="barcode-block">
+        <ngx-barcode [bc-value]="c.barCode" [bc-display-value]="true" [bc-height]="57" [bc-width]="1.6"
+          [bc-background]="background"></ngx-barcode>
+      </div>
+      <div class="name">
+        <span>{{c.name}}</span>
+      </div>
+      <div class="delete" data-bs-toggle="modal" data-bs-target="#deleteCard" (click)="deleteClubCardId=c.id">
+        <i class="material-icons">delete_forever</i>
+      </div>
+      <div class="update" data-bs-toggle="modal" data-bs-target="#updateCardModal" (click)='newCard=c'>
+        <img width="18" src='../../../../../../assets/image/physical-img/edit.svg'>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header my-modal-header">
+        <h3 class="modal-title" id="staticBackdropLabel">Add new card</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #close></button>
+      </div>
+      <div class="modal-body">
+        <div class="info">
+          <div class="name">
+            <label for='name'>Enter card name</label><br>
+            <input type='text' [(ngModel)]='newCard.name'>
+          </div>
+          <div class="barcode">
+            <label for='name'>Enter card bar-code</label><br>
+            <input type='text' [(ngModel)]='newCard.barCode'>
+            <!-- <ngx-barcode [bc-value]='newCard.barCode' [bc-display-value]="true" [bc-height]="57" [bc-width]="1.6"
+              [bc-background]="background"></ngx-barcode> -->
+          </div>
+        </div>
+
+        <div class="upload-image">
+          <div class="front">
+            <div class="upload">
+              <label for="front"><i class="material-icons">upload_file</i> Upload card front side</label>
+              <input id="front" style="display: none;" type='file' (change)='onUploadImage($event,1)'>
+            </div>
+          </div>
+          <div class="end">
+            <div class="upload">
+              <label for="end"><i class="material-icons">upload_file</i> Upload card back side</label>
+              <input id="end" style="display: none;" type='file' (change)='onUploadImage($event,2)'>
+            </div>
+          </div>
+        </div>
+        <div class="prew-img" *ngIf='newCard.imgData || newCard.imgDataBack'>
+          <img width="150" height="150" *ngIf='newCard.imgData' src='{{newCard.imgData}}'>
+          <img width="150" height="150" *ngIf='newCard.imgDataBack' src='{{newCard.imgDataBack}}'>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" [disabled]="newCard.barCode?.length < 4 || newCard.name?.length < 4 || !newCard.imgData || !newCard.imgDataBack"
+          class="btn btn-myColor" (click)='addCard()'>Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="updateCardModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header my-modal-header">
+        <h3 class="modal-title" id="staticBackdropLabel">Update card</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeUpdateModal (click)='newCard=updateCard'></button>
+      </div>
+      <div class="modal-body">
+        <div class="info">
+          <div class="name">
+            <label for='name'>Enter card name</label><br>
+            <input type='text' [(ngModel)]='newCard.name'>
+          </div>
+          <div class="barcode">
+            <label for='name'>Enter card bar-code</label><br>
+            <input type='text' [(ngModel)]='newCard.barCode'>
+            <!-- <ngx-barcode [bc-value]='newCard.barCode' [bc-display-value]="true" [bc-height]="57" [bc-width]="1.6"
+              [bc-background]="background"></ngx-barcode> -->
+          </div>
+        </div>
+
+        <div class="upload-image">
+          <div class="front">
+            <div class="upload">
+              <label for="front"><i class="material-icons">upload_file</i> Upload card front side</label>
+              <input id="front" style="display: none;" type='file' (change)='onUploadImage($event,1)'>
+            </div>
+          </div>
+          <div class="end">
+            <div class="upload">
+              <label for="end"><i class="material-icons">upload_file</i> Upload card back side</label>
+              <input id="end" style="display: none;" type='file' (change)='onUploadImage($event,2)'>
+            </div>
+          </div>
+        </div>
+        <div class="prew-img" *ngIf='newCard.imgData || newCard.imgDataBack'>
+          <img width="150" height="150" *ngIf='newCard.imgData' src='{{newCard.imgData}}'>
+          <img width="150" height="150" *ngIf='newCard.imgDataBack' src='{{newCard.imgDataBack}}'>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)='newCard=updateCard'>Cancel</button>
+        <button type="button" [disabled]="newCard.barCode?.length < 4 || newCard.name?.length < 4"
+          class="btn btn-myColor" (click)='onUpdateCardClick()'>Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="deleteCard" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header my-modal-header">
+        <h3 class="modal-title" id="staticBackdropLabel">Delete Card</h3>
+        <button type="button" class="btn-close" #clodeDeleteModal data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure?
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-myColor" (click)='deleteCard()'>Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-error *ngIf='errorToggle' [text]='errorMessage' (ok)='errorToggle=false' ></app-error>

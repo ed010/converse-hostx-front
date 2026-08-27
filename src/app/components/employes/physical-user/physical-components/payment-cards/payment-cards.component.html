@@ -1,0 +1,120 @@
+<div class="wrapper">
+  <div class="credit-card">
+      <div class="card-main add-card" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        <!-- <div class="header add-card-header">
+          <span>Add New Card</span>
+          <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+            viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+            <circle style="fill:#43B05C;" cx="25" cy="25" r="25"/>
+            <line style="fill:none;stroke:#FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;" x1="25" y1="13" x2="25" y2="38"/>
+            <line style="fill:none;stroke:#FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;" x1="37.5" y1="25" x2="12.5" y2="25"/>
+          </svg>
+        </div>
+        <div class="chip">
+          <img src="../../../../../../assets/image/mastercard-removebg-preview.png" alt="" class="card-image master_card">
+        </div>
+        <div class="footer">
+          <span>xxxx xxxx xxxx xxxx xxxx</span>
+          <span>Name Surname</span>
+        </div> -->
+        <!-- <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+            viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+            <circle style="fill:#43B05C;" cx="25" cy="25" r="25"/>
+            <line style="fill:none;stroke:#FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;" x1="25" y1="13" x2="25" y2="38"/>
+            <line style="fill:none;stroke:#FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;" x1="37.5" y1="25" x2="12.5" y2="25"/>
+          </svg> -->
+          <img  src='../../../../../../assets/image/physical-img/plus-sign.png'>
+      </div>
+
+    <div *ngFor='let c of cards'>
+      <div class="card-main" data-bs-toggle="modal" data-bs-target="#editCard" (click)="selctedId=c.id; selectCard(c.name)">
+        <div class="header">
+          <span>{{(c.name == null || c.name == '') ? 'Enter Card Name' : c.name}}</span>
+          <svg viewBox="0 -1 381.53417 381" xmlns="http://www.w3.org/2000/svg"><path d="m370.589844 230.964844c-5.523438 0-10 4.476562-10 10v88.792968c-.019532 16.558594-13.4375 29.980469-30 30h-280.589844c-16.5625-.019531-29.980469-13.441406-30-30v-260.589843c.019531-16.5625 13.4375-29.980469 30-30h88.789062c5.523438 0 10-4.476563 10-10 0-5.523438-4.476562-10-10-10h-88.789062c-27.601562.03125-49.96875 22.398437-50 50v260.589843c.03125 27.601563 22.398438 49.96875 50 50h280.589844c27.601562-.03125 49.96875-22.398437 50-50v-88.789062c0-5.523438-4.476563-10.003906-10-10.003906zm0 0"/><path d="m156.367188 178.34375 146.011718-146.015625 47.089844 47.089844-146.011719 146.015625zm0 0"/><path d="m132.542969 249.257812 52.039062-14.414062-37.625-37.625zm0 0"/><path d="m362.488281 7.578125c-9.769531-9.746094-25.585937-9.746094-35.355469 0l-10.605468 10.605469 47.089844 47.089844 10.605468-10.605469c9.75-9.769531 9.75-25.585938 0-35.355469zm0 0"/></svg>
+
+        </div>
+        <div class="chip">
+          <img *ngIf="c.maskedPan[0]=='9'" src="../../../../../../assets/image/arca-removebg-preview.png" alt="" class="card-image arca_card">
+          <img *ngIf="c.maskedPan[0]=='4'" src="../../../../../../assets/image/visa-removebg-preview.png" class="card-image visa_card">
+          <img *ngIf="c.maskedPan[0]=='5'" src="../../../../../../assets/image/mastercard-removebg-preview.png" alt="" class="card-image master_card">
+          <img *ngIf="c.maskedPan[0]=='6'" src="../../../../../../assets/image/maestro-removebg-preview.png" alt="" class="card-image maestro_card">
+        </div>
+        <div class="footer">
+          <span>{{c.maskedPan.substring(0,4)}} **** **** {{c.maskedPan.substring(8,12)}}</span>
+          <span>{{c.cardHolderName}}</span>
+        </div>
+      </div>
+      <div *ngIf='c.isDefaultCard' class="selected-card">
+        <div>
+          <img src='../../../../../../assets/image/physical-img/selected.png'>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <!-- Modal Add CArd-->
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header my-modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Add new card</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <span>In order to verify your card 10AMD will be charged. The amount will be returned after the confirmation. Do you want to continue?
+          </span>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-myColor" (click)='addCard()'>Yes</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Modal Edit Card -->
+
+  <div class="modal fade" id="editCard" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editCardLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content" *ngIf="currentCard">
+        <div class="modal-header my-modal-header">
+          <h5 class="modal-title" id="editCardLabel">Delete or edit card name</h5>
+          <button type="button" #closeEditCardModal class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="cardeName.reset()"></button>
+        </div>
+        <div class="modal-body edit-moal-body">
+          <form [formGroup]="cardeName" class="card-edit">
+            <!-- <label for="exampleFormControlInput1" class="form-label">Email address</label> -->
+            <input type="text" class="form-control" id="cardName" placeholder="Card name" formControlName="cardName">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCard" (click)="closeCardEditModal()">Delete card</button>
+          <button type="button" class="btn btn-secondary" (click)="setDefaultCard()" [disabled]="currentCard.isDefaultCard">Set as default card</button>
+          <button [disabled]="!cardeName.valid" class="btn btn-myColor" (click)='changeCardName()'>Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DELETE CARD -->
+  <div class="modal fade" id="deleteCard" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editCardLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header my-modal-header">
+          <h5 class="modal-title" id="editCardLabel">Delete card</h5>
+        </div>
+        <div class="modal-body edit-moal-body">
+          Are you sure?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" (click)="deleteCard()">Yes!</button>
+          <button type="button" class="btn btn-secondary" #closeDeleteModal data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

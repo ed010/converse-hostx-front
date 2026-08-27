@@ -1,0 +1,506 @@
+*{
+  text-decoration: none;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  box-sizing: border-box;
+}
+a{
+  text-decoration: none;
+}
+h1,h2,h3,h4,h5,h6{
+  margin: 0;
+  padding: 0;
+}
+
+header{
+  height: 100px;
+  margin-bottom: 1%;
+  border-bottom: 3px solid #208133;
+  font-family: 'Questrial', sans-serif;
+
+}
+.res-block{
+  height: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+header .hamburger-menu{
+  display: none;
+}
+header .main-block{
+  display: flex;
+  justify-content: space-around;
+}
+header .main-block .login-register{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+header .main-block .login-register button{
+  width: 90px;
+  height: 35px;
+  outline: none;
+  background: none;
+  border: 1px solid #208133;
+  cursor: pointer;
+
+}
+header .main-block .login-register .login{
+  margin-right: 5px;
+}
+header .main-block .language{
+  display: flex;
+  margin-left: 20%;
+}
+header .main-block .language div:not(:last-child){
+  margin-right: 5px;
+}
+
+section{
+  display: flex;
+}
+.allDetails{
+  flex: 2;
+}
+.ad-banner{
+  flex: 1;
+}
+aside{
+  /* width: 70%; */
+  padding: 15px;
+}
+/* .paymentDetails{
+  border-right: 5px solid #208133;
+} */
+.allDetails{
+  display: flex;
+}
+.paymentDetails{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Questrial', sans-serif;
+
+}
+.qrDetails{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* align-items: center; */
+  font-family: 'Questrial', sans-serif;
+
+}
+.paymentDetails{
+  flex: 2;
+}
+.qrDetails{
+  flex: 1;
+}
+.qrDetails .qr{
+  margin-bottom: 3%;
+  text-align: center;
+}
+.paymentDetails .info{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Bebas Neue', cursive;
+  letter-spacing: 1px;
+  margin-bottom: 4%;
+  border-bottom: 2px dashed #208133;
+  width: 90%;
+}
+.paymentDetails .info .logo{
+  margin-bottom: 2%;
+}
+.paymentDetails .info .company-name{
+  margin-bottom: 2%;
+}
+.paymentDetails .payment{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 70%;
+}
+.paymentDetails .payment .details{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+}
+.paymentDetails .payment .details .comment,
+.paymentDetails .payment .details .amount{
+  width: 55%;
+  height: 45px;
+  border: 2px solid #208133;
+  text-align: center;
+  line-height: 45px;
+  margin-bottom: 6%;
+}
+.paymentDetails .payment .pay-button{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 55%;
+}
+.paymentDetails .payment .pay-button button{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 55px;
+  padding: 10px;
+  border: 2px solid #208133;
+  background: #208133;
+  border-radius: 2px;
+  /* border-top-left-radius: 20px; */
+  /* border-left-width: 15px; */
+  outline: none;
+  cursor: pointer;
+  transition: .5s;
+  color: white;
+  font-weight: bold;
+}
+.paymentDetails .payment .pay-button button:hover{
+  background: #23612F;
+  border-color: #23612F;
+}
+.paymentDetails .payment .pay-button .btn-img{
+  margin-right: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.pay-button button span{
+  text-align: center;
+}
+/* .qrDetails .scan-for-pay, .qr-footer .scan-for-pay{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} */
+.scan-for-pay{
+  text-align: center;
+}
+.paymentDetails .payment .card-logo{
+  display: flex;
+  justify-content: space-around;
+  margin-top: 4%;
+  width: 55%;
+}
+.paymentDetails .payment .card-logo .arca{
+  width: 35%;
+}
+.paymentDetails .payment .card-logo .visa{
+  width: 60%;
+}
+.paymentDetails .payment .card-logo .arca img, .paymentDetails .payment .card-logo .visa img{
+  width: 100%;
+  height: 100%;
+}
+
+
+
+.paymentDetails .payment-and-qr{
+  display: flex;
+  align-items: flex-start;
+  width: 85%;
+}
+.qrDetails .qr img{
+  width: 160px;
+  height: 160px;
+}
+.qrDetails .scan-for-pay, .qr-footer{
+  color: #208133;
+  font-weight: bold;
+}
+.qrDetails .qr-footer span{
+  margin-bottom: 2%;
+  text-align: center;
+}
+
+.qrDetails .qr-footer{
+  display: flex;
+  flex-direction: column;
+  margin-top: 5%;
+  justify-content: center;
+  align-items: center;
+}
+.qrDetails .qr-footer .banks {
+  display: flex;
+  flex-direction: column;
+}
+.qrDetails .qr-footer .banks .first,
+.qrDetails .qr-footer .banks .second{
+  display: flex;
+}
+.qrDetails .qr-footer .banks img{
+  width: 55px;
+  height: 55px;
+}
+.qrDetails .qr-footer .banks div:not(:last-child){
+  margin-right: 2%;
+}
+.qrDetails .qr-footer .banks .payx img{
+  height: 35px;
+  width: 55px;
+}
+.qrDetails .qr-footer .banks .payx{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.ad-banner{
+  display: flex;
+  /* flex-direction: column; */
+  justify-content: center;
+  align-items: center;
+}
+
+.banner-div{
+  width: 100%;
+}
+.banner-div img{
+  width: 100%;
+  height: 100%;
+}
+/* .nothing{
+  width: 660px;
+  margin-bottom: 4%;
+} */
+
+.navbar-toggler:focus{
+  box-shadow: none;
+
+}
+
+/* --------------------*SWICH------------------------------ */
+.hide-block-for-paid{
+  display: none !important;
+}
+/* .hide-block-for-pay{
+  display: none !important;
+} */
+/* -------------------------------------------------------- */
+/* PAID */
+.text-seccessful{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #208133;
+}
+.text-seccessful span{
+  font-size: 1.6rem;
+}
+.text-seccessful img{
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  font-family: 'Questrial', sans-serif;
+}
+.line{
+  position: relative;
+}
+.line::before{
+  content: '';
+  position: absolute;
+  display: block;
+  height: 2px;
+  width: 50%;
+  bottom: -5%;
+  background-color: #208133;
+}
+.email{
+  margin-top: 5%;
+  width: 50%;
+}
+.email .text{
+  font-size: 1.2rem;
+  color: #208133;
+  text-align: center;
+}
+.email-input{
+  margin-top: 8%;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.email-field{
+  width: 100%;
+  border: 1px solid #208133;
+  height: 30px;
+  outline: none;
+  padding-left: 5px;
+}
+.send-btn{
+  display: flex;
+  justify-content: center;
+  margin-top: 10%;
+}
+.send-btn button{
+  outline: none;
+  border: 2px solid #208133;
+  background: #208133;
+  padding: 10px 25px;
+  color: white;
+  transition: .5s;
+}
+.send-btn button:hover{
+  background: #23612F;
+  border-color: #23612F;
+}
+/* END */
+
+
+/* MEDIA */
+@media screen and (max-width: 970px) {
+  .paymentDetails .payment .card-logo{
+      width: 70%;
+  }
+}
+
+
+@media screen and (max-width: 870px){
+  section{
+      flex-direction: column;
+  }
+  .ad-banner{
+      order: -1;
+      margin-top: 5px;
+      margin-bottom: 10px;
+  }
+}
+@media screen and (max-width: 810px){
+  header .main-block .language{
+      margin-left: 10%;
+  }
+}
+
+/* RESPOSIVE NAVBAR */
+@media screen and (max-width: 725px){
+  header{
+      border-bottom: none;
+      height: auto;
+  }
+  .res-block{
+      display: none;
+  }
+  .main-block{
+      margin-top: 20px;
+  }
+}
+@media screen and (min-width: 725px){
+  .res-block-none{
+      display: none;
+  }
+}
+/* RESPONSIVE NAVBAR END */
+
+
+
+
+
+@media screen and (max-width: 700px) {
+  .email {
+      width: 60%;
+  }
+}
+
+@media screen and (max-width: 685px){
+  header .main-block{
+      /* flex-direction: column; */
+  }
+  header .main-block .language{
+      /* order: -1; */
+      /* justify-content: flex-end; */
+  }
+  .paymentDetails .payment .pay-button button{
+      font-size: 0.9rem;
+  }
+}
+@media screen and (max-width: 601px){
+  .paymentDetails .payment .pay-button button{
+      font-size: 0.8rem;
+      padding: 0;
+      width: 100%;
+  }
+}
+@media screen and (max-width: 575px) {
+  .payment-and-qr{
+      flex-direction: column;
+      justify-content: center;
+      align-items: center !important;
+  }
+  .qrDetails{
+      margin-top: 5%;
+      justify-content: center;
+      align-items: center;
+  }
+  .paymentDetails .payment .card-logo{
+      width: 60%;
+  }
+  .paymentDetails .payment .card-logo .visa{
+      width: 65%;
+      margin-left: 5px;
+  }
+  .qrDetails .qr{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+  .qr-footer{
+      align-items: center;
+      justify-content: center;
+  }
+  .paymentDetails .payment .details .comment, .paymentDetails .payment .details .amount{
+      width: 100%;
+  }
+  .paymentDetails .payment .pay-button{
+      width: 100%;
+  }
+  .paymentDetails .payment .pay-button button{
+      font-size: unset;
+      padding: 10px;
+      width: unset;
+  }
+  .email {
+      width: 80%;
+  }
+}
+@media screen and (max-width: 440px) {
+  .middle-side{
+      width: 145px;
+  }
+  .paymentDetails .payment .card-logo{
+      width: 90%
+  }
+  .qrDetails{
+      margin-top: 10%;
+  }
+  .email {
+      width: 100%;
+  }
+}
+@media screen and (max-width: 383px) {
+  .paymentDetails .payment .pay-button button{
+      font-size: 0.9rem;
+      padding: 0;
+      width: 100%;
+  }
+}
+@media screen and (max-width: 330px) {
+  .paymentDetails .payment .card-logo{
+      width: 100%
+  }
+  .qr-footer{
+      font-size: 0.95rem;
+  }
+  .paymentDetails .payment .pay-button button{
+      font-size: 0.85rem;
+      width: 100%;
+  }
+}

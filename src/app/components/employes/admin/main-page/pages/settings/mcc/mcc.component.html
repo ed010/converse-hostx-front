@@ -1,0 +1,151 @@
+<div class="wrapper">
+  <div class="button">
+    <button class="btn my-btn-color" data-bs-toggle="modal" data-bs-target="#addMcc"
+      (click)="setBankFormArrayForNewMcc()">Add
+      MCC</button>
+  </div>
+
+  <div class="table-mcc">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">MCC</th>
+          <th scope="col">Type</th>
+          <th scope="col" *ngFor="let bank of banks">{{bank.title}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let mcc of mccs" (click)="setBankFormArray(mcc);stelectedMcc=mcc" style="cursor: pointer;"
+          data-bs-toggle="modal" data-bs-target="#infoModalUpdate">
+          <td>{{mcc.mccCode}}</td>
+          <td>{{mcc.activityType}}</td>
+          <td *ngFor='let bank of banks'>{{getPercentBank(bank.id,mcc.mccBankTarifs)}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <div class="loader" *ngIf="showLoader">
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal fade" id="infoModalUpdate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header back-orange">
+        <h5 class="modal-title" id="exampleModalLabel">Update</h5>
+        <button #closeUpdateModal type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        </button>
+      </div>
+      <div class="modal-body" *ngIf="stelectedMcc">
+        <form class="my-modal-body" [formGroup]="bankFormMcc">
+
+          <div class="bl">
+            <div class="name">
+              MCC:&nbsp;
+            </div>
+            <div class="data">
+              <input type="text" class="form-control" formControlName="mccCode">
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">
+              Type:&nbsp;
+            </div>
+            <div class="data">
+              <input type="text" class="form-control" formControlName="activityType">
+            </div>
+          </div>
+
+          <ng-container formArrayName="banksForm">
+            <ng-container *ngFor="let bankForm of banksForm.controls">
+              <div class="bl" [formGroup]="bankForm">
+                <div class="name">
+                  {{bankForm.get('bank').get('title').value}}:&nbsp;
+                </div>
+                <div class="data">
+                  <input type="number" class="form-control" formControlName="percent">
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id='closeInfoModal'>Cancel</button>
+        <!-- <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="deleteMcc()">Delete
+          Mcc</button> -->
+        <button type="button" class="btn btn-warning" data-bs-dismiss="modal" (click)="updateMcc()">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="addMcc" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header back-orange">
+        <h5 class="modal-title" id="exampleModalLabel">Update</h5>
+        <button #closeAddModal type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="my-modal-body" [formGroup]="newMcc">
+
+          <div class="bl">
+            <div class="name">
+              MCC:&nbsp;
+            </div>
+            <div class="data">
+              <input type="text" class="form-control" formControlName="mccCode">
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">
+              Type:&nbsp;
+            </div>
+            <div class="data">
+              <input type="text" class="form-control" formControlName="activityType">
+            </div>
+          </div>
+
+          <ng-container formArrayName="banksFormNewMcc">
+            <ng-container *ngFor="let bankForm of getBanksFormForNewMcc.controls">
+              <div class="bl" [formGroup]="bankForm">
+                <div class="name">
+                  {{bankForm.get('bank').get('title').value}}:&nbsp;
+                </div>
+                <div class="data">
+                  <input type="number" class="form-control" formControlName="percent">
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id='closeInfoModal'>Cancel</button>
+        <button type="button" class="btn btn-warning" data-bs-dismiss="modal" (click)="addMcc()">Update</button>
+      </div>
+    </div>
+  </div>
+</div>

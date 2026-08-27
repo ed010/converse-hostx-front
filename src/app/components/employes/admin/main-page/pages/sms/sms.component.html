@@ -1,0 +1,152 @@
+<div class="wrapper">
+  <div class="loader" *ngIf="showLoader">
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+
+  <!-- Merchants list -->
+  <ng-container *ngIf="view === 'merchants'">
+    <header>
+      <div class="filters">
+        <input
+          class="form-control form-control-sm"
+          type="number"
+          [(ngModel)]="merchantSearch.merchantId"
+          placeholder="Merchant ID"
+          (keyup.enter)="applyMerchantFilter()"
+        />
+        <input
+          class="form-control form-control-sm name-filter"
+          type="text"
+          [(ngModel)]="merchantSearch.companyNameEn"
+          placeholder="Company name"
+          (keyup.enter)="applyMerchantFilter()"
+        />
+        <button class="btn my-btn-color" (click)="applyMerchantFilter()">
+          Filter
+        </button>
+        <button class="btn btn-secondary" (click)="clearMerchantFilter()">
+          Clear
+        </button>
+      </div>
+
+      <div class="pagination">
+        <span class="page-meta">Page {{ merchantPage }}</span>
+        <button
+          [disabled]="merchantPage <= 1"
+          class="btn my-btn-color"
+          (click)="goMerchantPage(-1)"
+        >
+          &laquo; Previous
+        </button>
+        <button
+          [disabled]="disableMerchantNext"
+          class="btn my-btn-color"
+          (click)="goMerchantPage(1)"
+        >
+          Next &raquo;
+        </button>
+      </div>
+    </header>
+
+    <section class="tables">
+      <table class="table table-hover table-striped">
+        <thead>
+          <tr>
+            <th>Merchant ID</th>
+            <th>Company name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Domain</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let m of merchants"
+            class="clickable"
+            (click)="openMerchantSms(m)"
+          >
+            <td>{{ m?.merchantId }}</td>
+            <td>{{ merchantName(m) }}</td>
+            <td>{{ m?.merchantInfo?.phone || "—" }}</td>
+            <td>{{ m?.merchantInfo?.email || "—" }}</td>
+            <td>{{ m?.domain?.title || "—" }}</td>
+          </tr>
+          <tr *ngIf="!merchants?.length">
+            <td colspan="5" class="empty">No merchants</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </ng-container>
+
+  <!-- SMS history for selected merchant -->
+  <ng-container *ngIf="view === 'history'">
+    <header>
+      <div class="filters">
+        <button class="btn btn-secondary" (click)="backToMerchants()">
+          &larr; Back
+        </button>
+        <div class="selected-merchant">
+          <strong>{{ selectedMerchant?.merchantId }}</strong>
+          · {{ merchantName(selectedMerchant) }}
+        </div>
+      </div>
+
+      <div class="pagination">
+        <span class="page-meta"
+          >Page {{ smsPage }} / {{ smsTotalPages }} ·
+          {{ smsTotalCount }} total</span
+        >
+        <button
+          [disabled]="smsPage <= 1"
+          class="btn my-btn-color"
+          (click)="goSmsPage(-1)"
+        >
+          &laquo; Previous
+        </button>
+        <button
+          [disabled]="disableSmsNext"
+          class="btn my-btn-color"
+          (click)="goSmsPage(1)"
+        >
+          Next &raquo;
+        </button>
+      </div>
+    </header>
+
+    <section class="tables">
+      <table class="table table-hover table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Merchant user</th>
+            <th scope="col">Transaction ID</th>
+            <th scope="col">Receiver</th>
+            <th scope="col">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let h of history">
+            <td>{{ h?.sendDate | date: "dd/MM/yy HH:mm" }}</td>
+            <td>{{ h?.merchantUser }}</td>
+            <td>{{ h?.transactionId }}</td>
+            <td>{{ h?.receiver }}</td>
+            <td>{{ h?.amount }}</td>
+          </tr>
+          <tr *ngIf="!history?.length">
+            <td colspan="5" class="empty">No SMS history for this merchant</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </ng-container>
+</div>

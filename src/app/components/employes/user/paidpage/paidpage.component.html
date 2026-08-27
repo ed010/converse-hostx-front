@@ -1,0 +1,186 @@
+
+    <!-- HEADER -->
+    <header id="header">
+        <div class="res-block">
+            <div class="logo">
+                <img src="../../../../../assets/image/user-paid-unpaid/logo.png" alt="PayX">
+            </div>
+            <div class="middle-side">
+                <span>ԱՐԱԳ ԵՎ ՀԱՐՄԱՐ ՎՃԱՐՈՒՄՆԵՐ</span>
+            </div>
+            <div class="main-block">
+                <div class="login-register">
+                    <div class="login">
+                        <button>LOGIN</button>
+                    </div>
+                    <div class="register">
+                        <button>REGISTER</button>
+                    </div>
+                </div>
+                <div class="language">
+                    <div class="am">
+                        <img src="../../../../../assets/image/user-paid-unpaid/armenia.png" alt="Armenia">
+                    </div>
+                    <div class="ru">
+                        <img src="../../../../../assets/image/user-paid-unpaid/russia.png" alt="Russia">
+                    </div>
+                    <div class="en">
+                        <img src="../../../../../assets/image/user-paid-unpaid/united-states.png" alt="United States">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="res-block-none">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+                    <div class="logo">
+                        <img src="../../../../../assets/image/user-paid-unpaid/logo.png" alt="PayX">
+                    </div>
+                    <div class="middle-side">
+                        <span>ԱՐԱԳ ԵՎ ՀԱՐՄԱՐ ՎՃԱՐՈՒՄՆԵՐ</span>
+                    </div>
+                  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                  </button>
+                  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <div class="main-block">
+                        <div class="login-register">
+                            <div class="login">
+                                <button>LOGIN</button>
+                            </div>
+                            <div class="register">
+                                <button>REGISTER</button>
+                            </div>
+                        </div>
+                        <div class="language">
+                            <div class="am">
+                                <img src="../../../../../assets/image/user-paid-unpaid/armenia.png" alt="Armenia">
+                            </div>
+                            <div class="ru">
+                                <img src="../../../../../assets/image/user-paid-unpaid/russia.png" alt="Russia">
+                            </div>
+                            <div class="en">
+                                <img src="../../../../../assets/image/user-paid-unpaid/united-states.png" alt="United States">
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </nav>
+        </div>
+    </header>
+    <!-- MAIN -->
+    <section>
+        <aside class="allDetails">
+            <div class="paymentDetails">
+                <div class="info">
+                    <div class="logo">
+                        <img src="../../../../../assets/image/user-paid-unpaid/logo.png" alt="Company Logo">
+                    </div>
+                    <div class="company-name">
+                        <h2>Company Name</h2>
+                    </div>
+                </div>
+                <div class="payment-and-qr hide-block-for-paid">
+                    <div class="payment">
+                        <div class="details">
+                            <div class="comment">
+                                <span>NO COMMENT</span>
+                            </div>
+                            <div class="amount">
+                                <span>0AMD</span>
+                            </div>
+                        </div>
+                        <div class="pay-button">
+                            <div class="btn-img">
+                                <img src="../../../../../assets/image/user-paid-unpaid/credit-card.png" alt="Pay with card">
+                            </div>
+                            <button>
+                                <span>ՎՃԱՐԵԼ ՔԱՐՏՈՎ</span>
+                            </button>
+                        </div>
+                        <div class="card-logo">
+                            <div class="arca">
+                                <img src="../../../../../assets/image/user-paid-unpaid/ArCa_SecurePay.jpg" alt="Arca">
+                            </div>
+                            <div class="visa">
+                                <img src="../../../../../assets/image/user-paid-unpaid/vbv.png" alt="VisaMAstercard">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="qrDetails">
+                        <div class="qr">
+                            <img src="../../../../../assets/image/user-paid-unpaid/qrNew.png" alt="Generated Qr">
+                        </div>
+                        <div class="scan-for-pay">
+                            <span>ՍԿԱՆԱՎՈՐԵԼ ԵՎ ՎՃԱՐԵԼ</span>
+                        </div>
+                        <div class="qr-footer">
+                            <span>
+                                QR ՎՃԱՐԵՔ ՀԱՎԵԼՎԱԾՆԵՐՈՎ`
+                            </span>
+                            <div class="banks">
+                                <div class="first">
+                                    <div class="arca">
+                                        <img src="../../../../../assets/image/user-paid-unpaid/arca.png" alt="arca">
+                                    </div>
+                                    <div class="abb">
+                                        <img src="../../../../../assets/image/user-paid-unpaid/ABB.png" alt="abb">
+                                    </div>
+                                    <div class="ashb">
+                                        <img src="../../../../../assets/image/user-paid-unpaid/ASHB.png" alt="ashb">
+                                    </div>
+                                </div>
+                                <div class="second">
+                                    <div class="evoca">
+                                        <img src="../../../../../assets/image/user-paid-unpaid/Evoca.png" alt="evoca">
+                                    </div>
+                                    <div class="uni">
+                                        <img src="../../../../../assets/image/user-paid-unpaid/Uni.png" alt="uni">
+                                    </div>
+                                    <div class="payx">
+                                        <img src="../../../../../assets/image/user-paid-unpaid/logo.png" alt="payx">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="payment hide-block-for-pay" *ngIf="transaction">
+                    <div class="details line">
+                        <div class="comment">
+                            <span>{{transaction.comment}}</span>
+                        </div>
+                        <div class="amount">
+                            <span>{{transaction.amount}} AMD</span>
+                        </div>
+                        <div class="text-seccessful">
+                            <img src="../../../../../assets/image/user-paid-unpaid/check.png" alt="">
+                            <span>ՎՃԱՐՎԱԾ Է</span>
+                        </div>
+                    </div>
+                    <div class="email">
+                        <div class="text">
+                            <span>Ուղարկել վճարման անդորագիրը Էլ․ հասցեյով</span>
+                        </div>
+                        <div class="email-input">
+                            <input type="email" placeholder="Էլ․ փոստ" class="email-field">
+                        </div>
+                        <div class="send-btn">
+                            <button>Ուղարկել</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <aside class="ad-banner">
+            <!-- <div class="nothing"></div> -->
+            <div class="banner-div">
+                <img src="../../../../../assets/image/user-paid-unpaid/banner.jpg" alt="">
+            </div>
+        </aside>
+    </section>
+    <!-- FOOTER -->
+    <footer>
+
+    </footer>

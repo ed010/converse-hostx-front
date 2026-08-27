@@ -1,0 +1,111 @@
+<div class="wrapper">
+  <ng-container *ngIf="!isMainLoading">
+    <div class="info-list">
+      <div class="info-box order_info_cont">
+        <div class="left">
+          <p class="brand_name">
+            {{ transaction?.merchantName }}
+          </p>
+          <p class="price">{{ transaction?.amount }} ֏</p>
+        </div>
+        <div class="right">
+          <ng-container *ngIf="!transaction || !transaction.logo || transaction.logo.trim() === ''">
+            <svg
+              width="56"
+              height="56"
+              viewBox="0 0 56 56"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+            >
+              <rect
+                id="Logo"
+                x="0.5"
+                y="0.5"
+                width="55"
+                height="55"
+                rx="7.5"
+                fill="url(#pattern0)"
+                stroke="#CCD6E6"
+              />
+              <defs>
+                <pattern
+                  id="pattern0"
+                  patternContentUnits="objectBoundingBox"
+                  width="1"
+                  height="1"
+                >
+                  <use
+                    xlink:href="#image0_198_1166"
+                    transform="scale(0.015625)"
+                  />
+                </pattern>
+                <image
+                  id="image0_198_1166"
+                  data-name="Checker.png"
+                  width="64"
+                  height="64"
+                  xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAONJREFUeF7t20EOhEAIRFG4/6F7DvEnYeFzryQIv6pBd2behOu9dPvsbog+k+NLgArQAqmJcw9iAAhSgZKB3IJkkAySQTJ4CiE+gA8oBeg0mH3Ai084P89HhqwEqIA209ICsQdjAeaZIgaAYKxBDMCAYy8fXwAIgiAIcoJpJEYGI4VjB3YrbC9gL2AvkCB43cM5PgZgAAZgQFnNZAhdGykQBEEQBEEQDBmgAm2glM/z+QUYisYUGoldO7kY32IEAzCg6RgIRgjFAsw+AgRBMNYgBmCAT2TCYfoPPz/HCqQCX1eBHzHnv7C7WhBSAAAAAElFTkSuQmCC"
+                />
+              </defs>
+            </svg>
+          </ng-container>
+          <ng-container *ngIf="transaction && transaction.logo && transaction.logo.trim() !== ''">
+            <img
+              [src]="replaceConverseImgLink(transaction?.logo)"
+              alt="Merchant logo"
+            />
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- <div class="info-box send_emil_cont">
+          <div class="receiptEmail">
+            <p>Send payment receipt by email</p>
+            <mat-slide-toggle [(ngModel)]="showEmailField"></mat-slide-toggle>
+          </div>
+          <div class="checked" [ngClass]="{ show: showEmailField }">
+            <div class="continer">
+              <div class="input_container">
+                <input type="text" style="padding-bottom: 24px" />
+                <label for="">
+                  <p>Email</p>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div> -->
+
+      <div class="info-box pay_card_cont">
+        <div class="center status">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="56"
+            height="56"
+            viewBox="0 0 56 56"
+            fill="none"
+          >
+            <path
+              d="M51.3334 25.8667V28.0134C51.3305 33.045 49.7012 37.941 46.6885 41.971C43.6757 46.001 39.441 48.9492 34.6159 50.3758C29.7907 51.8025 24.6336 51.6311 19.9138 49.8874C15.1939 48.1437 11.1642 44.9209 8.4256 40.6999C5.68698 36.4788 4.3862 31.4855 4.71727 26.4648C5.04833 21.444 6.9935 16.6648 10.2627 12.8399C13.5318 9.01495 17.9499 6.34927 22.8578 5.24038C27.7657 4.1315 32.9006 4.63883 37.4967 6.68671M51.3334 9.33335L28 32.69L21 25.69"
+              stroke="#00C270"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </div>
+        <div class="status-text">
+          {{ "deals.paymentCompleted" | translate }}
+        </div>
+        <div class="desc-text">
+          <p>
+            {{ "deals.paymentCompletedMessage" | translate }}
+          </p>
+        </div>
+        <!-- <div class="actions">
+          <button>Back to store</button>
+        </div> -->
+      </div>
+    </div>
+  </ng-container>
+</div>

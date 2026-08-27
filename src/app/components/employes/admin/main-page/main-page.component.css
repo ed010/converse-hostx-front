@@ -1,0 +1,116 @@
+.wrapper {
+  width: 100%;
+  min-height: 100vh;
+  height: 100vh;
+  background-color: var(--background-color);
+  display: flex;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+
+}
+
+aside.left {
+  flex: 0.2;
+  height: 100%;
+  box-shadow: var(--main-border);
+  font-family: 'Mulish', sans-serif;
+  background-color: var(--second-color);
+}
+
+.left {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.left .header {
+  width: 100%;
+  height: 10%;
+  padding: 10px;
+}
+
+.left .header .logo {
+  width: 100%;
+  height: 100%;
+}
+
+.left .header .logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+
+}
+
+.left .bottom nav ul {
+  padding: 0;
+}
+
+.left .bottom nav ul li {
+  /* transition: .3s; */
+  cursor: pointer;
+}
+
+.left .bottom nav ul li:hover {
+  background-color: var(--uni-secondary-color);
+}
+
+.left .bottom nav ul li.active {
+  background-color: var(--uni-secondary-color);
+}
+
+
+.left .bottom nav ul li a {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+  color: var(--text-color);
+  padding: 20px;
+}
+
+.left .bottom nav ul li a:hover {
+  color: white
+}
+
+.left .bottom nav ul li a {
+  color: var(--uni--color);
+}
+
+.left .bottom nav ul li a .logo-img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.left .bottom nav ul .active a {
+  color: white
+}
+
+.left .bottom nav ul .active a .logo-img svg path {
+  fill: var(--uni--color);
+}
+
+.left .bottom nav ul li:hover~.left .bottom nav ul li a .logo-img svg path {
+  fill: white;
+}
+
+.left .bottom nav ul li a .logo-img svg {
+  width: 24px;
+  height: 24px;
+}
+
+.left .bottom nav ul li a .logo-img svg path {
+  fill: var(--uni--color);
+}
+
+aside.right {
+  flex: 1;
+  padding: 20px;
+  overflow-x: scroll;
+}

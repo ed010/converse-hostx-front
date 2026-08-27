@@ -1,0 +1,95 @@
+[
+  {
+    "value": "Compnay name EN"
+  },
+  {
+    "value": "Compnay name HY"
+  },
+  {
+    "value": "Compnay name RU"
+  },
+  {
+    "value": "Address EN"
+  },
+  {
+    "value": "Address HY"
+  },
+  {
+    "value": "Legal company name"
+  },
+  {
+    "value": "Legal address"
+  },
+  {
+    "value": "Tin"
+  },
+  {
+    "value": "Phone"
+  },
+  {
+    "value": "Bank serial number"
+  },
+  {
+    "value": "Website"
+  },
+  {
+    "value": "Email"
+  },
+  {
+    "value": "Sms phone"
+  },
+  {
+    "value": "Director"
+  },
+  {
+    "value": "Bank"
+  },
+  {
+    "value": "Api"
+  },
+  {
+    "value": "Api password"
+  },
+  {
+    "value": "Binding"
+  },
+  {
+    "value": "Binding password"
+  },
+  {
+    "value": "Arca %"
+  },
+  {
+    "value": "Local %"
+  },
+  {
+    "value": "Out %"
+  },
+  {
+    "value": "Domain"
+  },
+  {
+    "value": "Mcc"
+  },
+  {
+    "value": "Group"
+  },
+  {
+    "value": "Fee type"
+  },
+  {
+    "value": "Is offline"
+  },
+  {
+    "value": "Merchant type"
+  },
+  {
+    "value": "Tid"
+  },
+  {
+    "value": "Mid"
+  },
+  {
+    "value": "Status"
+  }
+]

@@ -1,0 +1,30 @@
+export type MerchantPaymentInfoModel = {
+  merchantUserId: "12906";
+  merchants: any[];
+  canReverse: boolean;
+  isBlocked: boolean;
+  canGenerateMultiQR: boolean;
+  canGenerateQR: boolean;
+  merchant: number;
+  canChangeComment: boolean;
+  isGeneralUser: boolean;
+  username: string;
+  password: string;
+  merchantInfo: {
+    companyNameHy: string;
+    companyNameRu: string;
+    companyNameEn: string;
+    logo: string;
+    addressHy: string;
+    addressEn: string;
+    legalCompanyName: string;
+    legalAddress: string;
+    tin: string;
+    phone: string;
+    bankSerialNumber: string;
+    website: string;
+    email: string;
+    smsPhone: string;
+    director: string;
+  };
+};

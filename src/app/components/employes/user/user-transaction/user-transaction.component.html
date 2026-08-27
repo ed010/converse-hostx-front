@@ -1,0 +1,940 @@
+<div class="wrapper">
+  <section>
+    <div class="toggle-div">
+      <form>
+        <div class="first-side">
+          <div class="control-text-and-checkbox">
+            <label for="inqDate" class="form-label"
+              >{{ "transactions.inqDate" | translate }}:
+            </label>
+            <label class="toggle-control">
+              <input
+                type="checkbox"
+                id="inqDate"
+                (change)="inqDate = !inqDate; setToLocalStorage()"
+                [checked]="inqDate"
+              />
+              <span class="control"></span>
+            </label>
+          </div>
+          <div class="control-text-and-checkbox">
+            <label for="cardHolderName" class="form-label"
+              >{{ "transactions.cardNumber" | translate }}:
+            </label>
+            <label class="toggle-control">
+              <input
+                type="checkbox"
+                id="cardHolderName"
+                (change)="
+                  addCardHolderName = !addCardHolderName; setToLocalStorage()
+                "
+                [checked]="addCardHolderName"
+              />
+              <span class="control"></span>
+            </label>
+          </div>
+          <div class="control-text-and-checkbox">
+            <label for="payerApp" class="form-label"
+              >{{ "transactions.payerApp" | translate }}:
+            </label>
+            <label class="toggle-control">
+              <input
+                type="checkbox"
+                id="payerApp"
+                (change)="payerApp = !payerApp; setToLocalStorage()"
+                [checked]="payerApp"
+              />
+              <span class="control"></span>
+            </label>
+          </div>
+          <div class="control-text-and-checkbox">
+            <label for="comment" class="form-label"
+              >{{ "transactions.comment" | translate }}:
+            </label>
+            <label class="toggle-control">
+              <input
+                type="checkbox"
+                id="comment"
+                (change)="comment = !comment; setToLocalStorage()"
+                [checked]="comment"
+              />
+              <span class="control"></span>
+            </label>
+          </div>
+          <div class="control-text-and-checkbox">
+            <label for="state" class="form-label"
+              >{{ "transactions.department" | translate }}:
+            </label>
+            <label class="toggle-control">
+              <input
+                type="checkbox"
+                id="state"
+                (change)="state = !state; setToLocalStorage()"
+                [checked]="state"
+              />
+              <span class="control"></span>
+            </label>
+          </div>
+          <div class="control-text-and-checkbox">
+            <label for="cardType" class="form-label"
+              >{{ "transactions.cardType" | translate }}:
+            </label>
+            <label class="toggle-control">
+              <input
+                type="checkbox"
+                id="cardType"
+                (change)="cardType = !cardType; setToLocalStorage()"
+                [checked]="cardType"
+              />
+              <span class="control"></span>
+            </label>
+          </div>
+        </div>
+      </form>
+      <div class="second-side">
+        <button class="btn btn-success" (click)="createExcelModel()">
+          {{ "transactions.excelText" | translate }}
+        </button>
+        <!-- <button class="btn btn-success" (click)="ajaxex()">AJAX button</button> -->
+        <form [formGroup]="dateFromTo" class="date-picker">
+          <mat-form-field appearance="fill" class="example-form-field">
+            <mat-label style="color: var(--uni--color)">{{
+              "transactions.dateFilter" | translate
+            }}</mat-label>
+            <mat-date-range-input
+              [rangePicker]="rangePicker"
+              formGroupName="dateRange"
+            >
+              <input
+                matStartDate
+                placeholder="{{ 'transactions.startDate' | translate }}"
+                formControlName="start"
+              />
+              <input
+                matEndDate
+                placeholder="{{ 'transactions.endDate' | translate }}"
+                formControlName="end"
+              />
+            </mat-date-range-input>
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="rangePicker"
+            ></mat-datepicker-toggle>
+            <mat-date-range-picker #rangePicker>
+              <mat-date-range-picker-actions>
+                <button mat-button matDateRangePickerCancel>
+                  {{ "transactions.cancel" | translate }}
+                </button>
+                <button
+                  mat-raised-button
+                  color="primary"
+                  matDateRangePickerApply
+                  (click)="showDataButton()"
+                >
+                  {{ "transactions.apply" | translate }}
+                </button>
+              </mat-date-range-picker-actions>
+            </mat-date-range-picker>
+          </mat-form-field>
+          <button
+            mat-raised-button
+            color="primary"
+            class="button-filter"
+            (click)="resetDate()"
+          >
+            {{ "transactions.clear" | translate }}
+          </button>
+          <!-- <button mat-raised-button color="primary" class="button-filter"
+            (click)="showDataButton()">{{'transactions.filter' |translate}}</button> -->
+        </form>
+
+        <select
+          id="select-type"
+          class="form-select form-select-sm fixed"
+          aria-label=".form-select-sm example"
+          #paidUnpaid_s
+          (change)="selectPaidUnpaid(paidUnpaid_s.value)"
+        >
+          <option value="5" [selected]="selectedOption">
+            {{ "transactions.selectPaidUnpaid.all" | translate }}
+          </option>
+          <option value="2">
+            {{ "transactions.selectPaidUnpaid.paid" | translate }}
+          </option>
+          <option value="0">
+            {{ "transactions.selectPaidUnpaid.unPaid" | translate }}
+          </option>
+          <option value="3">
+            {{ "transactions.selectPaidUnpaid.reversed" | translate }}
+          </option>
+          <option value="4">
+            {{ "transactions.selectPaidUnpaid.refund" | translate }}
+          </option>
+        </select>
+
+        <!-- <a id="my-cool-app" href="http://mycoolapp://"> Open my app </a> -->
+      </div>
+    </div>
+    <div class="media-large">
+      <table class="table table-striped table-hover">
+        <thead class="sticky">
+          <tr>
+            <!-- <th scope="col">#</th> -->
+            <th scope="col" class="orderNumber">
+              {{ "transactions.orderNumber" | translate }}
+            </th>
+            <th scope="col" *ngIf="inqDate" (click)="sortByDate()">
+              {{ "transactions.inqDate" | translate }}
+              <!-- <img src="../../../../../assets/image/sort-arrow.png" alt=""> -->
+            </th>
+            <th scope="col">{{ "transactions.payDate" | translate }}</th>
+            <th scope="col" *ngIf="state">
+              {{ "transactions.department" | translate }}
+            </th>
+            <th scope="col">{{ "transactions.amount" | translate }}</th>
+            <th scope="col" class="certCode">
+              {{ "transactions.certificationCode" | translate }}
+            </th>
+            <th scope="col" *ngIf="payerApp">
+              {{ "transactions.payerApp" | translate }}
+            </th>
+            <th scope="col" *ngIf="cardType">
+              {{ "transactions.cardType" | translate }}
+            </th>
+            <th scope="col">{{ "transactions.state" | translate }}</th>
+            <th scope="col" *ngIf="comment">
+              {{ "transactions.comment" | translate }}
+            </th>
+            <th scope="col" *ngIf="addCardHolderName">
+              {{ "transactions.cardNumber" | translate }}
+            </th>
+            <th scope="col" class="reqType">
+              {{ "transactions.requestType" | translate }}
+            </th>
+            <th scope="col">{{ "transactions.receiver" | translate }}</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="!showLoader">
+          <tr
+            *ngFor="let transaction of transactionsForDateFilter; index as i"
+            [attr.data-index]="i"
+            (click)="openReciept(transaction)"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal"
+            style="cursor: pointer"
+          >
+            <!-- <th scope="row">{{transactions.length - i}}</th> -->
+            <!-- <th scope="row">{{transaction.id}}</th> -->
+            <td scope="row">{{ transaction.transactionId }}</td>
+            <td *ngIf="inqDate">
+              {{ transaction.createDate | date : "dd/MM/yy HH:mm" }}
+            </td>
+            <td>
+              {{
+                getFullYear(transaction.transactionDate) > 2028 ||
+                getFullYear(transaction.transactionDate) < 2018
+                  ? "-"
+                  : (transaction.transactionDate | date : "dd/MM/yy HH:mm")
+              }}
+            </td>
+            <td *ngIf="state">{{ transaction.merchantUsername }}</td>
+            <td>{{ transaction.amount.toLocaleString() }} {{transaction.currency | currencySymbol}}</td>
+            <td>{{ transaction.authCode }}</td>
+            <td *ngIf="payerApp">
+              {{
+                transaction?.appName == "applepay"
+                  ? "Apple Pay"
+                  : transaction?.appName
+              }}
+            </td>
+            <td *ngIf="cardType" class="img-td">
+              <img
+                class="visa"
+                src="../../../../../assets/image/arca_visa_master/visa.png"
+                alt="visa"
+                *ngIf="transaction.card.maskedPan[0] == '4'"
+              />
+              <img
+                src="../../../../../assets/image/arca_visa_master/master.png"
+                alt="mastercard"
+                *ngIf="
+                  transaction.card.maskedPan[0] == '5' ||
+                  transaction.card.maskedPan[0] == '6'
+                "
+              />
+              <img
+                class="visa"
+                src="../../../../../assets/image/arca-removebg-preview.png"
+                alt="arca"
+                *ngIf="transaction.card.maskedPan[0] == '9'"
+              />
+            </td>
+            <!-- <td>{{transaction.card.maskedPan[0] == '5' || transaction.card.maskedPan[0] == '6' ? 'MasterCard' : transaction.card.maskedPan[0] == '4' ? 'Visa' : transaction.card.maskedPan[0] == '9' ? 'Arca' : '-'}}</td> -->
+            <!-- <td>{{transaction.transactionStatus == 2 ? ('transactions.selectPaidUnpaid.paid' | translate ) : transaction.transactionStatus == 4 ? ('transactions.selectPaidUnpaid.reverce' | translate ) : ('transactions.selectPaidUnpaid.unPaid' | translate)}}</td> -->
+            <td class="stat">
+              <img
+                src="../../../../../assets/image/checked.png"
+                alt="{{ 'transactions.selectPaidUnpaid.paid' | translate }}"
+                *ngIf="transaction.transactionStatus == 2"
+              />
+              <img
+                src="../../../../../assets/image/cancel.png"
+                alt="{{ 'transactions.selectPaidUnpaid.unPaid' | translate }}"
+                *ngIf="transaction.transactionStatus == 3"
+              />
+              <img
+                src="../../../../../assets/image/refund.png"
+                alt="{{ 'transactions.selectPaidUnpaid.unPaid' | translate }}"
+                *ngIf="transaction.transactionStatus == 4"
+              />
+              <img
+                src="../../../../../assets/image/question.png"
+                alt="{{ 'transactions.selectPaidUnpaid.reverse' | translate }}"
+                *ngIf="
+                  transaction.transactionStatus == 0 ||
+                  transaction.transactionStatus == 1
+                "
+              />
+            </td>
+            <td *ngIf="comment">
+              <div class="span">{{ transaction.comment }}</div>
+            </td>
+            <td *ngIf="addCardHolderName">
+              {{ transaction.card.maskedPan | creditCardDigits }}
+            </td>
+            <td>
+              {{
+                transaction.isLink == 0
+                  ? "SMS"
+                  : transaction.isLink == 1
+                  ? "Link"
+                  : "HostX"
+              }}
+            </td>
+            <td>{{ transaction.receiver }}</td>
+          </tr>
+        </tbody>
+        <tbody *ngIf="showLoader">
+          <div class="loader">
+            <div class="lds-roller">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          </div>
+        </tbody>
+      </table>
+      <mat-paginator
+        #myPaginator
+        [length]="transactionCount"
+        [pageSize]="50"
+        (page)="handlePageEvent($event)"
+        aria-label="Select page"
+      >
+      </mat-paginator>
+    </div>
+
+    <div class="media-small">
+      <table class="table">
+        <thead class="media-thead">
+          <tr>
+            <th class="sticky" scope="col">
+              {{ "transactions.inqDate" | translate }}
+            </th>
+            <th class="sticky" scope="col">
+              {{ "transactions.amount" | translate }}
+            </th>
+            <th class="sticky" scope="col">
+              {{ "transactions.requestType" | translate }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let transaction of transactions">
+            <th>{{ transaction.createDate | date : "dd/MM/yy HH:mm" }}</th>
+            <td>{{ transaction.amount }} {{transaction.currency | currencySymbol}}</td>
+            <td
+              (click)="openReciept(transaction)"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+              style="cursor: pointer"
+            >
+              {{
+                transaction.isLink == 0
+                  ? "SMS"
+                  : transaction.isLink == 1
+                  ? "Link"
+                  : "HostX"
+              }}
+            </td>
+          </tr>
+        </tbody>
+        <tbody *ngIf="showLoader">
+          <div class="loader">
+            <div class="lds-roller">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          </div>
+        </tbody>
+      </table>
+      <mat-paginator
+        #myPaginator
+        [length]="transactionCount"
+        [pageSize]="50"
+        (page)="handlePageEvent($event)"
+        aria-label="Select page"
+      >
+      </mat-paginator>
+    </div>
+  </section>
+
+  <!-- Modal -->
+  <div
+    class="modal fade"
+    id="moreIformation"
+    tabindex="-1"
+    aria-labelledby="moreIformationlLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button
+            type="button"
+            class="btn-close"
+            #infoModal
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body myModalBody">
+          <div class="data-side" *ngIf="modalIf">
+            <div class="data">
+              <h6>{{ "transactions.inqDate" | translate }}</h6>
+              <h5>{{ showData.createDate | date : "dd/MM/yy HH:mm" }}</h5>
+            </div>
+            <div class="data">
+              <h6 scope="col">{{ "transactions.payDate" | translate }}</h6>
+              <h5 *ngIf="inqDate">
+                {{
+                  getFullYear(showData.transactionDate) > 2028 ||
+                  getFullYear(showData.transactionDate) < 2018
+                    ? "-"
+                    : (showData.transactionDate | date : "dd/MM/yy HH:mm")
+                }}
+              </h5>
+            </div>
+            <div class="data">
+              <h6 scope="col">{{ "transactions.department" | translate }}</h6>
+              <h5>{{ showData.merchantUsername }}</h5>
+            </div>
+            <div class="data">
+              <h6 scope="col">{{ "transactions.amount" | translate }}</h6>
+              <h5>{{ showData.amount }} {{showData.currency | currencySymbol}}</h5>
+            </div>
+            <div class="data">
+              <h6 scope="col">
+                {{ "transactions.certificationCode" | translate }}
+              </h6>
+              <h5>{{ showData.authCode }}</h5>
+            </div>
+            <div class="data">
+              <h6 scope="col">{{ "transactions.payerApp" | translate }}</h6>
+              <h5>
+                {{
+                  showData?.appName == "applepay"
+                    ? "Apple Pay"
+                    : showData?.appName
+                }}
+              </h5>
+            </div>
+            <div class="data">
+              <h6 scope="col">{{ "transactions.cardType" | translate }}</h6>
+              <h5>
+                {{
+                  showData.card.maskedPan[0] == "5" ||
+                  showData.card.maskedPan[0] == "6"
+                    ? "MasterCard"
+                    : showData.card.maskedPan[0] == "4"
+                    ? "Visa"
+                    : showData.card.maskedPan[0] == "9"
+                    ? "Arca"
+                    : "-"
+                }}
+              </h5>
+            </div>
+            <div class="data">
+              <h6 scope="col">{{ "transactions.state" | translate }}</h6>
+              <h5>
+                {{
+                  showData.transactionStatus == 2
+                    ? ("transactions.selectPaidUnpaid.paid" | translate)
+                    : showData.transactionStatus == 4
+                    ? ("transactions.selectPaidUnpaid.reverse" | translate)
+                    : ("transactions.selectPaidUnpaid.unPaid" | translate)
+                }}
+              </h5>
+            </div>
+            <div class="data comment">
+              <h6 scope="col">{{ "transactions.comment" | translate }}</h6>
+              <h5 title="{{ showData.comment }}">{{ showData.comment }}</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INFOMODAL -->
+  <div
+    class="modal fade"
+    id="exampleModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button
+            type="button"
+            class="btn-close"
+            #infoModal
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body myModalBody">
+          <div class="data-side" *ngIf="showModalInfo">
+            <div class="data">
+              <h6 scope="col">
+                {{ "transactions.departmentName" | translate }}
+              </h6>
+              <h5>{{ receiptDepartmentName }}</h5>
+            </div>
+
+            <div class="data">
+              <h6 scope="col">{{ "transactions.address" | translate }}</h6>
+              <h5>{{ receiptAddress }}</h5>
+            </div>
+
+            <div class="data">
+              <h6 scope="col">{{ "transactions.tin" | translate }}</h6>
+              <h5>{{ tin }}</h5>
+            </div>
+
+            <div class="data">
+              <h6 scope="col">{{ "transactions.requestType" | translate }}</h6>
+              <h5>
+                {{
+                  currentTransaction.isLink == 0
+                    ? "SMS"
+                    : currentTransaction.isLink == 1
+                    ? "Link"
+                    : "HostX"
+                }}
+              </h5>
+            </div>
+
+            <div class="data">
+              <h6>{{ "transactions.inqDate" | translate }}</h6>
+              <h5>
+                {{ currentTransaction.createDate | date : "dd/MM/yy HH:mm" }}
+              </h5>
+            </div>
+
+            <div class="data">
+              <h6 scope="col">{{ "transactions.payDate" | translate }}</h6>
+              <h5
+                *ngIf="
+                  currentTransaction.transactionStatus != 0 &&
+                  currentTransaction.transactionStatus != 1
+                "
+              >
+                {{
+                  currentTransaction.transactionDate | date : "dd/MM/yy HH:mm"
+                }}
+              </h5>
+              <h5
+                *ngIf="
+                  currentTransaction.transactionStatus == 0 ||
+                  currentTransaction.transactionStatus == 1
+                "
+              >
+                -
+              </h5>
+            </div>
+
+            <div class="data">
+              <h6 scope="col">{{ "transactions.amount" | translate }}</h6>
+              <h5>{{ currentTransaction.amount }} {{currentTransaction.currency | currencySymbol}}</h5>
+            </div>
+
+            <div class="data">
+              <h6 scope="col">{{ "transactions.payerApp" | translate }}</h6>
+              <h5>
+                {{
+                  currentTransaction.appName == "" ||
+                  currentTransaction.appName == " "
+                    ? "-"
+                    : currentTransaction.appName == "applepay"
+                    ? "Apple Pay"
+                    : currentTransaction.appName
+                }}
+              </h5>
+            </div>
+
+            <div class="data">
+              <h6 scope="col">{{ "transactions.cardNumber" | translate }}</h6>
+              <h5>{{ currentTransaction.card.maskedPan }}</h5>
+            </div>
+
+            <div class="data">
+              <h6 scope="col">{{ "transactions.cardType" | translate }}</h6>
+              <h5>
+                {{
+                  currentTransaction.card.maskedPan[0] == "5" ||
+                  currentTransaction.card.maskedPan[0] == "6"
+                    ? "MasterCard"
+                    : currentTransaction.card.maskedPan[0] == "4"
+                    ? "Visa"
+                    : currentTransaction.card.maskedPan[0] == "9"
+                    ? "Arca"
+                    : "-"
+                }}
+              </h5>
+            </div>
+
+            <div class="data">
+              <h6>{{ "transactions.order" | translate }}</h6>
+              <h5>{{ currentTransaction.transactionId }}</h5>
+            </div>
+
+            <div class="data">
+              <h6 scope="col">
+                {{ "transactions.certificationCode" | translate }}
+              </h6>
+              <h5>
+                {{
+                  currentTransaction.authCode == "" ||
+                  currentTransaction.authCode == " "
+                    ? "-"
+                    : currentTransaction.authCode
+                }}
+              </h5>
+            </div>
+
+            <div class="data" *ngIf="currentTransaction?.receiver != '  '">
+              <h6 scope="col">{{ "transactions.receiver" | translate }}</h6>
+              <h5>{{ currentTransaction.receiver }}</h5>
+            </div>
+
+            <div class="data">
+              <h6 scope="col">{{ "transactions.state" | translate }}</h6>
+              <h5 class="bold">
+                {{
+                  currentTransaction.transactionStatus == 2
+                    ? ("transactions.selectPaidUnpaid.paid" | translate)
+                    : currentTransaction.transactionStatus == 4
+                    ? ("transactions.selectPaidUnpaid.refund" | translate)
+                    : currentTransaction.transactionStatus == 3
+                    ? ("transactions.selectPaidUnpaid.reversed" | translate)
+                    : currentTransaction.transactionStatus == 0 ||
+                      currentTransaction.transactionStatus == 1
+                    ? ("transactions.selectPaidUnpaid.unPaid" | translate)
+                    : "-"
+                }}
+              </h5>
+            </div>
+
+            <div class="data" *ngIf="totalRefundedAmount > 0">
+              <h6 scope="col">{{ "transactions.totalRefund" | translate }}</h6>
+              <h5>{{ totalRefundedAmount }}</h5>
+            </div>
+
+            <div class="data comment">
+              <h6 scope="col">{{ "transactions.comment" | translate }}</h6>
+              <h5
+                *ngIf="
+                  currentTransaction.comment != '' ||
+                  currentTransaction.comment != ' '
+                "
+                title="{{ currentTransaction.comment }}"
+              >
+                {{ currentTransaction.comment }}
+              </h5>
+              <h5
+                *ngIf="
+                  currentTransaction.comment == '' ||
+                  currentTransaction.comment == ' '
+                "
+              >
+                -
+              </h5>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer my_modal-footer" *ngIf="showModalInfo">
+          <div style="cursor: pointer" class="reverse">
+            <form
+              class="form_email"
+              [formGroup]="emailSend"
+              (submit)="sendSMS()"
+              *ngIf="
+                currentTransaction.transactionStatus == 4 ||
+                currentTransaction.transactionStatus == 2
+              "
+            >
+              <input
+                type="email"
+                placeholder="Email"
+                class="emailSend"
+                formControlName="email"
+              />
+              <button
+                type="submit"
+                class="btn btn-success"
+                [disabled]="!emailSend.get('email').valid || disableEmailButton"
+              >
+                {{ "transactions.send" | translate }}
+              </button>
+            </form>
+            <button
+              class="btn btn-secondary"
+              #infoModal
+              data-bs-dismiss="modal"
+              data-bs-toggle="modal"
+              data-bs-target="#reverse"
+              *ngIf="
+                canReverseMerchant && currentTransaction.transactionStatus == 2
+              "
+              (click)="closeModal()"
+            >
+              {{ "transactions.returnAmount" | translate }}
+            </button>
+
+            <div class="deleteTransaction">
+              <button
+                class="btn btn-secondary me-2"
+                *ngIf="
+                  currentTransaction.transactionStatus == 0 ||
+                  currentTransaction.transactionStatus == 1
+                "
+                [disabled]="checkStatusLoader"
+                (click)="checkTransactionStatus(currentTransaction)"
+              >
+                {{ "transactions.refresh" | translate }}
+              </button>
+              <button
+                class="btn btn-danger"
+                #infoModal
+                data-bs-dismiss="modal"
+                data-bs-toggle="modal"
+                data-bs-target="#deleteTrans"
+                *ngIf="
+                  currentTransaction.transactionStatus == 0 ||
+                  currentTransaction.transactionStatus == 1
+                "
+                (click)="closeModal()"
+              >
+                {{ "transactions.delete" | translate }}
+              </button>
+            </div>
+          </div>
+          <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+          <div
+            class="alert alert-danger mt-3"
+            *ngIf="errorSendMailSms"
+            role="alert"
+          >
+            {{ "transactions.emailerror" | translate }}
+          </div>
+          <div class="alert alert-success mt-3" *ngIf="sendedSms" role="alert">
+            {{ "transactions.emailsend" | translate }}
+          </div>
+        </div>
+        <div
+          class="modal-footer my_modal-footer2"
+          *ngIf="
+            canRefundMerchant &&
+            showModalInfo &&
+            (currentTransaction.transactionStatus == 2 ||
+              currentTransaction.transactionStatus == 4)
+          "
+        >
+          <div class="reverse">
+            <h5>{{ "transactions.pReturn" | translate }}</h5>
+          </div>
+
+          <form
+            class="form_email"
+            [formGroup]="refundSend"
+            (submit)="refundAmount()"
+          >
+            <input
+              appOnlyNumber
+              type="number"
+              placeholder="{{ 'transactions.amount' | translate }}"
+              class="emailSend"
+              formControlName="amount"
+            />
+            <button
+              type="submit"
+              class="btn btn-danger"
+              [disabled]="
+                !refundSend.get('amount').valid || disableRefundButton
+              "
+            >
+              {{ "transactions.refundAmount" | translate }}
+            </button>
+          </form>
+          <div class="alert alert-danger mt-3" *ngIf="errorRefund" role="alert">
+            {{ "transactions.refundError" | translate }}
+          </div>
+          <div
+            class="alert alert-success mt-3"
+            *ngIf="sendedRefund"
+            role="alert"
+          >
+            {{ "transactions.refundSend" | translate }}
+          </div>
+          <div class="table-height" *ngIf="refundHistory.length > 0">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th class="no" scope="col">
+                    {{ "transactions.refundDate" | translate }}
+                  </th>
+                  <th class="no" scope="col">
+                    {{ "transactions.amount" | translate }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let rt of refundHistory">
+                  <td>{{ rt.date | date : "dd/MM/yy HH:mm" }}</td>
+                  <td>{{ rt.amount }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="modal fade"
+    id="reverse"
+    tabindex="-1"
+    aria-labelledby="reverseLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="reverseLabel">
+            {{ "transactions.reverse" | translate }}
+          </h5>
+          <button
+            type="button"
+            #reverseModal
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          {{ "transactions.confirm" | translate }}
+          <div
+            class="alert alert-danger mt-3"
+            *ngIf="refverseErrorMsg"
+            role="alert"
+          >
+            {{ "transactions.errorMessageReverse" | translate }}
+          </div>
+        </div>
+        <div class="modal-footer" *ngIf="showModalInfo">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            {{ "transactions.no" | translate }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-success"
+            (click)="reverseTransaction(currentTransaction)"
+            #disableReverseBtn
+          >
+            {{ "transactions.yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="modal fade"
+    id="deleteTrans"
+    tabindex="-1"
+    aria-labelledby="deleteTransLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <!-- <h5 class="modal-title" id="deleteTransLabel">{{'transactions.delete' |translate}}</h5> -->
+          <button
+            type="button"
+            #reverseModal
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          {{ "transactions.deleteQuetion" | translate }}
+          <div
+            class="alert alert-danger mt-3"
+            *ngIf="refverseErrorMsg"
+            role="alert"
+          >
+            {{ "transactions.errorMessageReverse" | translate }}
+          </div>
+        </div>
+        <div class="modal-footer" *ngIf="showModalInfo">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            {{ "transactions.no" | translate }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-success"
+            (click)="blockTransaction()"
+            data-bs-dismiss="modal"
+          >
+            {{ "transactions.yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+.wrapper {
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+}
+
+.bl {
+  display: flex;
+
+  .name {
+    display: flex;
+    font-style: italic;
+    align-items: center;
+    width: 200px;
+  }
+
+  .data {
+    // font-weight: bold;
+    // min-width: 51%;
+    display: flex;
+    gap: 15px;
+
+    // width: 200px;
+  }
+}
+
+.my-btn-color {
+  color: white;
+  background-color: var(--maibhover-color);
+}

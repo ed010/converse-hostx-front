@@ -1,0 +1,136 @@
+<div class="wrapper">
+  <ng-container *ngIf="!isMainLoading">
+    <div class="info-list">
+      <div class="info-box order_info_cont">
+        <div class="left">
+          <p class="brand_name">
+            {{ transaction?.merchantName }}
+          </p>
+          <p class="price">{{ transaction?.amount }} ֏</p>
+        </div>
+        <div class="right">
+          <ng-container *ngIf="!transaction || !transaction.logo || transaction.logo.trim() === ''">
+            <svg
+              width="56"
+              height="56"
+              viewBox="0 0 56 56"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+            >
+              <rect
+                id="Logo"
+                x="0.5"
+                y="0.5"
+                width="55"
+                height="55"
+                rx="7.5"
+                fill="url(#pattern0)"
+                stroke="#CCD6E6"
+              />
+              <defs>
+                <pattern
+                  id="pattern0"
+                  patternContentUnits="objectBoundingBox"
+                  width="1"
+                  height="1"
+                >
+                  <use
+                    xlink:href="#image0_198_1166"
+                    transform="scale(0.015625)"
+                  />
+                </pattern>
+                <image
+                  id="image0_198_1166"
+                  data-name="Checker.png"
+                  width="64"
+                  height="64"
+                  xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAONJREFUeF7t20EOhEAIRFG4/6F7DvEnYeFzryQIv6pBd2behOu9dPvsbog+k+NLgArQAqmJcw9iAAhSgZKB3IJkkAySQTJ4CiE+gA8oBeg0mH3Ai084P89HhqwEqIA209ICsQdjAeaZIgaAYKxBDMCAYy8fXwAIgiAIcoJpJEYGI4VjB3YrbC9gL2AvkCB43cM5PgZgAAZgQFnNZAhdGykQBEEQBEEQDBmgAm2glM/z+QUYisYUGoldO7kY32IEAzCg6RgIRgjFAsw+AgRBMNYgBmCAT2TCYfoPPz/HCqQCX1eBHzHnv7C7WhBSAAAAAElFTkSuQmCC"
+                />
+              </defs>
+            </svg>
+          </ng-container>
+          <ng-container *ngIf="transaction && transaction.logo && transaction.logo.trim() !== ''">
+            <img
+              [src]="replaceConverseImgLink(transaction?.logo)"
+              alt="Merchant logo"
+            />
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- <div class="info-box send_emil_cont">
+            <div class="receiptEmail">
+              <p>Send payment receipt by email</p>
+              <mat-slide-toggle [(ngModel)]="showEmailField"></mat-slide-toggle>
+            </div>
+            <div class="checked" [ngClass]="{ show: showEmailField }">
+              <div class="continer">
+                <div class="input_container">
+                  <input type="text" style="padding-bottom: 24px" />
+                  <label for="">
+                    <p>Email</p>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div> -->
+
+      <div class="info-box pay_card_cont">
+        <div class="center status">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="56"
+            height="56"
+            viewBox="0 0 56 56"
+            fill="none"
+          >
+            <path
+              d="M35 21L21 35M21 21L35 35M51.3333 28C51.3333 40.8867 40.8866 51.3334 28 51.3334C15.1133 51.3334 4.66663 40.8867 4.66663 28C4.66663 15.1134 15.1133 4.66669 28 4.66669C40.8866 4.66669 51.3333 15.1134 51.3333 28Z"
+              stroke="#FF2F01"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </div>
+        <div class="status-text">{{ "deals.paymentFailed" | translate }}</div>
+        <div class="desc-text">
+          <p>{{ "deals.paymentFailedMessage" | translate }}</p>
+        </div>
+        <div class="actions">
+          <button (click)="onOkBtnClick()">
+            {{ "deals.goBack" | translate }}
+          </button>
+        </div>
+      </div>
+
+      <!-- <div class="info-box converse_pay_cont">
+            <p class="converse_pay_title">Converse Pay</p>
+            <p class="converse_pay_des">
+              Արագ վճարում Կոնվերս Բանկի հավելվածի միջոցով
+            </p>
+            <button>
+              <svg
+                class="icon_left"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g id="Logotype">
+                  <path
+                    id="Vector"
+                    d="M20.4816 3.52036C18.3089 1.34794 15.314 0 12 0C5.37203 0 0 5.37152 0 11.9989C0 15.3126 1.34806 18.3072 3.52069 20.4796C5.69332 22.6498 8.68601 24 12 24C15.314 24 18.3089 22.6521 20.4793 20.4796C22.6519 18.3072 24 15.3148 24 11.9989C24.0022 8.6852 22.6519 5.69054 20.4816 3.52036ZM12 6.87897C9.18929 6.87897 6.87961 9.18618 6.87961 11.9989C6.87961 14.834 9.18929 17.1413 12 17.1413C14.3321 17.1413 16.3205 15.5642 16.9384 13.4389H19.8637C19.2009 17.1637 15.9318 19.9989 12 19.9989C7.61206 19.9989 4.02172 16.4111 4.02172 11.9989C4.02172 7.61134 7.60981 4.02134 12 4.02134C15.9318 4.02134 19.2009 6.8565 19.8637 10.5813H16.9384C16.3205 8.45605 14.3321 6.87897 12 6.87897ZM14.2872 11.9989C14.2872 13.2569 13.2807 14.2836 12.0022 14.2836C10.7441 14.2836 9.71728 13.2547 9.71728 11.9989C9.71728 10.743 10.7463 9.71413 12.0022 9.71413C13.2807 9.71413 14.2872 10.743 14.2872 11.9989Z"
+                    fill="white"
+                  />
+                </g>
+              </svg>
+      
+              <p class="btn_text">Վճարել</p>
+            </button>
+          </div> -->
+    </div>
+  </ng-container>
+</div>

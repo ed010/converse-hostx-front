@@ -1,0 +1,30 @@
+<div class="wrapper">
+  <div class="all">
+    <div class="name_surname">
+      <div class="phone_number mb-4">
+        <h4>Phone number : {{user.phone}}</h4>
+      </div>
+      <div class="info">
+        <div class="name">
+          <input type="text" class="input" placeholder="First name" (change)="onSubmitButton = true"
+            [(ngModel)]='user.firstName'>
+        </div>
+        <div class="surname">
+          <input type="text" class="input" placeholder="Last name" (change)="onSubmitButton = true"
+            [(ngModel)]='user.lastName'>
+          <button class="enter" [disabled]="validateForm()" (click)="updateInfo()">Submit</button>
+        </div>
+      </div>
+    </div>
+    <form class="pass_form" [formGroup]="passwordForm">
+      <div class="footer">
+        <div class="password">
+          <input type="password" class="input_pass" placeholder="Old Password" formControlName="oldPass">
+          <input type="password" class="input_pass" placeholder="New Password" formControlName="newPass">
+          <input type="password" class="input_pass" placeholder="Confirm Password" formControlName="confirmPass">
+          <button (click)="changePassword()" class=" enter pass_enter">Submit</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

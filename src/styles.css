@@ -1,0 +1,160 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Provide sufficient contrast against white background */
+
+
+:root {
+  --uni--color: #002369;
+  --uni-secondary-color: #F78F1E;
+  --background-color: #e1e6eb;
+  --second-color: white;
+  --text-color: #9A9A9E;
+  --maibhover-color: #007DC3;
+  --maib-color: #007DC3;
+  --main-border: 2px 3px 15px -1px rgba(0, 0, 0, 0.81);
+  --page-border: 6px 7px 20px -6px rgba(0, 0, 0, 0.81);
+  --notary-main-color: #0070C0;
+  --notary-secondary-color: #E11837;
+
+}
+
+/* * {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  list-style: none;
+  text-decoration: none;
+  font-family: 'Montserratarm';
+} */
+
+
+
+@font-face {
+  font-family: 'Montserratarm-light';
+  src: url('assets/fonts/Montserratarm-Light.otf');
+}
+
+@font-face {
+  font-family: 'Montserratarm-extraLight';
+  src: url('assets/fonts/Montserratarm-ExtraLight.otf');
+}
+
+
+a {
+  color: var(--uni--color);
+}
+
+code {
+  color: #e01a76;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: var(--uni--color);
+  ;
+  border-color: var(--uni--color);
+  ;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background-color: #F2F2F2;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.btn-success {
+  background-color: var(--uni--color);
+  ;
+  border-color: var(--uni--color);
+  ;
+}
+
+.btn-success:hover,
+.btn-success:not(:disabled):not(.disabled).active,
+.btn-success:not(:disabled):not(.disabled):active,
+.show>.btn-success.dropdown-toggle,
+.btn-success.focus,
+.btn-success:focus {
+  background-color: var(--uni--color);
+  ;
+  border-color: var(--uni--color);
+  ;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.mat-h6,
+.mat-h5,
+.mat-h4,
+.mat-h3,
+.mat-h2,
+.mat-h1,
+.mat-typography h6,
+.mat-typography h5,
+.mat-typography h4,
+.mat-typography h3,
+.mat-typography h2,
+.mat-typography h1 {
+  /* font: unset; */
+  letter-spacing: unset;
+  margin: unset;
+}
+
+.mat-body,
+.mat-body-1,
+.mat-typography {
+  font: unset;
+  letter-spacing: unset;
+}
+
+.btn-check:focus+.btn,
+.btn:focus {
+  box-shadow: none;
+}
+
+.btn-check:focus+.btn-success,
+.btn-success:focus {
+  box-shadow: none;
+}
+
+.btn-check:focus+.btn,
+.btn:focus {
+  box-shadow: none;
+}
+
+.btn.focus,
+.btn:focus {
+  box-shadow: none;
+}
+
+
+
+.cdk-overlay-container {
+  z-index: 1100 !important;
+}

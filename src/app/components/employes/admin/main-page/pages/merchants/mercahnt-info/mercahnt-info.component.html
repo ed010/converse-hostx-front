@@ -1,0 +1,1117 @@
+<div class="wrapper">
+  <div class="main-info" *ngIf="merchant">
+    <header>
+      <!-- <div class="left-side"> -->
+      <div class="logo">
+        <img [src]="merchant.merchantInfo.logo" alt="Company logo" />
+      </div>
+      <div class="company-name">
+        <h3>{{ merchant.merchantInfo.companyNameEn }}</h3>
+      </div>
+      <div class="status">
+        <select
+          #stat
+          (change)="changeStatus(stat.value)"
+          class="form-select form-select-sm"
+          aria-label=".form-select-sm example"
+        >
+          <option [selected]="merchant.status == 0" value="0">
+            In Process
+          </option>
+          <option [selected]="merchant.status == 1" value="1">Active</option>
+          <option [selected]="merchant.status == 2" value="2">Closed</option>
+        </select>
+      </div>
+      <div class="buttons">
+        <button class="btn btn-warning" (click)="updatePage()">
+          Update Merchant
+        </button>
+        <!-- <button [disabled]="disableMerchantDelete" class="btn btn-danger" data-toggle="modal"
+          data-target="#deleteModal">
+          Dalete Merchant</button> -->
+        <button
+          #allusersmodal
+          class="btn btn-secondary"
+          data-bs-toggle="modal"
+          data-bs-target="#usersModal"
+        >
+          Users
+        </button>
+
+        <button
+          class="btn btn-success"
+          (click)="openRegisterMerchantDialog(registerMerchantApplePayTemplate)"
+        >
+          Register apple pay
+        </button>
+      </div>
+      <!-- </div> -->
+      <!-- <div class="right-side">
+
+      </div> -->
+    </header>
+
+    <section>
+      <div class="merchant-info">
+        <div class="left-side">
+          <div class="bl">
+            <div class="name">Internal ID:&nbsp;</div>
+            <div class="data">
+              {{ merchant.merchantId }}
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Company name HY:&nbsp;</div>
+            <div
+              class="data"
+              [ngClass]="{
+                'not-set': merchant.merchantInfo.companyNameHy == ''
+              }"
+            >
+              {{
+                merchant.merchantInfo.companyNameHy == ""
+                  ? "Not Set"
+                  : merchant.merchantInfo.companyNameHy
+              }}
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Company name EN:&nbsp;</div>
+            <div
+              class="data"
+              [ngClass]="{
+                'not-set': merchant.merchantInfo.companyNameEn == ''
+              }"
+            >
+              {{
+                merchant.merchantInfo.companyNameEn == ""
+                  ? "Not Set"
+                  : merchant.merchantInfo.companyNameEn
+              }}
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Company name RU:&nbsp;</div>
+            <div
+              class="data"
+              [ngClass]="{
+                'not-set': merchant.merchantInfo.companyNameRu == ''
+              }"
+            >
+              {{
+                merchant.merchantInfo.companyNameRu == ""
+                  ? "Not Set"
+                  : merchant.merchantInfo.companyNameRu
+              }}
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Address En:&nbsp;</div>
+            <div
+              class="data"
+              [ngClass]="{ 'not-set': merchant.merchantInfo.addressEn == '' }"
+            >
+              <address>
+                {{
+                  merchant.merchantInfo.addressEn == ""
+                    ? "Not Set"
+                    : merchant.merchantInfo.addressEn
+                }}
+              </address>
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Address Hy:&nbsp;</div>
+            <div
+              class="data"
+              [ngClass]="{ 'not-set': merchant.merchantInfo.addressHy == '' }"
+            >
+              {{
+                merchant.merchantInfo.addressHy == ""
+                  ? "Not Set"
+                  : merchant.merchantInfo.addressHy
+              }}
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Legal company name:&nbsp;</div>
+            <div
+              class="data"
+              [ngClass]="{
+                'not-set': merchant.merchantInfo.legalCompanyName == ''
+              }"
+            >
+              {{
+                merchant.merchantInfo.legalCompanyName == ""
+                  ? "Not Set"
+                  : merchant.merchantInfo.legalCompanyName
+              }}
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Legal address:&nbsp;</div>
+            <div
+              class="data"
+              [ngClass]="{
+                'not-set': merchant.merchantInfo.legalAddress == ''
+              }"
+            >
+              {{
+                merchant.merchantInfo.legalAddress == ""
+                  ? "Not Set"
+                  : merchant.merchantInfo.legalAddress
+              }}
+            </div>
+          </div>
+        </div>
+
+        <div class="right-side">
+          <div class="bl">
+            <div class="name">Phone:&nbsp;</div>
+            <div
+              class="data"
+              [ngClass]="{ 'not-set': merchant.merchantInfo.phone == '' }"
+            >
+              {{
+                merchant.merchantInfo.phone == ""
+                  ? "Not Set"
+                  : merchant.merchantInfo.phone
+              }}
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Sms phone:&nbsp;</div>
+            <div
+              class="data"
+              [ngClass]="{ 'not-set': merchant.merchantInfo.smsPhone == '' }"
+            >
+              {{
+                merchant.merchantInfo.smsPhone == ""
+                  ? "Not Set"
+                  : merchant.merchantInfo.smsPhone
+              }}
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Email:&nbsp;</div>
+            <div
+              class="data"
+              [ngClass]="{ 'not-set': merchant.merchantInfo.email == '' }"
+            >
+              {{
+                merchant.merchantInfo.email == ""
+                  ? "Not Set"
+                  : merchant.merchantInfo.email
+              }}
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Website:&nbsp;</div>
+            <div
+              class="data"
+              [ngClass]="{ 'not-set': merchant.merchantInfo.website == '' }"
+            >
+              {{
+                merchant.merchantInfo.website == ""
+                  ? "Not Set"
+                  : merchant.merchantInfo.website
+              }}
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Director:&nbsp;</div>
+            <div
+              class="data"
+              [ngClass]="{ 'not-set': merchant.merchantInfo.director == '' }"
+            >
+              {{
+                merchant.merchantInfo.director == ""
+                  ? "Not Set"
+                  : merchant.merchantInfo.director
+              }}
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Bank serial number:&nbsp;</div>
+            <div
+              class="data"
+              [ngClass]="{
+                'not-set': merchant.merchantInfo.bankSerialNumber == ''
+              }"
+            >
+              {{
+                merchant.merchantInfo.bankSerialNumber == ""
+                  ? "Not Set"
+                  : merchant.merchantInfo.bankSerialNumber
+              }}
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Tin:&nbsp;</div>
+            <div
+              class="data"
+              [ngClass]="{ 'not-set': merchant.merchantInfo.tin == '' }"
+            >
+              {{
+                merchant.merchantInfo.tin == ""
+                  ? "Not Set"
+                  : merchant.merchantInfo.tin
+              }}
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Token:&nbsp;</div>
+            <div class="data">
+              {{ merchant.payxToken }}
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Edit comments:&nbsp;</div>
+            <div class="data">
+              <input
+                (change)="changeCommentEdit($event)"
+                class="form-check-input"
+                #event
+                [checked]="merchant?.canChangeComment"
+                type="checkbox"
+              />
+            </div>
+          </div>
+          <!-- <div class="bl">
+            <div class="name">EPG:&nbsp;</div>
+            <div class="data">
+              <input
+                (change)="changeEPGStatus($event)"
+                class="form-check-input"
+                #event
+                [checked]="merchant?.isEpg"
+                type="checkbox"
+              />
+            </div>
+          </div> -->
+        </div>
+      </div>
+
+      <div class="secondary-info">
+        <div class="left-side">
+          <div class="bl">
+            <div class="name">Api:&nbsp;</div>
+            <div
+              class="data"
+              [ngClass]="{
+                'not-set': merchant.merchantArcaDetails.tidApi == ''
+              }"
+            >
+              {{
+                merchant.merchantArcaDetails.tidApi == ""
+                  ? "Not Set"
+                  : merchant.merchantArcaDetails.tidApi
+              }}
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Api password:&nbsp;</div>
+            <div
+              class="data"
+              [ngClass]="{
+                'not-set': merchant.merchantArcaDetails.bpcTidApiPassword == ''
+              }"
+            >
+              {{
+                merchant.merchantArcaDetails.bpcTidApiPassword == ""
+                  ? "Not Set"
+                  : merchant.merchantArcaDetails.bpcTidApiPassword
+              }}
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Binding:&nbsp;</div>
+            <div
+              class="data"
+              [ngClass]="{
+                'not-set': merchant.merchantArcaDetails.tidBinding == ''
+              }"
+            >
+              {{
+                merchant.merchantArcaDetails.tidBinding == ""
+                  ? "Not Set"
+                  : merchant.merchantArcaDetails.tidBinding
+              }}
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Binding password:&nbsp;</div>
+            <div
+              class="data"
+              [ngClass]="{
+                'not-set':
+                  merchant.merchantArcaDetails.bpcTidBindingPassword == ''
+              }"
+            >
+              {{
+                merchant.merchantArcaDetails.bpcTidBindingPassword == ""
+                  ? "Not Set"
+                  : merchant.merchantArcaDetails.bpcTidBindingPassword
+              }}
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">EPG username:&nbsp;</div>
+            <div
+              class="data"
+              [ngClass]="{
+                'not-set': merchant.merchantArcaDetails.epgUsername == ''
+              }"
+            >
+              {{
+                merchant.merchantArcaDetails.epgUsername == ""
+                  ? "Not Set"
+                  : merchant.merchantArcaDetails.epgUsername
+              }}
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">EPG password:&nbsp;</div>
+            <div
+              class="data"
+              [ngClass]="{
+                'not-set': merchant.merchantArcaDetails.epgPassword == ''
+              }"
+            >
+              {{
+                merchant.merchantArcaDetails.epgPassword == ""
+                  ? "Not Set"
+                  : merchant.merchantArcaDetails.epgPassword
+              }}
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Merchant arca perecent:&nbsp;</div>
+            <div
+              class="data"
+              [ngClass]="{
+                'not-set':
+                  merchant.merchantPercent.merchantArcaPercent == undefined
+              }"
+            >
+              {{
+                merchant.merchantPercent.merchantArcaPercent == ""
+                  ? "Not Set"
+                  : merchant.merchantPercent.merchantArcaPercent
+              }}
+              %
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Merchant local perecent:&nbsp;</div>
+            <div
+              class="data"
+              [ngClass]="{
+                'not-set':
+                  merchant.merchantPercent.merchantLocalPercent == undefined
+              }"
+            >
+              {{
+                merchant.merchantPercent.merchantLocalPercent == ""
+                  ? "Not Set"
+                  : merchant.merchantPercent.merchantLocalPercent
+              }}
+              %
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Merchant out perecent:&nbsp;</div>
+            <div
+              class="data"
+              [ngClass]="{
+                'not-set':
+                  merchant.merchantPercent.merchantOutPercent == undefined
+              }"
+            >
+              {{
+                merchant.merchantPercent.merchantOutPercent == ""
+                  ? "Not Set"
+                  : merchant.merchantPercent.merchantOutPercent
+              }}
+              %
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Sphere of activity:&nbsp;</div>
+            <div
+              class="data"
+              [ngClass]="{ 'not-set': merchant?.sphereOfActivity == '' }"
+            >
+              {{
+                merchant?.sphereOfActivity == ""
+                  ? "Not Set"
+                  : merchant?.sphereOfActivity
+              }}
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Domain name:&nbsp;</div>
+            <div
+              class="data"
+              [ngClass]="{
+                'not-set':
+                  merchant.domain.title == '' || merchant.domain.title == null
+              }"
+            >
+              {{
+                merchant.domain.title == "" || merchant.domain.title == null
+                  ? "Not Set"
+                  : merchant.domain.title
+              }}
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Mcc:&nbsp;</div>
+            <div class="data" [ngClass]="{ 'not-set': merchant.mcc == '' }">
+              {{ merchant.mcc == "" ? "Not Set" : merchant.mcc }}
+            </div>
+          </div>
+        </div>
+
+        <div class="right-side">
+          <div class="bl">
+            <div class="name">Is EPG:&nbsp;</div>
+            <div class="data">
+              {{ merchant.isEpg ? "Yes" : "No" }}
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Fee type:&nbsp;</div>
+            <div class="data" [ngClass]="{ 'not-set': merchant.feeType == 0 }">
+              {{
+                merchant.feeType == 0
+                  ? "Not Set"
+                  : merchant.feeType == 1
+                  ? "Fixed"
+                  : "Percent"
+              }}
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Is offline:&nbsp;</div>
+            <div class="data">
+              {{ merchant.isOffline ? "Yes" : "No" }}
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Merchant type:&nbsp;</div>
+            <div
+              class="data"
+              [ngClass]="{ 'not-set': merchant.merchantType == 0 }"
+            >
+              {{
+                merchant.merchantType == 0
+                  ? "Not Set"
+                  : merchant.merchantType == 1
+                  ? "Merchant"
+                  : "MobileApp"
+              }}
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">TID:&nbsp;</div>
+            <div
+              class="data"
+              [ngClass]="{ 'not-set': merchant.bankInternalTid == '' }"
+            >
+              {{
+                merchant.bankInternalTid == ""
+                  ? "Not Set"
+                  : merchant.bankInternalTid
+              }}
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">MID:&nbsp;</div>
+            <div
+              class="data"
+              [ngClass]="{ 'not-set': merchant.bankInternalMid == '' }"
+            >
+              {{
+                merchant.bankInternalMid == ""
+                  ? "Not Set"
+                  : merchant.bankInternalMid
+              }}
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Currencies:&nbsp;</div>
+            <div class="data">
+              {{merchant.currencies}}
+            </div>
+          </div>
+
+          <div class="bl" *ngIf="isMerchantGroup">
+            <div class="name">Merchant group:&nbsp;</div>
+            <div class="data">
+              {{ merchantGroupName }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!--
+  <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header background-orange">
+          <h1 class="modal-title" id="exampleModalLabel">Warrning</h1>
+          <button type="button" id='closeAddUserModal' class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Are you want to delete this merchant?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" id='closeDeleteModal'>Cancel</button>
+          <button type="button" class="btn btn-warning" data-dismiss="modal" (click)='disableMerchant()'>Yes</button>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <div
+    class="modal fade"
+    id="usersModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="usersModalLabel"
+    aria-hidden="true"
+  >
+    <div
+      class="modal-dialog modal-lg modal-dialog-scrollable"
+      role="document"
+    >
+      <div class="modal-content users-modal">
+        <div class="modal-header">
+          <h5 class="modal-title" id="usersModalLabel">
+            Users
+            <span class="users-count" *ngIf="users.length > 0">{{
+              users.length
+            }}</span>
+          </h5>
+          <button
+            #mainUserModal
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="users-toolbar">
+            <span class="users-toolbar-hint"
+              >Manage merchant users, their phone numbers and
+              permissions</span
+            >
+            <button
+              class="btn btn-success"
+              data-bs-toggle="modal"
+              data-bs-target="#add_user_modal"
+              (click)="closeMainUserModal()"
+            >
+              + Add User
+            </button>
+          </div>
+
+          <div class="users-empty" *ngIf="users.length === 0">
+            <div class="users-empty-icon">&#128100;</div>
+            <p>No users yet</p>
+            <span>Click "Add User" to create the first one</span>
+          </div>
+
+          <div class="users-list" *ngIf="users.length > 0">
+            <div
+              class="user-card"
+              *ngFor="let user of users; trackBy: trackByUser"
+              [class.user-blocked]="user.isBlocked"
+            >
+              <div class="user-card-header">
+                <div class="user-identity">
+                  <div class="user-avatar">
+                    {{ user.username ? user.username.charAt(0).toUpperCase() : "?" }}
+                  </div>
+                  <div class="user-titles">
+                    <div class="user-username">{{ user.username }}</div>
+                    <span class="blocked-badge" *ngIf="user.isBlocked"
+                      >Blocked</span
+                    >
+                  </div>
+                </div>
+                <div class="user-actions">
+                  <button
+                    class="btn btn-outline-danger btn-sm"
+                    *ngIf="!user.isBlocked"
+                    (click)="deleteUser(user.merchantUserId)"
+                  >
+                    Block
+                  </button>
+                  <button
+                    class="btn btn-outline-success btn-sm"
+                    *ngIf="user.isBlocked"
+                    (click)="deleteUser(user.merchantUserId)"
+                  >
+                    Unblock
+                  </button>
+                </div>
+              </div>
+
+              <div class="user-card-body">
+                <div class="user-fields">
+                  <div class="user-field">
+                    <label>Username</label>
+                    <div
+                      class="user-field-value"
+                      *ngIf="!isEditing(user, 'username')"
+                    >
+                      <span class="value-text">{{ user.username }}</span>
+                      <button
+                        type="button"
+                        class="btn-edit"
+                        title="Edit username"
+                        (click)="startEdit(user, 'username')"
+                      >
+                        &#9998;
+                      </button>
+                    </div>
+                    <div
+                      class="user-field-edit"
+                      *ngIf="isEditing(user, 'username')"
+                    >
+                      <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        placeholder="Enter username"
+                        [(ngModel)]="editingValue"
+                        (keyup.enter)="saveEdit(user)"
+                        (keyup.escape)="cancelEdit()"
+                      />
+                      <button
+                        class="btn btn-primary btn-sm"
+                        (click)="saveEdit(user)"
+                      >
+                        Save
+                      </button>
+                      <button
+                        class="btn btn-outline-secondary btn-sm"
+                        (click)="cancelEdit()"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="user-field">
+                    <label>Password</label>
+                    <div
+                      class="user-field-value"
+                      *ngIf="!isEditing(user, 'password')"
+                    >
+                      <span class="value-text muted">••••••••</span>
+                      <button
+                        type="button"
+                        class="btn-edit"
+                        title="Set new password"
+                        (click)="startEdit(user, 'password')"
+                      >
+                        &#9998;
+                      </button>
+                    </div>
+                    <div
+                      class="user-field-edit"
+                      *ngIf="isEditing(user, 'password')"
+                    >
+                      <input
+                        type="password"
+                        class="form-control form-control-sm"
+                        placeholder="Enter new password"
+                        [(ngModel)]="editingValue"
+                        (keyup.enter)="saveEdit(user)"
+                        (keyup.escape)="cancelEdit()"
+                      />
+                      <button
+                        class="btn btn-primary btn-sm"
+                        (click)="saveEdit(user)"
+                      >
+                        Save
+                      </button>
+                      <button
+                        class="btn btn-outline-secondary btn-sm"
+                        (click)="cancelEdit()"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="user-field">
+                    <label>Phone number</label>
+                    <div
+                      class="user-field-value"
+                      *ngIf="!isEditing(user, 'phoneNumber')"
+                    >
+                      <span
+                        class="value-text"
+                        [class.muted]="!user.phoneNumber"
+                        >{{ user.phoneNumber || "Not set" }}</span
+                      >
+                      <button
+                        type="button"
+                        class="btn-edit"
+                        title="Edit phone number"
+                        (click)="startEdit(user, 'phoneNumber')"
+                      >
+                        &#9998;
+                      </button>
+                    </div>
+                    <div
+                      class="user-field-edit"
+                      *ngIf="isEditing(user, 'phoneNumber')"
+                    >
+                      <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        placeholder="e.g. 37496446494"
+                        [(ngModel)]="editingValue"
+                        (keyup.enter)="saveEdit(user)"
+                        (keyup.escape)="cancelEdit()"
+                      />
+                      <button
+                        class="btn btn-primary btn-sm"
+                        (click)="saveEdit(user)"
+                      >
+                        Save
+                      </button>
+                      <button
+                        class="btn btn-outline-secondary btn-sm"
+                        (click)="cancelEdit()"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="user-permissions">
+                  <div class="user-permissions-title">Permissions</div>
+                  <div class="user-permissions-grid">
+                    <div class="form-check form-switch">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        role="switch"
+                        [id]="'qr-' + user.merchantUserId"
+                        [(ngModel)]="user.canGenerateQR"
+                        (ngModelChange)="updateUser(user)"
+                      />
+                      <label
+                        class="form-check-label"
+                        [for]="'qr-' + user.merchantUserId"
+                        >Show QR</label
+                      >
+                    </div>
+
+                    <div class="form-check form-switch">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        role="switch"
+                        [id]="'reverse-' + user.merchantUserId"
+                        [(ngModel)]="user.canReverse"
+                        (ngModelChange)="updateUser(user)"
+                      />
+                      <label
+                        class="form-check-label"
+                        [for]="'reverse-' + user.merchantUserId"
+                        >Can reverse</label
+                      >
+                    </div>
+
+                    <div class="form-check form-switch">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        role="switch"
+                        [id]="'refund-' + user.merchantUserId"
+                        [(ngModel)]="user.canRefund"
+                        (ngModelChange)="updateUser(user)"
+                      />
+                      <label
+                        class="form-check-label"
+                        [for]="'refund-' + user.merchantUserId"
+                        >Can refund</label
+                      >
+                    </div>
+
+                    <div class="form-check form-switch">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        role="switch"
+                        [id]="'general-' + user.merchantUserId"
+                        [(ngModel)]="user.isGeneralUser"
+                        (ngModelChange)="updateUser(user)"
+                      />
+                      <label
+                        class="form-check-label"
+                        [for]="'general-' + user.merchantUserId"
+                        >General user</label
+                      >
+                    </div>
+
+                    <div class="form-check form-switch">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        role="switch"
+                        [id]="'multiqr-' + user.merchantUserId"
+                        [(ngModel)]="user.canGenerateMultiQR"
+                        (ngModelChange)="updateUser(user)"
+                      />
+                      <label
+                        class="form-check-label"
+                        [for]="'multiqr-' + user.merchantUserId"
+                        >Multi QR</label
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="modal fade"
+    id="add_user_modal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">New User</h5>
+          <button
+            #closeUserModal
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="user-form">
+            <div class="user-form-field">
+              <label for="new-user-username">Username</label>
+              <input
+                id="new-user-username"
+                type="text"
+                class="form-control"
+                placeholder="Enter username"
+                [(ngModel)]="user.username"
+              />
+            </div>
+
+            <div class="user-form-field">
+              <label for="new-user-password">Password</label>
+              <input
+                id="new-user-password"
+                type="password"
+                class="form-control"
+                placeholder="Enter password"
+                [(ngModel)]="user.password"
+              />
+            </div>
+
+            <div class="user-form-field">
+              <label for="new-user-phone">Phone number</label>
+              <input
+                id="new-user-phone"
+                type="text"
+                class="form-control"
+                placeholder="e.g. 37496446494"
+                [(ngModel)]="user.phoneNumber"
+              />
+            </div>
+
+            <div class="user-permissions">
+              <div class="user-permissions-title">Permissions</div>
+              <div class="user-permissions-grid">
+                <div class="form-check form-switch">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    role="switch"
+                    id="new-user-qr"
+                    [(ngModel)]="user.canGenerateQR"
+                  />
+                  <label class="form-check-label" for="new-user-qr"
+                    >Show QR</label
+                  >
+                </div>
+
+                <div class="form-check form-switch">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    role="switch"
+                    id="new-user-reverse"
+                    [(ngModel)]="user.canReverse"
+                  />
+                  <label class="form-check-label" for="new-user-reverse"
+                    >Can reverse</label
+                  >
+                </div>
+
+                <div class="form-check form-switch">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    role="switch"
+                    id="new-user-refund"
+                    [(ngModel)]="user.canRefund"
+                  />
+                  <label class="form-check-label" for="new-user-refund"
+                    >Can refund</label
+                  >
+                </div>
+
+                <div class="form-check form-switch">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    role="switch"
+                    id="new-user-general"
+                    [(ngModel)]="user.isGeneralUser"
+                  />
+                  <label class="form-check-label" for="new-user-general"
+                    >General user</label
+                  >
+                </div>
+
+                <div class="form-check form-switch">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    role="switch"
+                    id="new-user-multiqr"
+                    [(ngModel)]="user.canGenerateMultiQR"
+                  />
+                  <label class="form-check-label" for="new-user-multiqr"
+                    >Multi QR</label
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            data-bs-dismiss="modal"
+          >
+            Cancel
+          </button>
+          <button type="button" class="btn btn-success" (click)="newUser()">
+            Add user
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #registerMerchantApplePayTemplate>
+    <form
+      [formGroup]="registerMerchantApplePayFormGroup"
+      (ngSubmit)="registerMerchantToApplePay()"
+    >
+      <div class="modal-template">
+        <div class="form-group">
+          <label for="encryptTo">Encrypt To</label>
+          <input
+            type="text"
+            id="encryptTo"
+            class="form-control"
+            formControlName="encryptTo"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="domainNames">Domain names</label>
+          <input
+            type="text"
+            id="domainNames"
+            class="form-control"
+            placeholder="ex. domain1.name domain2.name domain3.name"
+            formControlName="domainNames"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="partnerMerchantName">Partner merchant name</label>
+          <input
+            type="text"
+            id="partnerMerchantName"
+            class="form-control"
+            formControlName="partnerMerchantName"
+          />
+        </div>
+
+        <button
+          type="submit"
+          class="btn btn-success"
+          [disabled]="registerMerchantApplePayFormGroup.ivalid"
+        >
+          Register
+        </button>
+      </div>
+    </form>
+  </ng-template>
+</div>

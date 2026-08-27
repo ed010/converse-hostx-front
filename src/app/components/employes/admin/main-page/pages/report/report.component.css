@@ -1,0 +1,88 @@
+/* .wrapper {
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+} */
+
+.wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  box-shadow: var(--page-border);
+  padding: 10px;
+  border-radius: 10px;
+  overflow-y: scroll;
+  background-color: white;
+  position: relative;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.my-btn-color {
+  color: white;
+  background-color: var(--maibhover-color);
+}
+
+
+.wrappp {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+
+
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--maibhover-color);
+  border-radius: 10px;
+}
+
+.wrappp select {
+  width: 50%;
+}
+
+.loader-2 {
+  border: 4px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 4px solid blue;
+  border-bottom: 4px solid blue;
+  width: 25px;
+  height: 25px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

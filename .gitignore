@@ -1,0 +1,64 @@
+# Dependencies
+/node_modules
+/ClientApp/node_modules
+
+# Build / output
+/dist
+/tmp
+/out-tsc
+/bazel-out
+/ClientApp/dist
+
+# Angular / tooling caches
+/.angular
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+testem.log
+*.log
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.p12
+*.key
+
+# Archives / local dumps
+*.zip
+ClientApp.zip
+
+# e2e / test artifacts
+/e2e/*.js
+/e2e/*.map
+/protractor-results
+/typings
+
+# Misc
+/typings
+*.swp
+*.swo
+*~

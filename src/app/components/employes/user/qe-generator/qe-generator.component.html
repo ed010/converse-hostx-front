@@ -1,0 +1,298 @@
+<div class="success_meassage zoom" *ngIf="showSuccessMessage">
+  <img src="../../../../../assets/image/checked64.png" alt="" />
+</div>
+<div class="wrapper">
+  <form [formGroup]="qrForm">
+
+    <!-- <div class="mb-3">
+      <label class="form-label">{{"qrModal.currency" | translate}}</label>
+      <div class="d-flex align-items-center gap-3">
+        <ng-container *ngFor="let currency of currencies; let i = index">
+          <div class="d-flex gap-1 align-items-center">
+            <label style="margin-bottom: 0px;" [for]="currency" class="form-label">{{currency}}</label>
+            <input [id]="currency" type="radio" name="currency" [value]="currency" [attr.checked]="i === 0 ? 'checked' : null" formControlName="currency">
+          </div>
+        </ng-container>
+      </div>
+    </div> -->
+
+    <div class="mb-3">
+      <label for="amount" class="form-label">{{
+        "qrModal.amount" | translate
+      }}</label>
+      <div class="d-flex gap-1">
+        <input
+          type="text"
+          class="form-control"
+          id="amount"
+          [suffix]="getCurrencySuffix()"
+          mask="separator.2"
+          thousandSeparator=","
+          formControlName="amount"
+          onkeydown="return event.keyCode !== 69 && event.keyCode !== 189"
+        />
+        <select class="form-select" formControlName="currency">
+          <option *ngFor="let currency of currencies" [value]="currency">{{ currency }}</option>
+        </select>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="comment" class="form-label">{{
+        "qrModal.comment" | translate
+      }}</label>
+      <textarea
+        class="form-control"
+        id="comment"
+        rows="3"
+        formControlName="comment"
+      ></textarea>
+    </div>
+    <div class="mb-3 toggles" *ngIf="canGenerateMultiQR">
+      <div class="tog">
+        <label for="multi" class="form-label">{{
+          "qrModal.isMulti" | translate
+        }}</label>
+        <label class="switch" id="multi">
+          <input
+            type="checkbox"
+            formControlName="isMulti"
+            (change)="amDisable($event)"
+          />
+          <span class="slider round"></span>
+        </label>
+      </div>
+
+      <div class="t">
+        <div class="tog">
+          <label for="changeComment" class="form-label">{{
+            "qrModal.changeComment" | translate
+          }}</label>
+          <label class="switch" id="changeComment">
+            <input
+              type="checkbox"
+              formControlName="canChangeComment"
+              (change)="changeCommentStatus($event)"
+            />
+            <span class="slider round"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-3 toggles" *ngIf="!canGenerateMultiQR">
+      <div class="tog">
+        <label for="multi" class="form-label">{{
+          "qrModal.isMulti" | translate
+        }}</label>
+        <label class="switch" id="multi">
+          <input
+            disabled
+            type="checkbox"
+            formControlName="isMulti"
+            (change)="amDisable($event)"
+          />
+          <span class="slider round"></span>
+        </label>
+      </div>
+      <div class="t">
+        <div class="tog">
+          <label for="changeCommentMultiOff" class="form-label">{{
+            "qrModal.changeComment" | translate
+          }}</label>
+          <label class="switch" id="changeCommentMultiOff">
+            <input
+              type="checkbox"
+              formControlName="canChangeComment"
+              (change)="changeCommentStatus($event)"
+            />
+            <span class="slider round"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-success" (click)="generateQR()">
+      {{ "qrModal.button" | translate }}
+    </button>
+  </form>
+
+  <button
+    type="button"
+    #qr_modal
+    class="btn btn-primary hidden_button"
+    data-bs-toggle="modal"
+    data-bs-target="#qrlink"
+  ></button>
+
+  <div
+    class="modal fade"
+    id="qr-modal"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="qr-modalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">QR</h5>
+          <button
+            type="button"
+            #close_modal_qr
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+            (click)="dissmiss()"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="my-modal-body">
+            <div class="spinner-grow text-warning" *ngIf="loading"></div>
+          </div>
+          <div class="header" *ngIf="!loading">
+            <h3>{{ "qrModal.amount" | translate }} {{ this.amountValue }} {{qrForm.get("currency").value}}</h3>
+            <qr-code
+              *ngIf="canGenerateQR"
+              value="{{ qrCode }}"
+              size="200"
+              errorCorrectionLevel="M"
+            ></qr-code>
+          </div>
+          <div class="modal-footer" *ngIf="!loading">
+            <div class="cop">
+              <!-- <div class="alert alert-secondary text-center" role="alert" *ngIf="copied">
+                {{'qrModal.copied' | translate}}
+              </div> -->
+              <button
+                class="btn btn-success btn-for-qr"
+                (click)="copyLink()"
+                data-bs-toggle="modal"
+                data-bs-target="#qrlink"
+              >
+                {{ "qrModal.copyLinkAndSend" | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phone-modal modal fade" id="phoneModal" tabindex="-1" aria-labelledby="phoneModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body">
+          <label for="phoneNumber" class="form-label">{{
+            "qrModal.phoneNumber" | translate
+            }}</label>
+          <div class="d-flex gap-2">
+            <div class="dropdown">
+              <button class="btn btn-outline-secondary dropdown-toggle d-flex align-items-center gap-2" type="button"
+                id="countryCodeDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="min-width: 100px;">
+                <span class="fi fi-{{selectedCountry.code.toLowerCase()}}"></span>
+                <span>{{selectedCountry.dialCode}}</span>
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="countryCodeDropdown"
+                style="max-height: 300px; overflow-y: auto;">
+                <li>
+                  <input type="text" class="form-control mx-2 mb-2" [placeholder]="'qrModal.search' | translate" [(ngModel)]="countrySearchText"
+                    (click)="$event.stopPropagation()" style="width: calc(100% - 1rem);">
+                </li>
+                <li *ngFor="let country of filteredCountries">
+                  <a class="dropdown-item d-flex align-items-center gap-2" href="javascript:void(0)"
+                    (click)="selectCountry(country)">
+                    <span class="fi fi-{{country.code.toLowerCase()}}"></span>
+                    <span>{{country.name}} {{country.dialCode}}</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <input 
+              id="phoneNumber" 
+              type="text" 
+              class="form-control flex-grow-1"
+              [mask]="phoneMask" 
+              [(ngModel)]="phoneNumber"
+              [placeholder]="phoneMask"
+              onkeydown="return event.keyCode !== 69 && event.keyCode !== 189" 
+              />
+          </div>
+          <div class="alert alert-danger mt-3" *ngIf="invalidPhoneNumber" role="alert">
+            {{ "qrModal.invalidPhone" | translate }}
+          </div>
+          <div class="alert alert-success mt-3" *ngIf="successPhone" role="alert">
+            {{ "qrModal.sended" | translate }}
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" #closeModal data-bs-dismiss="modal">
+            {{ "qrModal.close" | translate }}
+          </button>
+          <button type="button" class="btn btn-success" [disabled]="!sendSmsButton" (click)="sendSMS()">
+            {{ "qrModal.sendSMS" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="modal fade"
+    id="qrlink"
+    tabindex="-1"
+    aria-labelledby="qrlinkLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="phoneModalLabel">QR LINK</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+            #closeQrLink
+          ></button>
+        </div>
+        <div class="modal-body qr-body">
+          <div class="my-modal-body">
+            <div class="spinner-grow text-warning" *ngIf="loading"></div>
+          </div>
+          <div class="header" *ngIf="!loading">
+            <h3>{{ "qrModal.amount" | translate }} {{ this.amountValue }} {{qrForm.get("currency").value}}</h3>
+            <qr-code
+              *ngIf="canGenerateQR"
+              value="{{ this.link }}"
+              size="200"
+              errorCorrectionLevel="M"
+            ></qr-code>
+          </div>
+          <!-- <div class="alert alert-secondary text-center" role="alert" *ngIf="copied">
+            {{'qrModal.copied' | translate}}
+          </div> -->
+          <!-- <p>{{this.link}}</p> -->
+        </div>
+        <!-- <div class="modal-footer my-modal-footer">
+          <button type="button" class="btn btn-secondary" #closeModal data-bs-dismiss="modal">{{'qrModal.close' |
+            translate}}</button>
+        </div> -->
+
+        <div class="modal-footer" *ngIf="!loading">
+          <div class="cop">
+            <div
+              class="alert alert-secondary text-center"
+              role="alert"
+              *ngIf="copied"
+            >
+              {{ "qrModal.copied" | translate }}
+            </div>
+            <button class="btn btn-success btn-for-qr" (click)="copyLink()">
+              {{ "qrModal.copyLinkAndSend" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,418 @@
+.wrapper {
+  position: relative;
+  width: 30%;
+  margin: auto;
+  font-family: Montserratarm-Light;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.tog {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+}
+
+.toggles {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  /* justify-content: space-between; */
+}
+
+.form-select {
+  width: unset;
+}
+
+.phone-modal {
+  z-index: 1051;
+}
+
+.modal-backdrop {
+  z-index: 1050 !important;
+}
+
+.form-control {
+  border: 2px solid var(--uni--color);
+}
+
+input:checked+.slider {
+  background-color: var(--uni--color) !important;
+}
+
+.btn-success.focus,
+.btn-success:focus {
+  border: none;
+}
+
+.btn-check:focus+.btn,
+.btn:focus {
+  box-shadow: none;
+}
+
+textarea {
+  min-height: 40px;
+  max-height: 150px;
+}
+
+.qr-modal {
+  position: absolute;
+  bottom: -40%;
+  left: 0;
+  width: 101%;
+  min-height: 550px;
+  background-color: var(--uni--color);
+  ;
+  display: none;
+  /* display: flex; */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.main-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* border: 1px solid black; */
+  padding: 20px;
+}
+
+.success_meassage {
+  position: absolute;
+  width: 0;
+  height: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background-color: silver; */
+  z-index: 1000;
+  animation: zoom 0.8s ease-in-out forwards;
+}
+
+/* .success_meassage img {
+  width: 64px;
+  height: 64px;
+} */
+
+.qr-modal svg {
+  width: 35px;
+  height: 35px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.footer {
+  width: 300px;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.footer button:not(:last-child) {
+  margin-bottom: 10px;
+}
+
+.dis {
+  display: flex;
+  animation: animateOpen 0.4s ease-in-out forwards;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+input:checked+.slider {
+  background-color: #2196f3;
+}
+
+input:focus+.slider {
+  box-shadow: 0 0 1px #2196f3;
+}
+
+.my-modal-body {
+  display: flex;
+  justify-content: center;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: space-around;
+}
+
+.modal-footer button {
+  width: 100%;
+}
+
+.my-modal-footer button {
+  width: 30%;
+}
+
+.cop,
+.sms {
+  width: 100%;
+}
+
+.cop button,
+.sms button {
+  border: var(--uni--color);
+}
+
+input:checked+.slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.sw-btn {
+  display: flex;
+  flex-direction: column;
+}
+
+input[_ngcontent-ng-cli-universal-c66]:checked+.slider[_ngcontent-ng-cli-universal-c66] {
+  background-color: #FF621D;
+}
+
+.hidden_button {
+  visibility: hidden;
+  opacity: 0;
+}
+
+form {
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+}
+
+form button {
+  /* min-width: 160px; */
+  width: 100%;
+  min-height: 40px;
+  background-color: var(--uni--color);
+  border-color: var(--uni--color);
+}
+
+form button:active {
+  background-color: var(--uni--color) !important;
+}
+
+.btn-for-qr {
+  background-color: var(--uni--color);
+}
+
+.btn-for-qr-y {
+  background-color: var(--uni--color);
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.spinner-grow {
+  width: 10rem;
+  height: 10rem;
+  animation-duration: 0.85s;
+}
+
+.qr-modal .text-warning {
+  background-color: #e67e22 !important;
+}
+
+.modal-dialog {
+  /* min-width: 700px; */
+}
+
+.qr-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* gap: 30px; */
+}
+
+@keyframes zoom {
+  from {
+    width: 0;
+    height: 0;
+  }
+
+  to {
+    width: 100%;
+    height: 50vh;
+  }
+}
+
+@keyframes animateOpen {
+  from {
+    transform: scale(0);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes animateClose {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(0);
+  }
+}
+
+/* @media screen and (max-width: 1213px) {
+  .qr-modal {
+    bottom: -43%;
+  }
+} */
+
+/* @media screen and (max-width: 1193px) {
+  .qr-modal {
+    bottom: -35%;
+    min-height: 510px;
+  }
+} */
+
+/* @media screen and (max-width: 1143px) {
+  .qr-modal {
+    bottom: -20%;
+    min-height: 450px;
+    width: 130%;
+  }
+} */
+
+@media screen and (max-width: 1042px) {
+  /* section {
+    padding-top: 90px
+  } */
+}
+
+
+@media screen and (max-width: 950px) {
+  .wrapper {
+    width: 45%;
+    /* margin-top: 5%; */
+  }
+
+  .wrapper form {
+    margin-top: 45px;
+  }
+}
+
+@media screen and (max-width: 715px) {
+  .wrapper {
+    width: 50%;
+    /* margin-top: 10%; */
+  }
+
+  .wrapper form {
+    margin-top: 50px;
+  }
+}
+
+@media screen and (max-width: 612px) {
+  .wrapper {
+    width: 57%;
+    /* margin-top: 15%; */
+  }
+
+  .wrapper form {
+    margin-top: 60px;
+  }
+
+  /* .qr-modal {
+    bottom: -18%;
+    min-height: 430px;
+    width: 100%;
+  } */
+}
+
+@media screen and (max-width: 476px) {
+  .wrapper {
+    width: 65%;
+    /* margin-top: 0%; */
+  }
+
+  .footer {
+    width: 200px;
+  }
+
+  /* .qr-modal .header h3 {
+    font-size: 1.5rem;
+  } */
+
+  /* .footer{
+    width: 170px;
+  }
+  canvas{
+    width: 150px;
+    height: 150px;
+  } */
+}
+
+/* @media screen and (max-width: 370px) {
+  .qr-modal {
+    bottom: -13%;
+  }
+} */

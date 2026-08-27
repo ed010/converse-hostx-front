@@ -1,0 +1,90 @@
+<div class="wrapper">
+
+  <div class="button">
+    <button class="btn my-btn-color" data-bs-toggle="modal" data-bs-target="#addModal">Add Domain</button>
+  </div>
+
+  <div class="bl" *ngFor="let domain of domains">
+    <div class="name">
+      {{domain.title}}:&nbsp;
+    </div>
+    <div class="data">
+      <button class="btn btn-warning" (click)='selectDomainForUpdate(domain)' data-bs-toggle="modal"
+        data-bs-target="#infoModalUpdate">Update</button>
+      <!-- <button class="btn btn-danger" (click)='selectedDomain=domain' data-toggle="modal"
+        data-target="#infoModal">Delete</button> -->
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add new domain</h5>
+        <button #closeAddModal type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="bl">
+          <div class="name">
+            Domain name:&nbsp;
+          </div>
+          <div class="data">
+            <input type="text" class="form-control" [(ngModel)]='domain.title'>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id='closeAddModal'>Cancel</button>
+        <button type="button" class="btn btn-danger" (click)='addDomain()'>Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header back-orange">
+        <h5 class="modal-title" id="exampleModalLabel">Warrning</h5>
+        <button #closeInfoModal type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        </button>
+      </div>
+      <div class="modal-body">
+        <h4>Are you want delete {{selectedDomain.title}}</h4>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id='closeInfoModal'>No</button>
+        <button type="button" class="btn btn-warning" (click)='deleteDomain(selectedDomain.id)'>Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="infoModalUpdate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header back-orange">
+        <h5 class="modal-title" id="exampleModalLabel">Update</h5>
+        <button #closeUpdateModal type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="bankName" class="form-label">Domain Name</label>
+          <input type="text" class="form-control" id="bankName" placeholder="{{selectedDomain.title}}"
+            [(ngModel)]='selectedDomain.title'>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-warning" (click)='updateDomain()'>Update</button>
+      </div>
+    </div>
+  </div>
+</div>

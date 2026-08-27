@@ -1,0 +1,478 @@
+<div class="wrapper">
+  <div class="loader" *ngIf="showLoader">
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+
+  <header>
+    <div class="tabs">
+      <button
+        class="tab-btn"
+        [class.active]="activeTab === 'arca'"
+        (click)="setTab('arca')"
+      >
+        ARCA / EPG
+      </button>
+      <button
+        class="tab-btn"
+        [class.active]="activeTab === 'hostx'"
+        (click)="setTab('hostx')"
+      >
+        HostX / Apple Pay
+      </button>
+      <button
+        class="tab-btn"
+        [class.active]="activeTab === 'transaction'"
+        (click)="setTab('transaction')"
+      >
+        Transaction history
+      </button>
+    </div>
+
+    <div class="pagination" *ngIf="activeTab !== 'transaction'">
+      <span class="page-meta"
+        >Page {{ page }} / {{ totalPages || 1 }} · {{ totalCount }} total</span
+      >
+      <button
+        [disabled]="page <= 1"
+        class="btn my-btn-color"
+        (click)="goToPage(-1)"
+      >
+        &laquo; Previous
+      </button>
+      <button
+        [disabled]="totalPages > 0 && page >= totalPages"
+        class="btn my-btn-color"
+        (click)="goToPage(1)"
+      >
+        Next &raquo;
+      </button>
+    </div>
+  </header>
+
+  <section class="filters" *ngIf="activeTab !== 'transaction'">
+    <div class="filter-grid">
+      <input
+        class="form-control form-control-sm"
+        [(ngModel)]="filter.merchantId"
+        placeholder="merchantId"
+        (keyup.enter)="applyFilters()"
+      />
+      <input
+        class="form-control form-control-sm"
+        [(ngModel)]="filter.transactionId"
+        placeholder="transactionId"
+        (keyup.enter)="applyFilters()"
+      />
+      <input
+        class="form-control form-control-sm"
+        [(ngModel)]="filter.pxNumber"
+        placeholder="pxNumber"
+        (keyup.enter)="applyFilters()"
+      />
+      <input
+        class="form-control form-control-sm"
+        [(ngModel)]="filter.orderNumber"
+        placeholder="orderNumber"
+        (keyup.enter)="applyFilters()"
+      />
+      <input
+        class="form-control form-control-sm"
+        [(ngModel)]="filter.correlationId"
+        placeholder="correlationId"
+        (keyup.enter)="applyFilters()"
+      />
+      <input
+        *ngIf="activeTab === 'arca'"
+        class="form-control form-control-sm"
+        [(ngModel)]="filter.apiType"
+        placeholder="apiType (e.g. register.do)"
+        (keyup.enter)="applyFilters()"
+      />
+      <input
+        *ngIf="activeTab === 'arca'"
+        class="form-control form-control-sm"
+        [(ngModel)]="filter.arcaOrderId"
+        placeholder="arcaOrderId"
+        (keyup.enter)="applyFilters()"
+      />
+      <input
+        *ngIf="activeTab === 'hostx'"
+        class="form-control form-control-sm"
+        [(ngModel)]="filter.action"
+        placeholder="action (e.g. register)"
+        (keyup.enter)="applyFilters()"
+      />
+      <input
+        *ngIf="activeTab === 'hostx'"
+        class="form-control form-control-sm"
+        [(ngModel)]="filter.path"
+        placeholder="path (e.g. /pos_api/)"
+        (keyup.enter)="applyFilters()"
+      />
+      <input
+        class="form-control form-control-sm"
+        [(ngModel)]="filter.statusCode"
+        placeholder="statusCode"
+        (keyup.enter)="applyFilters()"
+      />
+      <select
+        class="form-select form-select-sm"
+        [(ngModel)]="filter.isSuccess"
+        (change)="applyFilters()"
+      >
+        <option value="">Success: All</option>
+        <option value="true">Success only</option>
+        <option value="false">Failed only</option>
+      </select>
+      <input
+        class="form-control form-control-sm"
+        type="datetime-local"
+        [(ngModel)]="filter.from"
+        title="From (local → send as ISO)"
+      />
+      <input
+        class="form-control form-control-sm"
+        type="datetime-local"
+        [(ngModel)]="filter.to"
+        title="To (local → send as ISO)"
+      />
+      <input
+        class="form-control form-control-sm filter-search"
+        [(ngModel)]="filter.search"
+        placeholder="Search in body / URL / exception"
+        (keyup.enter)="applyFilters()"
+      />
+    </div>
+    <div class="filter-actions">
+      <button class="btn my-btn-color" (click)="applyFilters()">Filter</button>
+      <button class="btn btn-secondary" (click)="clearFilters()">Clear</button>
+    </div>
+  </section>
+
+  <section class="filters" *ngIf="activeTab === 'transaction'">
+    <div class="filter-grid history-grid">
+      <input
+        class="form-control form-control-sm"
+        [(ngModel)]="historyLookup.transactionId"
+        placeholder="transactionId"
+        (keyup.enter)="loadTransactionHistory()"
+      />
+      <input
+        class="form-control form-control-sm"
+        [(ngModel)]="historyLookup.pxNumber"
+        placeholder="pxNumber"
+        (keyup.enter)="loadTransactionHistory()"
+      />
+      <button class="btn my-btn-color" (click)="loadTransactionHistory()">
+        Load history
+      </button>
+    </div>
+  </section>
+
+  <!-- ARCA table -->
+  <section class="tables" *ngIf="activeTab === 'arca'">
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th>Created (UTC)</th>
+          <th>API</th>
+          <th>Method</th>
+          <th>Status</th>
+          <th>OK</th>
+          <th>ms</th>
+          <th>Txn</th>
+          <th>Merchant</th>
+          <th>pxNumber</th>
+          <th>Correlation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let row of arcaItems"
+          (click)="openArcaDetail(row)"
+          [class.row-fail]="!row.isSuccess"
+        >
+          <td>{{ formatUtc(row.createdAt) | date: "dd/MM/yy HH:mm:ss" }}</td>
+          <td>{{ row.apiType }}</td>
+          <td>{{ row.httpMethod }}</td>
+          <td>{{ row.responseStatusCode }}</td>
+          <td>
+            <span class="badge" [class.ok]="row.isSuccess" [class.fail]="!row.isSuccess">
+              {{ row.isSuccess ? "OK" : "FAIL" }}
+            </span>
+          </td>
+          <td>{{ row.durationMs }}</td>
+          <td>{{ row.transactionId || "—" }}</td>
+          <td>{{ row.merchantId || "—" }}</td>
+          <td class="mono truncate">{{ row.pxNumber || "—" }}</td>
+          <td class="mono truncate">{{ row.correlationId || "—" }}</td>
+        </tr>
+        <tr *ngIf="!arcaItems?.length">
+          <td colspan="10" class="empty">No ARCA logs</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- HostX table -->
+  <section class="tables" *ngIf="activeTab === 'hostx'">
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th>Created (UTC)</th>
+          <th>Action</th>
+          <th>Method</th>
+          <th>Path</th>
+          <th>Status</th>
+          <th>OK</th>
+          <th>ms</th>
+          <th>Txn</th>
+          <th>Merchant</th>
+          <th>Client IP</th>
+          <th>Correlation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let row of hostxItems"
+          (click)="openHostxDetail(row)"
+          [class.row-fail]="!row.isSuccess"
+        >
+          <td>{{ formatUtc(row.createdAt) | date: "dd/MM/yy HH:mm:ss" }}</td>
+          <td>{{ row.action }}</td>
+          <td>{{ row.httpMethod }}</td>
+          <td class="mono">{{ row.path }}{{ row.queryString || "" }}</td>
+          <td>{{ row.responseStatusCode }}</td>
+          <td>
+            <span class="badge" [class.ok]="row.isSuccess" [class.fail]="!row.isSuccess">
+              {{ row.isSuccess ? "OK" : "FAIL" }}
+            </span>
+          </td>
+          <td>{{ row.durationMs }}</td>
+          <td>{{ row.transactionId || "—" }}</td>
+          <td>{{ row.merchantId || "—" }}</td>
+          <td>{{ row.clientIp || "—" }}</td>
+          <td class="mono truncate">{{ row.correlationId || "—" }}</td>
+        </tr>
+        <tr *ngIf="!hostxItems?.length">
+          <td colspan="11" class="empty">No HostX logs</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Transaction history -->
+  <section class="tables traces" *ngIf="activeTab === 'transaction'">
+    <div class="trace-card" *ngFor="let trace of transactionTraces; let i = index">
+      <div class="trace-header">
+        <strong>#{{ i + 1 }}</strong>
+        <span class="mono">{{ trace.correlationId }}</span>
+        <button
+          class="btn btn-sm my-btn-color"
+          (click)="showTrace(trace.correlationId)"
+          *ngIf="trace.correlationId"
+        >
+          Open full trace
+        </button>
+      </div>
+      <div class="trace-cols">
+        <div>
+          <h6>Inbound ({{ trace.inboundRequests?.length || 0 }})</h6>
+          <ul>
+            <li *ngFor="let inb of trace.inboundRequests">
+              {{ formatUtc(inb.createdAt) | date: "dd/MM/yy HH:mm:ss" }} ·
+              {{ inb.action }} · {{ inb.responseStatusCode }}
+              <span class="badge" [class.ok]="inb.isSuccess" [class.fail]="!inb.isSuccess">
+                {{ inb.isSuccess ? "OK" : "FAIL" }}
+              </span>
+            </li>
+            <li *ngIf="!trace.inboundRequests?.length" class="muted">None</li>
+          </ul>
+        </div>
+        <div>
+          <h6>ARCA ({{ trace.arcaRequests?.length || 0 }})</h6>
+          <ul>
+            <li *ngFor="let ar of trace.arcaRequests">
+              {{ formatUtc(ar.createdAt) | date: "dd/MM/yy HH:mm:ss" }} ·
+              {{ ar.apiType }} · {{ ar.responseStatusCode }}
+              <span class="badge" [class.ok]="ar.isSuccess" [class.fail]="!ar.isSuccess">
+                {{ ar.isSuccess ? "OK" : "FAIL" }}
+              </span>
+            </li>
+            <li *ngIf="!trace.arcaRequests?.length" class="muted">None</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="empty" *ngIf="!transactionTraces?.length">
+      Enter a transactionId or pxNumber and load history.
+    </div>
+  </section>
+</div>
+
+<!-- Hidden bootstrap modal triggers -->
+<button
+  #detailModalOpen
+  type="button"
+  class="d-none"
+  data-bs-toggle="modal"
+  data-bs-target="#logDetailModal"
+></button>
+<button
+  #traceModalOpen
+  type="button"
+  class="d-none"
+  data-bs-toggle="modal"
+  data-bs-target="#logTraceModal"
+></button>
+
+<!-- Detail modal -->
+<div class="modal fade" id="logDetailModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" *ngIf="detailType === 'arca' && selectedArca">
+          ARCA #{{ selectedArca.id }} · {{ selectedArca.apiType }}
+        </h5>
+        <h5 class="modal-title" *ngIf="detailType === 'hostx' && selectedHostx">
+          HostX #{{ selectedHostx.id }} · {{ selectedHostx.action }}
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" *ngIf="detailType === 'arca' && selectedArca">
+        <div class="detail-meta">
+          <div><label>Created (UTC)</label>{{ formatUtc(selectedArca.createdAt) | date: "yyyy-MM-dd HH:mm:ss" }}</div>
+          <div><label>Method</label>{{ selectedArca.httpMethod }}</div>
+          <div><label>Status</label>{{ selectedArca.responseStatusCode }}</div>
+          <div><label>Duration</label>{{ selectedArca.durationMs }} ms</div>
+          <div><label>Success</label>{{ selectedArca.isSuccess }}</div>
+          <div><label>Merchant</label>{{ selectedArca.merchantId || "—" }}</div>
+          <div><label>Transaction</label>{{ selectedArca.transactionId || "—" }}</div>
+          <div><label>Order #</label>{{ selectedArca.orderNumber || "—" }}</div>
+          <div><label>ARCA order</label>{{ selectedArca.arcaOrderId || "—" }}</div>
+          <div class="full"><label>pxNumber</label><span class="mono">{{ selectedArca.pxNumber || "—" }}</span></div>
+          <div class="full"><label>Correlation</label><span class="mono">{{ selectedArca.correlationId || "—" }}</span></div>
+          <div class="full"><label>URL</label><span class="mono wrap">{{ selectedArca.requestUrl }}</span></div>
+          <div class="full" *ngIf="selectedArca.exceptionMessage">
+            <label>Exception</label>
+            <pre class="body-pre fail-text">{{ selectedArca.exceptionMessage }}</pre>
+          </div>
+        </div>
+        <div class="body-block">
+          <h6>Request body</h6>
+          <pre class="body-pre">{{ pretty(selectedArca.requestBody) }}</pre>
+        </div>
+        <div class="body-block">
+          <h6>Response body</h6>
+          <pre class="body-pre">{{ pretty(selectedArca.responseBody) }}</pre>
+        </div>
+      </div>
+      <div class="modal-body" *ngIf="detailType === 'hostx' && selectedHostx">
+        <div class="detail-meta">
+          <div><label>Created (UTC)</label>{{ formatUtc(selectedHostx.createdAt) | date: "yyyy-MM-dd HH:mm:ss" }}</div>
+          <div><label>Method</label>{{ selectedHostx.httpMethod }}</div>
+          <div><label>Status</label>{{ selectedHostx.responseStatusCode }}</div>
+          <div><label>Duration</label>{{ selectedHostx.durationMs }} ms</div>
+          <div><label>Success</label>{{ selectedHostx.isSuccess }}</div>
+          <div><label>Client IP</label>{{ selectedHostx.clientIp || "—" }}</div>
+          <div><label>Merchant</label>{{ selectedHostx.merchantId || "—" }}</div>
+          <div><label>Transaction</label>{{ selectedHostx.transactionId || "—" }}</div>
+          <div><label>Order #</label>{{ selectedHostx.orderNumber || "—" }}</div>
+          <div class="full"><label>Path</label><span class="mono">{{ selectedHostx.path }}{{ selectedHostx.queryString || "" }}</span></div>
+          <div class="full"><label>pxNumber</label><span class="mono">{{ selectedHostx.pxNumber || "—" }}</span></div>
+          <div class="full"><label>Correlation</label><span class="mono">{{ selectedHostx.correlationId || "—" }}</span></div>
+          <div class="full" *ngIf="selectedHostx.exceptionMessage">
+            <label>Exception</label>
+            <pre class="body-pre fail-text">{{ selectedHostx.exceptionMessage }}</pre>
+          </div>
+        </div>
+        <div class="body-block">
+          <h6>Request body</h6>
+          <pre class="body-pre">{{ pretty(selectedHostx.requestBody) }}</pre>
+        </div>
+        <div class="body-block">
+          <h6>Response body</h6>
+          <pre class="body-pre">{{ pretty(selectedHostx.responseBody) }}</pre>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          class="btn my-btn-color"
+          *ngIf="detailType === 'arca' && selectedArca?.correlationId"
+          (click)="showTrace(selectedArca.correlationId, true)"
+        >
+          Show full trace
+        </button>
+        <button
+          class="btn my-btn-color"
+          *ngIf="detailType === 'hostx' && selectedHostx?.correlationId"
+          (click)="showTrace(selectedHostx.correlationId, true)"
+        >
+          Show full trace
+        </button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Trace modal -->
+<div class="modal fade" id="logTraceModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content" *ngIf="selectedTrace">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          Trace · <span class="mono">{{ selectedTrace.correlationId }}</span>
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <h6>Inbound requests ({{ selectedTrace.inboundRequests?.length || 0 }})</h6>
+        <div class="trace-item" *ngFor="let inb of selectedTrace.inboundRequests">
+          <div class="trace-item-head">
+            {{ formatUtc(inb.createdAt) | date: "dd/MM/yy HH:mm:ss" }} ·
+            {{ inb.httpMethod }} {{ inb.path }}{{ inb.queryString || "" }} ·
+            {{ inb.action }} · {{ inb.responseStatusCode }} ({{ inb.durationMs }} ms)
+            <span class="badge" [class.ok]="inb.isSuccess" [class.fail]="!inb.isSuccess">
+              {{ inb.isSuccess ? "OK" : "FAIL" }}
+            </span>
+          </div>
+          <pre class="body-pre">{{ pretty(inb.requestBody) }}</pre>
+          <pre class="body-pre">{{ pretty(inb.responseBody) }}</pre>
+        </div>
+        <p *ngIf="!selectedTrace.inboundRequests?.length" class="muted">No inbound requests</p>
+
+        <h6 class="mt-3">ARCA requests ({{ selectedTrace.arcaRequests?.length || 0 }})</h6>
+        <div class="trace-item" *ngFor="let ar of selectedTrace.arcaRequests">
+          <div class="trace-item-head">
+            {{ formatUtc(ar.createdAt) | date: "dd/MM/yy HH:mm:ss" }} ·
+            {{ ar.apiType }} · {{ ar.responseStatusCode }} ({{ ar.durationMs }} ms)
+            <span class="badge" [class.ok]="ar.isSuccess" [class.fail]="!ar.isSuccess">
+              {{ ar.isSuccess ? "OK" : "FAIL" }}
+            </span>
+          </div>
+          <div class="mono wrap small">{{ ar.requestUrl }}</div>
+          <pre class="body-pre">{{ pretty(ar.requestBody) }}</pre>
+          <pre class="body-pre">{{ pretty(ar.responseBody) }}</pre>
+        </div>
+        <p *ngIf="!selectedTrace.arcaRequests?.length" class="muted">No ARCA requests</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

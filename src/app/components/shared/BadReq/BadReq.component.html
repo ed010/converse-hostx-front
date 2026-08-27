@@ -1,0 +1,67 @@
+<!-- <app-deal-navbar></app-deal-navbar> -->
+<div class="head">
+  <app-header></app-header>
+</div>
+<!-- MAIN -->
+<section *ngIf="transaction">
+  <aside class="allDetails">
+    <div class="paymentDetails">
+      <div class="info">
+        <!-- <div class="logo">
+          <img src="../../../../assets/image/VTB/VTB_logo.jpg" alt="Company Logo">
+        </div> -->
+        <div class="company-name">
+          <div class="logo">
+            <!-- <img src="{{domSanitizer.bypassSecurityTrustUrl(transaction?.qrImage)}}" alt="Company Logo"> -->
+            <img
+              [src]="replaceConverseImgLink(transaction?.logo)"
+              alt="Company Logo"
+            />
+          </div>
+          <!-- <h2>Congress Hotel</h2> -->
+          <h2>{{ transaction.merchantName }}</h2>
+        </div>
+      </div>
+      <div class="payment hide-block-for-pay">
+        <div class="details line">
+          <div class="comment" *ngIf="transaction.status == ''">
+            <span>{{ transaction.comment }}</span>
+          </div>
+          <div class="amount">
+            <span>{{ transaction.amount }} AMD</span>
+          </div>
+          <div class="text-seccessful">
+            <!-- <img
+              src="../../../../../assets/image/user-paid-unpaid/check.png"
+              alt=""
+            /> -->
+            <span>{{ "deals.declined" | translate }}</span>
+            <button class="btn btn-success" (click)="onOkBtnClick()">
+              {{ "deals.goBack" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <!-- <aside class="ad-banner">
+    <div class="banner-div">
+      <img src="../../../../../assets/image/user-paid-unpaid/banner.jpg" alt="">
+    </div>
+  </aside> -->
+</section>
+<!-- FOOTER -->
+<footer>
+  <div class="loader" *ngIf="showLoaderBig">
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,150 @@
+<div class="wrapper">
+  <div class="background">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="1440"
+      height="900"
+      viewBox="0 0 1440 900"
+      fill="none"
+    >
+      <rect width="1440" height="900" fill="var(--uni--color)" />
+      <circle class="aaa" cx="776" cy="839" r="697" fill="#469893" />
+      <circle class="aaa2" cx="1073.5" cy="304.5" r="489.5" fill="#5AC4BD" />
+    </svg>
+  </div>
+  <div class="con">
+    <header>
+      <a class="logo" href="https://www.conversebank.am">
+        <img src="../../../../../assets/image/login/logo.png" alt="" />
+      </a>
+      <div class="l">
+        <div class="ad lang" tabindex="1">
+          <div class="ico">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 14 14"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M7 13C10.3137 13 13 10.3137 13 7C13 3.68629 10.3137 1 7 1C3.68629 1 1 3.68629 1 7C1 10.3137 3.68629 13 7 13Z"
+                stroke="#007DC3"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1 7H13"
+                stroke="#007DC3"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M6.99998 1C8.50074 2.64301 9.35363 4.77522 9.39998 7C9.35363 9.22478 8.50074 11.357 6.99998 13C5.49921 11.357 4.64632 9.22478 4.59998 7C4.64632 4.77522 5.49921 2.64301 6.99998 1V1Z"
+                stroke="#007DC3"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+          <div class="title t-lang">
+            {{ langText == "en" ? "EN" : langText == "RU" ? "Rus" : "AM" }}
+          </div>
+          <div class="arrow">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="10"
+              height="6"
+              viewBox="0 0 10 6"
+              fill="none"
+            >
+              <path
+                d="M1 1L5 5L9 1"
+                stroke="white"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+
+          <div class="nested n-lang">
+            <ul>
+              <li
+                (click)="changeLang('en')"
+                [ngClass]="{ active: langText == 'en' }"
+                class="en"
+              >
+                EN
+              </li>
+              <li
+                (click)="changeLang('ru')"
+                [ngClass]="{ active: langText == 'ru' }"
+              >
+                RU
+              </li>
+              <li
+                (click)="changeLang('am')"
+                [ngClass]="{ active: langText == 'am' }"
+                class="am"
+              >
+                AM
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="main">
+      <div class="left">
+        <div class="big-text">
+          <h1>
+            TRUSTED BY <br />
+            GENERATIONS <br />
+          </h1>
+        </div>
+      </div>
+      <div class="right">
+        <form (ngSubmit)="onSubBtnClick()">
+          <div class="title">{{ "login.login" | translate }}</div>
+          <input
+            type="text"
+            placeholder="{{ 'login.username' | translate }}"
+            [ngModelOptions]="{ standalone: true }"
+            [(ngModel)]="login.username"
+          />
+          <input
+            type="password"
+            placeholder="{{ 'login.password' | translate }}"
+            [ngModelOptions]="{ standalone: true }"
+            [(ngModel)]="login.password"
+          />
+          <div
+            class="wrong-password-or-login"
+            [ngClass]="{ invalid: !loginIsValid }"
+          >
+            Incorrect username or password
+          </div>
+          <div class="terms">
+            {{ "login.termsAndConditions1" | translate
+            }}<span class="t">{{
+              "login.termsAndConditions2" | translate
+            }}</span>
+          </div>
+          <button type="submit">{{ "login.login" | translate }}</button>
+          <div class="forgot-password">
+            <span>{{ "login.forgotPass" | translate }}</span>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <footer>
+      <p>© {{ date.getFullYear() }} Conversebank. All rights reserved.</p>
+    </footer>
+  </div>
+</div>

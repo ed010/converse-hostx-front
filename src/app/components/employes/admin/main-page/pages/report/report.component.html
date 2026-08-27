@@ -1,0 +1,52 @@
+<div class="wrapper">
+
+  <div class="button">
+    <button class="btn my-btn-color" (click)="downloadFile()" d>Download current file</button>
+    <div *ngIf="showLoaderDownload" class="loader-2"></div>
+  </div>
+
+  <div class="wrappp" *ngIf="!showLoader">
+    <select #selectedValue class="form-select">
+      <option selected value="-1">Select and download old file</option>
+      <ng-container *ngFor="let h of historyObj">
+        <option [value]="h.id">{{h.from| date: 'dd/MM/yy HH:mm'}} -> {{h.to| date: 'dd/MM/yy HH:mm'}}</option>
+      </ng-container>
+    </select>
+    <div class="button">
+      <button class="btn my-btn-color" (click)="downloadFileSelect(selectedValue.value)" d>Download selected
+        file</button>
+      <div *ngIf="showLoaderDownload2" class="loader-2"></div>
+    </div>
+    <!-- <table class="table table-hover" *ngIf="!showLoader">
+      <thead>
+        <tr>
+          <th scope="col">From</th>
+          <th scope="col">To</th>
+          <th scope="col">Download report</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let h of historyObj">
+          <td>{{h.from | date: 'dd/MM/yy HH:mm'}}</td>
+          <td>{{h.to | date: 'dd/MM/yy HH:mm'}}</td>
+          <td>
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#reportfile">DOWNLOAD</button>
+          </td>
+        </tr>
+      </tbody>
+    </table> -->
+    <div class="loader" *ngIf="showLoader">
+      <div class="lds-roller">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </div>
+
+</div>

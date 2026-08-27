@@ -1,0 +1,520 @@
+<div class="wrapper">
+  <form [formGroup]="merchantInfo" *ngIf="merchantInfo">
+    <div class="main-block">
+      <div class="left-side">
+        <div class="bl">
+          <div class="name">Company name En*:&nbsp;</div>
+          <div class="data">
+            <input
+              type="text"
+              class="form-control"
+              formControlName="companyNameEn"
+            />
+          </div>
+        </div>
+
+        <div class="bl">
+          <div class="name">Company name Hy*:&nbsp;</div>
+          <div class="data">
+            <input
+              type="text"
+              class="form-control"
+              formControlName="companyNameHy"
+            />
+          </div>
+        </div>
+
+        <div class="bl">
+          <div class="name">Company name Ru:&nbsp;</div>
+          <div class="data">
+            <input
+              type="text"
+              class="form-control"
+              formControlName="companyNameRu"
+            />
+          </div>
+        </div>
+
+        <div class="bl">
+          <div class="name">Address En*:&nbsp;</div>
+          <div class="data">
+            <input
+              type="text"
+              class="form-control"
+              formControlName="addressEn"
+            />
+          </div>
+        </div>
+
+        <div class="bl">
+          <div class="name">Address Hy*:&nbsp;</div>
+          <div class="data">
+            <input
+              type="text"
+              class="form-control"
+              formControlName="addressHy"
+            />
+          </div>
+        </div>
+
+        <div class="bl">
+          <div class="name">Legal company name*:&nbsp;</div>
+          <div class="data">
+            <input
+              type="text"
+              class="form-control"
+              formControlName="legalCompanyName"
+            />
+          </div>
+        </div>
+
+        <div class="bl">
+          <div class="name">Legal address*:&nbsp;</div>
+          <div class="data">
+            <input
+              type="text"
+              class="form-control"
+              formControlName="legalAddress"
+            />
+          </div>
+        </div>
+
+        <div class="bl">
+          <div class="name">Director:&nbsp;</div>
+          <div class="data">
+            <input
+              type="text"
+              class="form-control"
+              formControlName="director"
+            />
+          </div>
+        </div>
+
+        <div class="bl">
+          <div class="name">Phone:&nbsp;</div>
+          <div class="data">
+            <input
+              type="text"
+              class="form-control"
+              prefix="+374"
+              mask="00 00 00 00"
+              formControlName="phone"
+            />
+          </div>
+        </div>
+
+        <div class="bl">
+          <div class="name">SMS phone:&nbsp;</div>
+          <div class="data">
+            <input
+              type="text"
+              class="form-control"
+              prefix="+374"
+              mask="00 00 00 00"
+              formControlName="smsPhone"
+            />
+          </div>
+        </div>
+
+        <div class="bl">
+          <div class="name">Email:&nbsp;</div>
+          <div class="data">
+            <input type="text" class="form-control" formControlName="email" />
+          </div>
+        </div>
+
+        <div class="bl">
+          <div class="name">Website:&nbsp;</div>
+          <div class="data">
+            <input type="text" class="form-control" formControlName="website" />
+          </div>
+        </div>
+
+        <div class="bl">
+          <div class="name">Logo:&nbsp;</div>
+          <div class="data logo-field">
+            <div class="logo-preview" *ngIf="currentLogoPreview">
+              <img [src]="currentLogoPreview" alt="Current logo" />
+            </div>
+            <input
+              #logoInput
+              type="file"
+              accept="image/png, image/jpeg"
+              class="logo-input-hidden"
+              (change)="uploadLogo($event)"
+            />
+            <button
+              type="button"
+              class="btn btn-outline-secondary btn-sm"
+              (click)="logoInput.click()"
+            >
+              {{ currentLogoPreview ? "Change logo" : "Upload logo" }}
+            </button>
+          </div>
+        </div>
+
+        <div class="bl">
+          <div class="name">Bank serial number:&nbsp;</div>
+          <div class="data">
+            <input
+              type="text"
+              class="form-control"
+              formControlName="bankSerialNumber"
+            />
+          </div>
+        </div>
+
+        <div class="bl">
+          <div class="name">TIN:&nbsp;</div>
+          <div class="data">
+            <input type="text" class="form-control" formControlName="tin" />
+          </div>
+        </div>
+
+        <!-- <div class="bl">
+          <div class="name">
+            Bank:&nbsp;
+          </div>
+          <div class="data">
+            <select #bank_value class="form-control" (change)="setBank(bank_value.value)" formControlName="bank">
+              <option *ngIf="showBank">None</option>
+              <option *ngFor="let bank of banks" [value]="bank.id">{{bank.title}}</option>
+
+            </select>
+          </div>
+        </div> -->
+
+        <div class="bl">
+          <div class="name">Sphere of activity:&nbsp;</div>
+          <div class="data">
+            <input
+              type="text"
+              class="form-control"
+              formControlName="sphereOfActivity"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="right-side">
+        <div class="main-info">
+          <div class="bl">
+            <div class="name">MCC*:&nbsp;</div>
+            <div class="data">
+              <input type="text" class="form-control" formControlName="mcc" />
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Domain*:&nbsp;</div>
+            <div class="data">
+              <select
+                #domain_value
+                class="form-select"
+                (change)="setDomain(domain_value.value)"
+                formControlName="domain"
+              >
+                <option selected *ngIf="showDomain">None</option>
+                <option *ngFor="let domain of domains" [value]="domain.id">
+                  {{ domain.title }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Merchant arca percent*:&nbsp;</div>
+            <div class="data">
+              <input
+                type="text"
+                mask="separator"
+                maxlength="5"
+                class="form-control"
+                formControlName="merchantArcaPercent"
+              />
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Merchant local percent*:&nbsp;</div>
+            <div class="data">
+              <input
+                type="text"
+                mask="separator"
+                maxlength="5"
+                class="form-control"
+                formControlName="merchantLocalPercent"
+              />
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Merchant out percent*:&nbsp;</div>
+            <div class="data">
+              <input
+                type="text"
+                mask="separator"
+                maxlength="5"
+                class="form-control"
+                formControlName="merchantOutPercent"
+              />
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Bank internal tid:&nbsp;</div>
+            <div class="data">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="bankInternalTid"
+              />
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Bank internal mid:&nbsp;</div>
+            <div class="data">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="bankInternalMid"
+              />
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Fee type:&nbsp;</div>
+            <div class="data">
+              <select class="form-select" formControlName="feeType">
+                <option selected value="1">Fixed</option>
+                <option value="2">Percent</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Merchant type:&nbsp;</div>
+            <div class="data">
+              <select class="form-select" formControlName="merchantType">
+                <option selected value="1">Merchant</option>
+                <option value="2">MobileApp</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Status:&nbsp;</div>
+            <div class="data">
+              <select class="form-select" formControlName="status">
+                <option selected value="0">In Process</option>
+                <option value="1">Active</option>
+                <option value="2">Closed</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Offline:&nbsp;</div>
+            <div class="data">
+              <input type="checkbox" formControlName="isOffline" />
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Merchant Group:&nbsp;</div>
+            <div class="data">
+              <input
+                (change)="checkBanks()"
+                [checked]="merchantGroup"
+                [(ngModel)]="merchantGroup"
+                [ngModelOptions]="{ standalone: true }"
+                type="checkbox"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="bl">
+          <div class="name">EPG:&nbsp;</div>
+          <div class="data">
+            <input type="checkbox" formControlName="isEpg" />
+          </div>
+        </div>
+
+        <div class="bl">
+          <div class="name">Currencies:</div>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap; user-select: none;">
+            <div *ngFor="let currency of currencies" style="display: flex; gap: 3px;">
+              <label [for]="currency.code">{{ currency.name }}</label>
+              <input [id]="currency.code" type="checkbox" [checked]="currenciesFormArray.value.includes(currency.name)"
+                (change)="onCurrencyChange(currency.name, $event.target.checked)" />
+            </div>
+          </div>
+        </div>
+        <div *ngIf="merchantInfo.get('currencies').touched && merchantInfo.get('currencies').errors?.atLeastOneRequired">
+          Please select at least one currency.
+        </div>
+
+        <div class="arca-info" *ngIf="!merchantGroup">
+          <div class="bl">
+            <div class="name">Api*:&nbsp;</div>
+            <div class="data">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="tidApi"
+              />
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Api password*:&nbsp;</div>
+            <div class="data">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="bpcTidApiPassword"
+              />
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Binding*:&nbsp;</div>
+            <div class="data">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="tidBinding"
+              />
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Binding password*:&nbsp;</div>
+            <div class="data">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="bpcTidBindingPassword"
+              />
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">EPG username:&nbsp;</div>
+            <div class="data">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="epgUsername"
+              />
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">EPG password:&nbsp;</div>
+            <div class="data">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="epgPassword"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="arca-info" *ngIf="merchantGroup">
+          <div class="bl">
+            <div class="name">Select group:&nbsp;</div>
+            <div class="data">
+              <select
+                #group_value
+                class="form-select"
+                (change)="setGroup(group_value.value)"
+                formControlName="merchantGroup"
+              >
+                <option selected *ngIf="showGroups">None</option>
+                <option *ngFor="let group of groups" [value]="group.id">
+                  {{ group.merchantGroupName }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Api:&nbsp;</div>
+            <div class="data">
+              <input
+                type="text"
+                class="form-control disabled"
+                disabled
+                formControlName="tidApi"
+              />
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Api password:&nbsp;</div>
+            <div class="data">
+              <input
+                type="text"
+                class="form-control disabled"
+                disabled
+                formControlName="bpcTidApiPassword"
+              />
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Binding:&nbsp;</div>
+            <div class="data">
+              <input
+                type="text"
+                class="form-control disabled"
+                disabled
+                formControlName="tidBinding"
+              />
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">Binding password:&nbsp;</div>
+            <div class="data">
+              <input
+                type="text"
+                class="form-control disabled"
+                disabled
+                formControlName="bpcTidBindingPassword"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="button">
+      <button class="btn btn-secondary" (click)="cancelBtn()">Cancel</button>
+      <button
+        class="btn btn-success"
+        [disabled]="merchantInfo.invalid"
+        (click)="setNewMerchant()"
+      >
+        Update
+      </button>
+    </div>
+  </form>
+
+  <div class="loader" *ngIf="showLoader">
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</div>

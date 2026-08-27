@@ -1,0 +1,112 @@
+<div class="wrapper">
+  <!-- <app-deal-navbar></app-deal-navbar> -->
+  <div class="head">
+    <app-header></app-header>
+  </div>
+  <!-- MAIN -->
+  <section *ngIf="transaction">
+    <aside class="allDetails">
+      <div class="paymentDetails">
+        <div class="info">
+          <!-- <div class="logo">
+            <img src="../../../../assets/image/VTB/VTB_logo.jpg" alt="Company Logo">
+          </div> -->
+          <div class="company-name">
+            <div class="logo">
+              <!-- <img src="{{domSanitizer.bypassSecurityTrustUrl(transaction?.qrImage)}}" alt="Company Logo"> -->
+              <img
+                [src]="replaceConverseImgLink(transaction?.logo)"
+                alt="Company Logo"
+              />
+            </div>
+            <!-- <h2>Congress Hotel</h2> -->
+            <h2>{{ transaction.merchantName }}</h2>
+          </div>
+        </div>
+        <div class="payment hide-block-for-pay">
+          <div class="details line">
+            <div class="comment" *ngIf="transaction.status == ''">
+              <span>{{ transaction.comment }}</span>
+            </div>
+            <div class="amount">
+              <span>{{ transaction.amount }} AMD</span>
+            </div>
+            <div class="text-seccessful">
+              <img
+                src="../../../../../assets/image/user-paid-unpaid/check.png"
+                alt=""
+              />
+              <span>{{ "deals.paid" | translate }}</span>
+            </div>
+          </div>
+          <form class="email" [formGroup]="sendMail" (submit)="sendData()">
+            <div class="text">
+              <span>{{ "deals.send" | translate }}</span>
+            </div>
+            <div class="email-input">
+              <!-- <input type="email" placeholder="Էլ․ փոստ" class="email-field"> -->
+              <input
+                type="email"
+                placeholder="{{ 'deals.mail' | translate }}"
+                class="email-field"
+                formControlName="email"
+              />
+              <div class="spin">
+                <div
+                  *ngIf="showLoader"
+                  class="spinner-border text-success"
+                  role="status"
+                >
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+                <div class="succ" *ngIf="showTick">
+                  <svg
+                    width="24px"
+                    height="24px"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M18 7L9.42857 17L6 13"
+                      stroke="#363853"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div class="send-btn">
+              <!-- <button>Ուղարկել</button> -->
+              <button [disabled]="!sendMail.get('email').valid">
+                {{ "deals.sendButton" | translate }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </aside>
+    <!-- <aside class="ad-banner">
+      <div class="banner-div">
+        <img src="../../../../../assets/image/user-paid-unpaid/banner.jpg" alt="">
+      </div>
+    </aside> -->
+  </section>
+  <!-- FOOTER -->
+  <footer>
+    <div class="loader" *ngIf="showLoaderBig">
+      <div class="lds-roller">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </footer>
+</div>

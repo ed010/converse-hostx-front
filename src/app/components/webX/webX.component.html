@@ -1,0 +1,96 @@
+<!-- <div class="wrapper">
+  <div class="logo">
+    <img src="../../../assets/image/bank/Converse.png" alt="" />
+  </div>
+  <div class="header">
+    <p style="font-size: 2.5em; color: var(--uni--color)">
+      FAST & CONVENIENT PAYMENTS
+    </p>
+    <p style="font-size: 1.5em; color: var(--uni--color)">
+      <b style="color: var(--uni--color)">Scan</b> &
+      <b style="color: var(--uni--color)">Pay</b>
+    </p>
+  </div>
+  <div class="body">
+    <div class="qr-wrapper">
+      <div class="qr" *ngIf="!loadingToggle && !errorToggle">
+        <qr-code
+          value="{{ link }}"
+          size="300"
+          errorCorrectionLevel="M"
+        ></qr-code>
+      </div>
+      <div class="loader center" *ngIf="!loadingToggle && errorToggle">
+        <b style="color: rgb(230, 149, 63); font-size: 32px"
+          >Sorrrrry!!!
+          <h2 style="color: red">We can't find this order...</h2>
+        </b>
+      </div>
+      <div class="loader center" *ngIf="loadingToggle">
+        <app-loading></app-loading>
+      </div>
+    </div>
+  </div>
+  <div class="footer center" *ngIf="!loadingToggle && !errorToggle">
+    <button class="button-pushable" role="button" (click)="onClickPayByCard()">
+      <span class="button-shadow"></span>
+      <span class="button-edge"></span>
+      <span style="background: var(--uni--color)" class="button-front text">
+        Pay by card
+      </span>
+    </button>
+  </div>
+  <div class="footer center" *ngIf="!loadingToggle && errorToggle">
+    <button class="button-pushable" role="button" (click)="onClickOkBtn()">
+      <span class="button-shadow"></span>
+      <span class="button-edge"></span>
+      <span style="background: rgb(230, 149, 63)" class="button-front text">
+        Go to home
+      </span>
+    </button>
+  </div>
+</div>
+
+<div class="modal-wrapper" *ngIf="showCards">
+  <div class="modal-box-wrapper">
+    <div class="modal-header">
+      <h1>Select card</h1>
+    </div>
+    <div class="modal-body">
+      <div class="card-wrapper two-cols-evn">
+        <div
+          [ngClass]="{ 'selected-card': c.id == selectedCard }"
+          class="card"
+          *ngFor="let c of cards"
+          (click)="selectedCard = c.id"
+        >
+          <div class="two-cols">
+            <div>
+              {{ c.name }}
+            </div>
+            <div style="text-align: right">
+              <img width="60" src="../../../assets/image/mastercard.png" />
+            </div>
+          </div>
+          <div style="text-align: right; margin-top: 0.5em">
+            <h3>**** **** **** {{ c.maskedPan.substring(8, 12) }}</h3>
+          </div>
+        </div>
+        <div *ngIf="cards.length == 0" class="no-cards"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-danger" (click)="onCancelBtnClick()">
+        Cancel
+      </button>
+      <button class="btn btn-success" (click)="payByUser()">Pay</button>
+    </div>
+  </div>
+</div>
+
+<app-success
+  *ngIf="payByUserSuccess"
+  (ok)="payByUserSuccess = false"
+  [text]="'Thank you for using our services!!!'"
+>
+</app-success> -->

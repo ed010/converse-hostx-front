@@ -1,0 +1,92 @@
+<form class="wrapper" [formGroup]="groupForm">
+
+  <div class="bl">
+    <div class="name">
+      Group name:&nbsp;
+    </div>
+    <div class="data">
+      <input type="text" class="form-control" formControlName="merchantGroupName">
+    </div>
+  </div>
+
+  <div class="bl">
+    <div class="name">
+      Mcc:&nbsp;
+    </div>
+    <div class="data">
+      <input type="text" class="form-control" formControlName="mcc">
+    </div>
+  </div>
+
+  <ng-container formGroupName="merchantArcaDetails">
+
+    <div class="bl">
+      <div class="name">
+        Api:&nbsp;
+      </div>
+      <div class="data">
+        <input type="text" class="form-control" formControlName="tidApi">
+      </div>
+    </div>
+
+    <div class="bl">
+      <div class="name">
+        Api password:&nbsp;
+      </div>
+      <div class="data">
+        <input type="text" class="form-control" formControlName="bpcTidApiPassword">
+      </div>
+    </div>
+
+    <div class="bl">
+      <div class="name">
+        Binding:&nbsp;
+      </div>
+      <div class="data">
+        <input type="text" class="form-control" formControlName="tidBinding">
+      </div>
+    </div>
+
+    <div class="bl">
+      <div class="name">
+        Binding password:&nbsp;
+      </div>
+      <div class="data">
+        <input type="text" class="form-control" formControlName="bpcTidBindingPassword">
+      </div>
+    </div>
+
+  </ng-container>
+
+
+  <!-- <div class="bl">
+    <div class="name">
+      Bank:&nbsp;
+    </div>
+    <div class="data">
+      <select #bank_value class="form-control" (change)="setBank(bank_value.value)">
+        <option *ngIf="showBank">None</option>
+        <option *ngFor="let bank of banks" [value]="bank.id">{{bank.title}}</option>
+      </select>
+    </div>
+  </div> -->
+
+  <div class="button">
+    <button [disabled]="!groupForm.valid" class="btn my-btn-color" (click)="addGroup()">Create new group</button>
+  </div>
+
+
+  <div class="loader" *ngIf="showLoader">
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+
+</form>

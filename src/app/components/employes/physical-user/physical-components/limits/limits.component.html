@@ -1,0 +1,122 @@
+<div class="wrapper">
+  <div *ngIf='limit && !setLimit' class="body" data-toggle="modal" data-target="#exampleModal">
+
+    <div class="info-block-limit payType">
+      <div class="title">
+        <h5>Payment type</h5>
+      </div>
+      <div class="value">
+        <h5>{{getType(limit.limitType)}}</h5>
+      </div>
+    </div>
+
+    <div class="info-block-limit maxValue">
+      <div class="title">
+        <h5>Maximum amount</h5>
+      </div>
+      <div class="value">
+        <h5>{{limit.maximumAmount}}</h5>
+      </div>
+    </div>
+
+    <div class="info-block-limit maxQuantity">
+      <div class="title">
+        <h5>Maximum quantity</h5>
+      </div>
+      <div class="value">
+        <h5>{{limit.count}}</h5>
+      </div>
+    </div>
+
+    <div class="info-block-limit maxTotal">
+      <div class="title">
+        <h5>Maximum total amount</h5>
+      </div>
+      <div class="value">
+        <h5>{{limit.maximumTotalAmount}}</h5>
+      </div>
+    </div>
+
+  </div>
+
+  <div *ngIf='limit && setLimit' class="body" data-toggle="modal" data-target="#exampleModal">
+
+    <div class="info-block-limit payType">
+      <div class="title">
+        <h5>Payment type</h5>
+      </div>
+      <div class="value">
+        <h5>set</h5>
+      </div>
+    </div>
+
+    <div class="info-block-limit maxValue">
+      <div class="title">
+        <h5>Maximum amount</h5>
+      </div>
+      <div class="value">
+        <h5>set</h5>
+      </div>
+    </div>
+
+    <div class="info-block-limit maxQuantity">
+      <div class="title">
+        <h5>Maximum quantity</h5>
+      </div>
+      <div class="value">
+        <h5>set</h5>
+      </div>
+    </div>
+
+    <div class="info-block-limit maxTotal">
+      <div class="title">
+        <h5>Maximum total amount</h5>
+      </div>
+      <div class="value">
+        <h5>set</h5>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="limit">Example select</label>
+          <select #limitSelect class="form-control" id="limit" (change)="limit.limitType = limitSelect.value*1">
+            <option [selected]="limit.limitType == 0" value="0">Daily</option>
+            <option [selected]="limit.limitType == 1" value="1">Weekly</option>
+            <option [selected]="limit.limitType == 2" value="2">Monthly</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="maximumAmount">Maximum Amount</label>
+          <input type="number" [(ngModel)]="limit.maximumAmount" class="form-control" id="maximumAmount">
+        </div>
+        <div class="form-group">
+          <label for="totalamount">Maximum Total Amount</label>
+          <input type="number" [(ngModel)]="limit.maximumTotalAmount" class="form-control" id="totalamount">
+        </div>
+        <div class="form-group">
+          <label for="count">Count</label>
+          <input type="number" [(ngModel)]="limit.count" class="form-control" id="count">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" (click)="changeLimits()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

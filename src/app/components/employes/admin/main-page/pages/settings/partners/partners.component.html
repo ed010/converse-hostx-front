@@ -1,0 +1,166 @@
+<div class="wrapper">
+
+  <div class="button">
+    <button class="btn my-btn-color" data-bs-toggle="modal" data-bs-target="#addnewPartner" (click)="buildForm()">Add
+      partner HostX</button>
+  </div>
+
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">QR Type</th>
+        <th scope="col">System Name</th>
+        <th scope="col">URL</th>
+        <th scope="col">Token</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let partner of partners; index as i" style="cursor: pointer;" data-bs-toggle="modal"
+        data-bs-target="#infoModalUpdate" (click)="useData(partner)">
+        <td>{{i + 1}}</td>
+        <td>{{partner?.qrType}}</td>
+        <td>{{partner?.systemName}}</td>
+        <td>{{partner?.baseUrl}}</td>
+        <td>{{partner?.token}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="modal fade" id="addnewPartner" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New partner</h5>
+        <button #closeAddModal type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        </button>
+      </div>
+      <div class="modal-body" *ngIf="newPartner">
+        <div class="my-modal-body" [formGroup]="newPartner">
+
+          <div class="bl">
+            <div class="name">
+              QR Type:&nbsp;
+            </div>
+            <div class="data">
+              <input type="text" class="form-control disabled" formControlName="qrType">
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">
+              System Name:&nbsp;
+            </div>
+            <div class="data">
+              <input type="text" class="form-control disabled" formControlName="systemName">
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">
+              URL:&nbsp;
+            </div>
+            <div class="data">
+              <input type="text" class="form-control disabled" formControlName="baseUrl">
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">
+              Merchant ID:&nbsp;
+            </div>
+            <div class="data">
+              <input type="number" class="form-control disabled" formControlName="merchantId">
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">
+              Token:&nbsp;
+            </div>
+            <div class="data">
+              <input type="text" class="form-control disabled" formControlName="token">
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="modal-footer" *ngIf="newPartner">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-warning" [disabled]="!newPartner.valid" data-bs-dismiss="modal"
+          (click)="addNewPartner()">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="infoModalUpdate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Update partner</h5>
+        <button #closeUpdateModal type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        </button>
+      </div>
+      <div class="modal-body" *ngIf="newPartner">
+        <div class="my-modal-body" [formGroup]="newPartner">
+
+          <div class="bl">
+            <div class="name">
+              QR Type:&nbsp;
+            </div>
+            <div class="data">
+              <input type="text" class="form-control disabled" formControlName="qrType">
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">
+              System Name:&nbsp;
+            </div>
+            <div class="data">
+              <input type="text" class="form-control disabled" formControlName="systemName">
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">
+              URL:&nbsp;
+            </div>
+            <div class="data">
+              <input type="text" class="form-control disabled" formControlName="baseUrl">
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">
+              Merchant ID:&nbsp;
+            </div>
+            <div class="data">
+              <input type="number" class="form-control disabled" formControlName="merchantId">
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="name">
+              Token:&nbsp;
+            </div>
+            <div class="data">
+              <input type="text" class="form-control disabled" formControlName="token">
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="modal-footer" *ngIf="newPartner">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id='closeInfoModal'>Cancel</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="deletePartner()">Delete</button>
+        <button type="button" class="btn btn-warning" data-bs-dismiss="modal" [disabled]="!newPartner.valid"
+          (click)="updatePartner()">Update</button>
+      </div>
+    </div>
+  </div>
+</div>

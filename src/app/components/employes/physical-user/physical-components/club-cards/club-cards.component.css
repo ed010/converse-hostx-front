@@ -1,0 +1,169 @@
+.club-cards{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr)
+}
+.main-card{
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  /* flex: 1 0 21%; */
+  /* width: 19%; */
+  height: 300px;
+  background-color: #F3F3F3;
+  margin: 15px;
+  padding: 15px;
+  /* -webkit-box-shadow: 3px 6px 25px -3px #A3A3A3;
+  box-shadow: 3px 6px 25px -3px #A3A3A3; */
+  -webkit-box-shadow: 4px 4px 8px -1px #a3a3a3;
+  box-shadow: 4px 4px 8px -1px #a3a3a3;
+  cursor: pointer;
+  transition: .4s;
+  position: relative;
+}
+.main-card:hover{
+  -webkit-box-shadow: 2px 6px 8px 5px #a3a3a3;
+  box-shadow: 2px 6px 8px 5px #a3a3a3;
+}
+.main-card .header{
+  flex: 4;
+  display: flex;
+  justify-content: center;
+}
+.main-card .header img{
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+}
+.main-card .barcode-block{
+  display: flex;
+  justify-content: center;
+  flex: 1;
+}
+.main-card .name{
+  display: flex;
+  justify-content: center;
+  flex: 1;
+}
+
+.delete{
+  position: absolute;
+  top: 2%;
+  left: 2%;
+  z-index: 10;
+  transition: .3s;
+}
+.delete:hover{
+  transform: scale(1.5);
+}
+.update{
+  position: absolute;
+  top: 2%;
+  right: 2%;
+  z-index: 10;
+  transition: .3s;
+}
+.update:hover{
+  transform: scale(1.5);
+}
+/* svg{
+  width: 100%;
+  height: 70px;
+} */
+.add-card{
+  display: flex;
+  justify-content: center !important;
+  align-items: center !important;
+  border:none;
+  background:none;
+  box-shadow: none;
+}
+.add-card svg{
+  width: 50%;
+}
+.modal-body .info{
+  display: flex;
+  gap: 10px;
+}
+.modal-body .info>div{
+  flex: 1;
+}
+.modal-body .info input{
+  width: 100%;
+  height: 45px;
+  border: 1px solid #F6931D;
+  outline: none;
+  padding-left: 15px;
+  font-size: 1.1rem;
+}
+
+.upload-image{
+  margin-top: 5%;
+  display: flex;
+  gap: 10px;
+}
+.upload-image label {
+  margin: 0;
+  cursor: pointer;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.upload-image>div{
+  flex: 1;
+  text-align: center;
+  border: 1px solid #F6931D;
+}
+
+.prew-img{
+  display: flex;
+  justify-content: center;
+  margin-top: 5%;
+  gap: 10%;
+}
+
+
+.my-modal-header{
+  background-color: #52BE80;
+}
+.btn-myColor{
+  background-color: #52BE80;
+}
+
+@media screen and (max-width: 1111px){
+  .club-cards{
+    grid-template-columns: repeat(3, 1fr)
+  }
+}
+@media screen and (max-width: 919px){
+  .club-cards{
+    grid-template-columns: repeat(2, 1fr)
+  }
+}
+@media screen and (max-width: 600px){
+  .club-cards{
+    grid-template-columns: 1fr;
+  }
+  .main-card{
+    height: 350px;
+  }
+  .add-card svg{
+    width: 30%;
+  }
+  .add-card{
+    height: 150px;
+  }
+}
+
+@media screen and (max-width: 380px){
+  .main-card{
+    width: 180px;
+  }
+}
+
+.img-wrapper{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap:1em;
+  text-align: center;
+}

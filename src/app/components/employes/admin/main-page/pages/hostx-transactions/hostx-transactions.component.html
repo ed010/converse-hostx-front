@@ -1,0 +1,477 @@
+<div class="wrapper">
+  <header>
+    <nav>
+      <div class="left-side">
+        <div class="status">
+          <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#filterModal">Columns</button>
+          <button class="btn btn-success" (click)="createExcelModel()">Download Excel</button>
+
+          <div class="date-range">
+
+            <form [formGroup]="dateFromTo" class="date-picker">
+              <mat-form-field appearance="fill" class="example-form-field">
+                <mat-label style="color: var(--uni--color);">Create Date</mat-label>
+                <mat-date-range-input [rangePicker]="rangePicker1" formGroupName="dateRange">
+                  <input matStartDate placeholder="Start date" formControlName="start">
+                  <input matEndDate placeholder="End date" formControlName="end">
+                </mat-date-range-input>
+                <mat-datepicker-toggle matSuffix [for]="rangePicker1"></mat-datepicker-toggle>
+                <mat-date-range-picker #rangePicker1>
+                  <mat-date-range-picker-actions>
+                    <button mat-button matDateRangePickerCancel (click)="resetDate()">{{'transactions.cancel'
+                      |translate}}</button>
+                    <button mat-raised-button color="primary" matDateRangePickerApply
+                      (click)="showDataButton()">{{'transactions.apply'
+                      |translate}}</button>
+                  </mat-date-range-picker-actions>
+                </mat-date-range-picker>
+              </mat-form-field>
+              <!-- <button mat-raised-button color="primary" class="button-filter"
+                (click)="showDataButton()">{{'transactions.filter' |translate}}</button>
+              <button mat-raised-button color="primary" class="button-filter"
+                (click)="resetDate()">{{'transactions.clear'
+                |translate}}</button> -->
+            </form>
+
+
+            <form [formGroup]="transactionDate" class="date-picker">
+              <mat-form-field appearance="fill" class="example-form-field">
+                <mat-label style="color: var(--uni--color);">Transaction Date</mat-label>
+                <mat-date-range-input [rangePicker]="rangePicker" formGroupName="dateRange">
+                  <input matStartDate placeholder="Start date" formControlName="start">
+                  <input matEndDate placeholder="End date" formControlName="end">
+                </mat-date-range-input>
+                <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
+                <mat-date-range-picker #rangePicker>
+                  <mat-date-range-picker-actions>
+                    <button mat-button matDateRangePickerCancel (click)="resetDate2()">{{'transactions.cancel'
+                      |translate}}</button>
+                    <button mat-raised-button color="primary" matDateRangePickerApply
+                      (click)="showDataButton2()">{{'transactions.apply'
+                      |translate}}</button>
+                  </mat-date-range-picker-actions>
+                </mat-date-range-picker>
+              </mat-form-field>
+              <!-- <button mat-raised-button color="primary" class="button-filter"
+                (click)="showDataButton()">{{'transactions.filter' |translate}}</button>
+              <button mat-raised-button color="primary" class="button-filter"
+                (click)="resetDate()">{{'transactions.clear'
+                |translate}}</button> -->
+            </form>
+          </div>
+
+        </div>
+
+      </div>
+      <div class="right-side">
+        <div class="buttons">
+          <div class="pagination">
+            <button [disabled]="page == 1" class="btn my-btn-color" (click)="goToPage(-1)"
+              style="width: 100px; cursor: pointer;">&laquo; Previous
+            </button>
+            <button [disabled]="disableNextButton" class="btn my-btn-color" (click)="goToPage(1)"
+              style="width: 100px; cursor: pointer; margin-left: 20px;">Next
+              &raquo;</button>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <section>
+    <div class="tables">
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr class="tit">
+            <th scope="col" *ngIf="show_transactionId">ID</th>
+            <th scope="col" *ngIf="show_createDate">Create Date</th>
+            <th scope="col" *ngIf="show_transactionDate">Transaction Date</th>
+            <th scope="col" *ngIf="show_trxnType">Trxn. Type</th>
+            <th scope="col" *ngIf="show_transactionStatus">Transaction Status</th>
+            <th scope="col" *ngIf="show_amount">Amount</th>
+            <th scope="col" *ngIf="show_merchantId">Internal ID</th>
+            <th scope="col" *ngIf="show_merchantName">Merchant Name</th>
+            <th scope="col" *ngIf="show_domain">Domain</th>
+            <th scope="col" *ngIf="show_authCode">Authorization Code</th>
+            <th scope="col" *ngIf="show_bankTid">TID</th>
+            <th scope="col" *ngIf="show_bankName">Acquier Bank</th>
+            <th scope="col" *ngIf="show_fee">Fee</th>
+            <th scope="col" *ngIf="show_transactionOutOrLocal">Out or Local</th>
+            <th scope="col" *ngIf="show_cardtype">Card Type</th>
+            <th scope="col" *ngIf="show_cardHolderName">Card Number</th>
+            <th scope="col" *ngIf="show_comment">Comment</th>
+            <th scope="col" *ngIf="show_appName">Application</th>
+            <th scope="col" *ngIf="show_mcc">MCC</th>
+            <th scope="col" *ngIf="show_requesttype">Request type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="tit">
+            <th *ngIf="show_transactionId">
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch.keys['outside_transactions.id']"
+                  [ngModelOptions]="{standalone: true}" type="text">
+              </form>
+            </th>
+            <th *ngIf="show_createDate">
+              <form (keyup.enter)="filter()">
+                <input class="form-control" disabled placeholder="not working" type="text">
+              </form>
+            </th>
+            <th *ngIf="show_transactionDate">
+              <form (keyup.enter)="filter()">
+                <input class="form-control" disabled placeholder="not working" type="text">
+              </form>
+            </th>
+            <th *ngIf="show_trxnType">
+              <form>
+                <select class="form-select" [(ngModel)]="filterSearch.keys.transaction_type"
+                  [ngModelOptions]="{standalone: true}" (change)="filter()">
+                  <option value="">All</option>
+                  <option value="0">Debet</option>
+                  <option value="1">Credit</option>
+                </select>
+              </form>
+
+            </th>
+
+            <th *ngIf="show_transactionStatus">
+              <form>
+                <select class="form-select" [(ngModel)]="filterSearch.keys.transaction_status"
+                  [ngModelOptions]="{standalone: true}" (change)="filter()">
+                  <option value="">All</option>
+                  <option value="2">Paid</option>
+                  <option value="4">Reversed</option>
+                </select>
+              </form>
+            </th>
+
+            <th *ngIf="show_amount">
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch.keys.amount" [ngModelOptions]="{standalone: true}"
+                  type="text">
+              </form>
+            </th>
+            <th *ngIf="show_merchantId">
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch.keys.merchant_id"
+                  [ngModelOptions]="{standalone: true}" type="text">
+              </form>
+            </th>
+            <th *ngIf="show_merchantName">
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch.keys.company_name_en"
+                  [ngModelOptions]="{standalone: true}" type="text">
+              </form>
+            </th>
+            <th *ngIf="show_domain">
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch.keys.title" [ngModelOptions]="{standalone: true}"
+                  type="text">
+              </form>
+            </th>
+            <th *ngIf="show_authCode">
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch.keys.auth_code"
+                  [ngModelOptions]="{standalone: true}" type="text">
+              </form>
+            </th>
+            <th *ngIf="show_bankTid">
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch.keys.bank_tid"
+                  [ngModelOptions]="{standalone: true}" type="text">
+              </form>
+            </th>
+            <th *ngIf="show_bankName">
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch.keys.bank_name"
+                  [ngModelOptions]="{standalone: true}" type="text">
+              </form>
+            </th>
+            <th *ngIf="show_fee" class="fee">
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch.keys.payx_fee"
+                  [ngModelOptions]="{standalone: true}" type="text">
+              </form>
+            </th>
+            <th *ngIf="show_transactionOutOrLocal">
+              <form>
+                <select class="form-select" [(ngModel)]="filterSearch.keys.transaction_out_or_local"
+                  [ngModelOptions]="{standalone: true}" (change)="filter()">
+                  <option value="">All</option>
+                  <option value="1">Out</option>
+                  <option value="2">Local</option>
+                </select>
+              </form>
+            </th>
+            <th *ngIf="show_cardtype">
+              <form (keyup.enter)="filter()">
+                <input class="form-control" disabled placeholder="not working" type="text">
+              </form>
+            </th>
+            <th *ngIf="show_cardHolderName">
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch.keys.card_number"
+                  [ngModelOptions]="{standalone: true}" type="text">
+              </form>
+            </th>
+            <th *ngIf="show_comment">
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch.keys.comment"
+                  [ngModelOptions]="{standalone: true}" type="text">
+              </form>
+            </th>
+            <th *ngIf="show_appName">
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch.keys.app_name"
+                  [ngModelOptions]="{standalone: true}" type="text">
+              </form>
+            </th>
+            <th *ngIf="show_mcc">
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch.keys.mcc" [ngModelOptions]="{standalone: true}"
+                  type="text">
+              </form>
+            </th>
+            <th *ngIf="show_requesttype">
+              <form (keyup.enter)="filter()">
+                <input class="form-control" disabled placeholder="not working" type="text">
+              </form>
+            </th>
+          </tr>
+          <tr>
+          <tr *ngFor="let transaction of transactions">
+            <th *ngIf="show_transactionId" scope="row">{{transaction.transactionId}}</th>
+            <td *ngIf="show_createDate">{{transaction.createDate | date: 'dd/MM/yy HH:mm'}}</td>
+            <td *ngIf="show_transactionDate">{{transaction.transactionDate | date: 'dd/MM/yy HH:mm'}}</td>
+            <td *ngIf="show_trxnType">{{transaction.transactionType == 0 ? 'Debet' : 'Credit'}}</td>
+            <td *ngIf="show_transactionStatus">{{transaction.transactionStatus == 2 ? 'Paid' : 'Reversed'}}</td>
+            <td *ngIf="show_amount">{{transaction.amount}}</td>
+            <td *ngIf="show_merchantId">{{transaction.merchantId}}</td>
+            <td *ngIf="show_merchantName">{{transaction.merchantName}}</td>
+            <td *ngIf="show_domain">{{transaction.domain.title}}</td>
+            <td *ngIf="show_authCode">{{transaction.authCode}}</td>
+            <td *ngIf="show_bankTid">{{transaction.bankTid}}</td>
+            <td *ngIf="show_bankName">{{transaction.bankName}}</td>
+            <td *ngIf="show_fee">{{transaction.payxFee.toLocaleString()}}</td>
+            <td *ngIf="show_transactionOutOrLocal">{{transaction.transactionOutOrLocal == 1 ? 'Out' : 'Local'}}</td>
+            <!-- <td>Card Type</td> -->
+            <td *ngIf="show_cardtype" class="img-td">
+              {{transaction.card.maskedPan[0] == '4' ? 'Visa' : transaction.card.maskedPan[0] == '5' ||
+              transaction.card.maskedPan[0] == '6' ? 'MasterCard' : transaction.card.maskedPan[0] == '9' ? 'Arca' :
+              'Not paid'}}
+            </td>
+            <td *ngIf="show_cardHolderName">{{transaction.card.maskedPan}}</td>
+            <td *ngIf="show_comment">
+              <div class="span">{{transaction.comment}}</div>
+            </td>
+            <td *ngIf="show_appName">{{transaction.appName}}</td>
+            <td *ngIf="show_mcc">{{transaction.mcc}}</td>
+            <td *ngIf="show_requesttype">{{transaction.isLink == 0 ? 'QR' : transaction.isLink == 1 ? 'Link' :
+              transaction?.receiver}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="loader" *ngIf="showLoader">
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+
+  <div class="info">
+    <span>Total amount: {{transactionsTotalAmount}}</span>
+    <span>Transactions count: {{transactionsCount}}</span>
+  </div>
+</div>
+
+
+<div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Columns</h5>
+        <button #closeModal type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="d">
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="trid" [(ngModel)]="show_transactionId"
+              (change)="changeColumn()">
+            <label class="form-check-label" for="trid">
+              ID
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="cr_date" [(ngModel)]="show_createDate"
+              (change)="changeColumn()">
+            <label class="form-check-label" for="cr_date">
+              Create Date
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="trdate" [(ngModel)]="show_transactionDate"
+              (change)="changeColumn()">
+            <label class="form-check-label" for="trdate">
+              Transaction Date
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="trx_type" [(ngModel)]="show_trxnType"
+              (change)="changeColumn()">
+            <label class="form-check-label" for="trx_type">
+              Trxn. Type
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="trx_type" [(ngModel)]="show_transactionStatus"
+              (change)="changeColumn()">
+            <label class="form-check-label" for="trx_type">
+              Transaction Status
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="Amount" [(ngModel)]="show_amount"
+              (change)="changeColumn()">
+            <label class="form-check-label" for="Amount">
+              Amount
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="internal_id" [(ngModel)]="show_merchantId"
+              (change)="changeColumn()">
+            <label class="form-check-label" for="internal_id">
+              Internal ID
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="m_name" [(ngModel)]="show_merchantName"
+              (change)="changeColumn()">
+            <label class="form-check-label" for="m_name">
+              Merchant Name
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="Domain" [(ngModel)]="show_domain"
+              (change)="changeColumn()">
+            <label class="form-check-label" for="Domain">
+              Domain
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="Authorization" [(ngModel)]="show_authCode"
+              (change)="changeColumn()">
+            <label class="form-check-label" for="Authorization">
+              Authorization Code
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="TID" [(ngModel)]="show_bankTid"
+              (change)="changeColumn()">
+            <label class="form-check-label" for="TID">
+              TID
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="Bank" [(ngModel)]="show_bankName"
+              (change)="changeColumn()">
+            <label class="form-check-label" for="Bank">
+              Acquier Bank
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="Fee" [(ngModel)]="show_fee"
+              (change)="changeColumn()">
+            <label class="form-check-label" for="Fee">
+              Fee
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="out" [(ngModel)]="show_transactionOutOrLocal"
+              (change)="changeColumn()">
+            <label class="form-check-label" for="out">
+              Out or Local
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="Card" [(ngModel)]="show_cardtype"
+              (change)="changeColumn()">
+            <label class="form-check-label" for="Card">
+              Card Type
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="Card_n" [(ngModel)]="show_cardHolderName"
+              (change)="changeColumn()">
+            <label class="form-check-label" for="Card_n">
+              Card Number
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="Comment" [(ngModel)]="show_comment"
+              (change)="changeColumn()">
+            <label class="form-check-label" for="Comment">
+              Comment
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="Application" [(ngModel)]="show_appName"
+              (change)="changeColumn()">
+            <label class="form-check-label" for="Application">
+              Application
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="MCC" [(ngModel)]="show_mcc"
+              (change)="changeColumn()">
+            <label class="form-check-label" for="MCC">
+              MCC
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="Request" [(ngModel)]="show_requesttype"
+              (change)="changeColumn()">
+            <label class="form-check-label" for="Request">
+              Request type
+            </label>
+          </div>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

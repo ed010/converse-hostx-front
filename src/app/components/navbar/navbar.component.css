@@ -1,0 +1,23 @@
+.navbar-wrapper{
+  display: grid;
+  grid-template-columns: repeat(6,max-content) 1fr;
+  grid-gap:1em;
+  background:black;
+  color: white;
+}
+.navbar-wrapper div{
+  padding:1em;
+}
+.active{
+  border-bottom:1px solid white;
+}
+h2{
+  color:white;
+}
+a{
+  text-decoration: none;
+}
+h2:hover{
+  /* border:1px solid white; */
+  color:rgba(255, 255, 255, 0.596);
+}

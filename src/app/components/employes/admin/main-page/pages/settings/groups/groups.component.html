@@ -1,0 +1,194 @@
+<div class="wrapper">
+
+  <div class="button">
+    <button class="btn my-btn-color" routerLink="new-group">Add Group</button>
+  </div>
+
+  <!-- <div class="accordion accordion-flush" id="accordionFlushExample">
+    <div class="accordion-item" *ngFor="let bank of banks; index as i">
+      <h2 (click)="getGroupsByBank(bank.id)" class="accordion-header" id="flush-heading-{{i}}">
+        <button class="accordion-button collapsed" type="button" [attr.data-bs-toggle]="'collapse'"
+          [attr.data-bs-target]="'#flush-collapse-' + i" [attr.aria-expanded]="false"
+          [attr.aria-controls]="'flush-collapse-'+ i">
+          {{bank.title}}
+        </button>
+      </h2>
+      <div id="flush-collapse-{{i}}" class="accordion-collapse collapse" [attr.aria-labelledby]="'flush-heading-' + i"
+        [attr.data-bs-parent]="'#accordionFlushExample'">
+        <div class="accordion-body">
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+
+  <table class="table table-hover" *ngIf="!showLoader">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Merchant group name</th>
+        <th scope="col">API</th>
+        <th scope="col">BINDING</th>
+        <th scope="col">MCC</th>
+        <!-- <th scope="col">Download report</th> -->
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let m of allMerchantGroups" (click)="buildForm(m)" style="cursor: pointer;" data-bs-toggle="modal"
+        data-bs-target="#editmerchantgroup">
+        <td>{{m?.id}}</td>
+        <td>{{m?.merchantGroupName}}</td>
+        <td>{{m?.merchantArcaDetails?.tidApi}}</td>
+        <td>{{m?.merchantArcaDetails?.tidBinding}}</td>
+        <td>{{m?.mcc}}</td>
+        <!-- <td>
+          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#reportfile">DOWNLOAD</button>
+        </td> -->
+      </tr>
+    </tbody>
+  </table>
+  <div class="loader" *ngIf="showLoader">
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+
+
+
+  <div class="modal fade" id="editmerchantgroup" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Update group</h5>
+          <button #closeModalUpdate type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" *ngIf="selectedGroup && groupForm">
+          <form class="my-modal-body" [formGroup]="groupForm">
+
+            <div class="bl">
+              <div class="name">
+                Group name:&nbsp;
+              </div>
+              <div class="data">
+                <input type="text" class="form-control" formControlName="merchantGroupName">
+              </div>
+            </div>
+
+            <div class="bl">
+              <div class="name">
+                Mcc:&nbsp;
+              </div>
+              <div class="data">
+                <input type="text" class="form-control" formControlName="mcc">
+              </div>
+            </div>
+
+            <ng-container formGroupName="merchantArcaDetails">
+
+              <div class="bl">
+                <div class="name">
+                  Api:&nbsp;
+                </div>
+                <div class="data">
+                  <input type="text" class="form-control" formControlName="tidApi">
+                </div>
+              </div>
+
+              <div class="bl">
+                <div class="name">
+                  Api password:&nbsp;
+                </div>
+                <div class="data">
+                  <input type="text" class="form-control" formControlName="bpcTidApiPassword">
+                </div>
+              </div>
+
+              <div class="bl">
+                <div class="name">
+                  Binding:&nbsp;
+                </div>
+                <div class="data">
+                  <input type="text" class="form-control" formControlName="tidBinding">
+                </div>
+              </div>
+
+              <div class="bl">
+                <div class="name">
+                  Binding password:&nbsp;
+                </div>
+                <div class="data">
+                  <input type="text" class="form-control" formControlName="bpcTidBindingPassword">
+                </div>
+              </div>
+
+            </ng-container>
+
+            <!-- <ng-container formGroupName="bank">
+              <div class="bl">
+                <div class="name">
+                  Bank:&nbsp;
+                </div>
+                <div class="data">
+                  <select #bank_value class="form-control" (change)="setBank(bank_value.value)" formControlName="id">
+                    <option *ngIf="showBank">None</option>
+                    <option *ngFor="let bank of banks" [value]="bank.id">{{bank.title}}</option>
+                  </select>
+                </div>
+              </div>
+            </ng-container> -->
+
+          </form>
+        </div>
+        <div class="modal-footer" *ngIf="selectedGroup && groupForm">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" [disabled]="!groupForm.valid" class="btn my-btn-color"
+            (click)="addGroup()">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="reportfile" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Download Report</h5>
+          <button #closeModalUpdate type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" *ngIf="selectedGroup">
+          <form [formGroup]="dateFromTo" class="date-picker">
+            <mat-form-field appearance="fill" class="example-form-field">
+              <mat-label style="color: var(--uni--color);">From-To</mat-label>
+              <mat-date-range-input [rangePicker]="rangePicker" formGroupName="dateRange">
+                <input matStartDate placeholder="Start date" formControlName="start">
+                <input matEndDate placeholder="End date" formControlName="end">
+              </mat-date-range-input>
+              <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
+              <mat-date-range-picker #rangePicker>
+                <mat-date-range-picker-actions>
+                  <button mat-button matDateRangePickerCancel>{{'transactions.cancel' |translate}}</button>
+                  <button mat-raised-button color="primary" matDateRangePickerApply>{{'transactions.apply'
+                    |translate}}</button>
+                </mat-date-range-picker-actions>
+              </mat-date-range-picker>
+            </mat-form-field>
+          </form>
+          <!-- <button mat-raised-button color="primary" class="button-filter"
+            (click)="showDataButton()">{{'transactions.filter' |translate}}</button> -->
+        </div>
+        <div class="modal-footer" *ngIf="selectedGroup">
+          <button type="button" class="btn btn-primary" class="btn my-btn-color"
+            (click)="showDataButton()">Download</button>
+        </div>
+      </div>
+    </div>
+  </div>

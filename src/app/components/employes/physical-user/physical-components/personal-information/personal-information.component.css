@@ -1,0 +1,120 @@
+.wrapper{
+  width: 70%;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+
+}
+.all{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 60%;
+}
+
+.name_surname{
+  display: flex;
+  flex-direction: column;
+  margin-top: 10%;
+  width: 100%;
+  position: relative;
+}
+.name_surname .phone_number{
+  text-align: center;
+}
+.name_surname .info{
+  display: flex;
+  justify-content: space-between;
+
+}
+.name_surname .info .input{
+  width: 100%;
+  height: 45px;
+  border: 1px solid #F6931D;
+  outline: none;
+  padding-left: 15px;
+  font-size: 1.1rem;
+}
+.enter{
+  align-self: flex-end;
+  width: 75px;
+  background-color: #F6931D;
+  border: none;
+  height: 35px;
+  margin-top: 3%;
+}
+.name_surname::before{
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  background-color: #A5A5A9;
+  width: 100%;
+  height: 2px;
+
+}
+.footer{
+  margin-top: 10%;
+  display: flex;
+  justify-content: center;
+}
+.password{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.input_pass{
+  width: 100%;
+  height: 45px;
+  border: 1px solid #F6931D;
+  outline: none;
+  padding-left: 15px;
+  font-size: 1.1rem;
+}
+.surname{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.input_pass:not(:last-child){
+  margin-bottom: 3%;
+}
+.pass_form{
+  width: 100%;
+}
+
+
+@media screen and (max-width: 1128px) {
+  .name_surname .info{
+    flex-direction: column;
+  }
+  .name_surname .info input:first-child{
+    margin-bottom: 15px;
+  }
+}
+@media screen and (max-width: 738px) {
+  .wrapper{
+    margin-top: 20%;
+  }
+  .all{
+    width: 70%;
+  }
+}
+@media screen and (max-width: 627px) {
+  .all{
+    width: 80%;
+  }
+  .pass_form{
+    margin-top: 35px;
+  }
+}
+@media screen and (max-width: 479px) {
+  .all{
+    width: 90%;
+  }
+}
+@media screen and (max-width: 372px) {
+  .all{
+    width: 100%;
+  }
+
+}

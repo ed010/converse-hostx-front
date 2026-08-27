@@ -1,0 +1,851 @@
+<div class="wrapper">
+
+  <header>
+    <nav>
+      <div class="left-side">
+        <div class="status">
+          <select [(ngModel)]="filterSearch.status" (change)="filterByStatus()" class="form-select form-select-sm"
+            aria-label=".form-select-sm example">
+            <option [selected]="filterSearch.status == undefined || filterSearch.status == ''" value="">All</option>
+            <option value="0">In process</option>
+            <option value="1">Active</option>
+            <option value="2">Closed</option>
+          </select>
+
+        </div>
+        <div class="pagination">
+          <button [disabled]="page == 1" class="btn my-btn-color" (click)="goToPage(-1)"
+            style="width: 100px; cursor: pointer;">&laquo; Previous
+          </button>
+          <button [disabled]="disableNextPage" class="btn my-btn-color" (click)="goToPage(1)"
+            style="width: 100px; cursor: pointer; margin-left: 20px;">Next
+            &raquo;</button>
+        </div>
+        <div class="excel">
+          <button class="btn btn-success" (click)="createExcelModel()">Download Excel</button>
+
+        </div>
+      </div>
+      <div class="right-side">
+        <div class="buttons">
+          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changetablesettings">Change table
+            settings</button>
+          <!-- <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#filters">Filters</button> -->
+          <button class="btn btn-danger" routerLink="new-merchant">Add</button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <section>
+    <div class="tables">
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr class="tit">
+            <th *ngIf='columnsState.status'>Status</th>
+            <th *ngIf='columnsState.merchant_id'>Terminal ID</th>
+            <th *ngIf='columnsState.company_name_en'>Company name EN</th>
+            <th *ngIf='columnsState.company_name_hy'>Company name HY</th>
+            <th *ngIf='columnsState.company_name_ru'>Company name RU</th>
+            <th *ngIf='columnsState.address_en'>Address EN</th>
+            <th *ngIf='columnsState.address_hy'>Address HY</th>
+            <th *ngIf='columnsState.legal_company_name'>Legal company name</th>
+            <th *ngIf='columnsState.legal_address'>Legal address</th>
+            <th *ngIf='columnsState.tin'>Tin</th>
+            <th *ngIf='columnsState.phone'>Phone</th>
+            <th *ngIf='columnsState.bank_serial_number'>Bank serial number</th>
+            <th *ngIf='columnsState.website'>Website</th>
+            <th *ngIf='columnsState.email'>Email</th>
+            <!-- <th *ngIf='columnsState.'>Sms phone</th> -->
+            <th *ngIf='columnsState.director'>Director</th>
+            <!-- <th *ngIf='headers[14].status'>Bank</th> -->
+            <th *ngIf='columnsState.tid_api'>Api</th>
+            <th *ngIf='columnsState.tid_api_pass'>Api password</th>
+            <th *ngIf='columnsState.tid_binding'>Binding</th>
+            <th *ngIf='columnsState.tid_binding_pass'>Binding password</th>
+            <th *ngIf='columnsState.merchant_arca_percent'>Arca %</th>
+            <th *ngIf='columnsState.merchant_local_percent'>Local %</th>
+            <th *ngIf='columnsState.merchant_outside_percent'>Out %</th>
+            <th *ngIf='columnsState.title'>Domain</th>
+            <th *ngIf='columnsState.mcc'>Mcc</th>
+
+            <!-- <th *ngIf='columnsState.'>Group</th> -->
+
+            <th *ngIf='columnsState.fee_type'>Fee type</th>
+            <th *ngIf='columnsState.offline_merhcant'>Offline\Online</th>
+            <th *ngIf='columnsState.merchant_type'>Merchant type</th>
+            <th *ngIf='columnsState.bank_internal_tid'>Tid</th>
+            <th *ngIf='columnsState.bank_internal_mid'>Mid</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="tit">
+            <th *ngIf='columnsState.status'>
+              <form (keyup.enter)="filter()">
+                <!-- <input class="form-control" [(ngModel)]="filterSearch['status']" [ngModelOptions]="{standalone: true}"
+                  type="text"> -->
+                <select class="status-sel form-select" [(ngModel)]="filterSearch['status']"
+                  [ngModelOptions]="{standalone: true}" (change)="filter()">
+                  <option [selected]="filterSearch.status == undefined || filterSearch.status == ''" value="">All
+                  </option>
+                  <option value="0">In process</option>
+                  <option value="1">Active</option>
+                  <option value="2">Closed</option>
+                </select>
+              </form>
+            </th>
+
+            <th *ngIf="columnsState.merchant_id">
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch['merchant_id']"
+                  [ngModelOptions]="{standalone: true}" type="text">
+              </form>
+            </th>
+
+            <th *ngIf="columnsState.company_name_en">
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch['company_name_en']"
+                  [ngModelOptions]="{standalone: true}" type="text">
+              </form>
+            </th>
+
+            <th *ngIf="columnsState.company_name_hy">
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch['company_name_hy']"
+                  [ngModelOptions]="{standalone: true}" type="text">
+              </form>
+            </th>
+
+            <th *ngIf="columnsState.company_name_ru">
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch['company_name_ru']"
+                  [ngModelOptions]="{standalone: true}" type="text">
+              </form>
+            </th>
+            <th *ngIf="columnsState.address_en">
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch['address_en']"
+                  [ngModelOptions]="{standalone: true}" type="text">
+              </form>
+            </th>
+            <th *ngIf="columnsState.address_hy">
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch['address_hy']"
+                  [ngModelOptions]="{standalone: true}" type="text">
+              </form>
+            </th>
+            <th *ngIf="columnsState.legal_company_name">
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch['legal_company_name']"
+                  [ngModelOptions]="{standalone: true}" type="text">
+              </form>
+            </th>
+            <th *ngIf="columnsState.legal_address">
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch['legal_address']"
+                  [ngModelOptions]="{standalone: true}" type="text">
+              </form>
+            </th>
+            <th *ngIf="columnsState.tin">
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch['tin']" [ngModelOptions]="{standalone: true}"
+                  type="text">
+              </form>
+            </th>
+            <th *ngIf="columnsState.phone">
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch['phone']" [ngModelOptions]="{standalone: true}"
+                  type="text">
+              </form>
+            </th>
+            <th *ngIf="columnsState.bank_serial_number">
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch['bank_serial_number']"
+                  [ngModelOptions]="{standalone: true}" type="text">
+              </form>
+            </th>
+            <th *ngIf="columnsState.website">
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch['website']" [ngModelOptions]="{standalone: true}"
+                  type="text">
+              </form>
+            </th>
+            <th *ngIf="columnsState.email">
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch['email']" [ngModelOptions]="{standalone: true}"
+                  type="text">
+              </form>
+            </th>
+            <!-- <th *ngIf="columnsState.sms_phone">
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch['sms_phone']"
+                  [ngModelOptions]="{standalone: true}" type="text">
+              </form>
+            </th> -->
+            <th *ngIf="columnsState.director">
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch['director']" [ngModelOptions]="{standalone: true}"
+                  type="text">
+              </form>
+            </th>
+            <th *ngIf='columnsState.tid_api'>
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch['tid_api']" [ngModelOptions]="{standalone: true}"
+                  type="text">
+              </form>
+            </th>
+            <th *ngIf='columnsState.tid_api_pass'>
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch['tid_api_pass']"
+                  [ngModelOptions]="{standalone: true}" type="text">
+              </form>
+            </th>
+            <th *ngIf='columnsState.tid_binding'>
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch['tid_binding']"
+                  [ngModelOptions]="{standalone: true}" type="text">
+              </form>
+            </th>
+            <th *ngIf='columnsState.tid_binding_pass'>
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch['tid_binding_pass']"
+                  [ngModelOptions]="{standalone: true}" type="text">
+              </form>
+            </th>
+            <th *ngIf='columnsState.merchant_arca_percent'>
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch['merchant_arca_percent']"
+                  [ngModelOptions]="{standalone: true}" type="text">
+              </form>
+            </th>
+            <th *ngIf='columnsState.merchant_local_percent'>
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch['merchant_local_percent']"
+                  [ngModelOptions]="{standalone: true}" type="text">
+              </form>
+            </th>
+            <th *ngIf='columnsState.merchant_outside_percent'>
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch['merchant_outside_percent']"
+                  [ngModelOptions]="{standalone: true}" type="text">
+              </form>
+            </th>
+            <th *ngIf='columnsState.title'>
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch['title']" [ngModelOptions]="{standalone: true}"
+                  type="text">
+              </form>
+            </th>
+            <th *ngIf='columnsState.mcc'>
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch['mcc']" [ngModelOptions]="{standalone: true}"
+                  type="text">
+              </form>
+            </th>
+            <!-- <th *ngIf='columnsState.mcc'>
+              <form>
+                <input class="form-control" disabled placeholder="Not Working" type="text">
+              </form>
+            </th> -->
+            <th *ngIf='columnsState.fee_type'>
+              <form (keyup.enter)="filter()">
+                <!-- <input class="form-control" [(ngModel)]="filterSearch['fee_type']" [ngModelOptions]="{standalone: true}"
+                  type="text"> -->
+
+                <select class="status-sel form-select" [(ngModel)]="filterSearch['fee_type']"
+                  [ngModelOptions]="{standalone: true}" (change)="filter()">
+                  <option selected value="">All</option>
+                  <option value="1">Fixed</option>
+                  <option value="2">Percent</option>
+                </select>
+              </form>
+            </th>
+            <th *ngIf='columnsState.offline_merhcant'>
+              <form (keyup.enter)="filter()">
+                <!-- <input class="form-control" [(ngModel)]="filterSearch['offline_merhcant']"
+                  [ngModelOptions]="{standalone: true}" type="text"> -->
+                <input class="form-control" type="text" disabled placeholder="Not working">
+                <!-- <select class="status-sel form-select" [(ngModel)]="filterSearch['offline_merhcant']"
+                  [ngModelOptions]="{standalone: true}" (change)="filter()">
+                  <option selected value="">All</option>
+                  <option value="true">Offline</option>
+                  <option value="false">Online</option>
+                </select> -->
+              </form>
+            </th>
+            <th *ngIf='columnsState.merchant_type'>
+              <form (keyup.enter)="filter()">
+                <!-- <input class="form-control" [(ngModel)]="filterSearch['merchant_type']"
+                  [ngModelOptions]="{standalone: true}" type="text"> -->
+                <select class="status-sel form-select" [(ngModel)]="filterSearch['merchant_type']"
+                  [ngModelOptions]="{standalone: true}" (change)="filter()">
+                  <option selected value="">All</option>
+                  <option value="1">Web</option>
+                  <option value="2">Mobile App</option>
+                </select>
+              </form>
+            </th>
+            <th *ngIf='columnsState.bank_internal_tid'>
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch['bank_internal_tid']"
+                  [ngModelOptions]="{standalone: true}" type="text">
+              </form>
+            </th>
+            <th *ngIf='columnsState.bank_internal_mid'>
+              <form (keyup.enter)="filter()">
+                <input class="form-control" [(ngModel)]="filterSearch['bank_internal_mid']"
+                  [ngModelOptions]="{standalone: true}" type="text">
+              </form>
+            </th>
+
+          </tr>
+          <tr>
+          <tr *ngFor='let merchant of merchants' (click)="openMerchantInfo(merchant.merchantId)">
+            <td *ngIf='columnsState.status'>
+              {{merchant?.status == 0 ? 'In process' : merchant.status == 1 ? 'Active' : 'Closed'}}
+            </td>
+
+            <td *ngIf="columnsState.merchant_id">
+              {{merchant?.merchantId}}
+            </td>
+
+            <td *ngIf='columnsState.company_name_en'>
+              {{merchant.merchantInfo?.companyNameEn}}
+            </td>
+            <td *ngIf='columnsState.company_name_hy'>
+              {{merchant.merchantInfo?.companyNameHy}}
+            </td>
+            <td *ngIf='columnsState.company_name_ru'>
+              {{merchant.merchantInfo?.companyNameRu}}
+            </td>
+            <td *ngIf='columnsState.address_en'>
+              {{merchant.merchantInfo?.addressEn}}
+            </td>
+            <td *ngIf='columnsState.address_hy'>
+              {{merchant.merchantInfo?.addressHy}}
+            </td>
+            <td *ngIf='columnsState.legal_company_name'>
+              {{merchant.merchantInfo?.legalCompanyName}}
+            </td>
+            <td *ngIf='columnsState.legal_address'>
+              {{merchant.merchantInfo?.legalAddress}}
+            </td>
+            <td *ngIf='columnsState.tin'>
+              {{merchant.merchantInfo?.tin}}
+            </td>
+            <td *ngIf='columnsState.phone'>
+              {{merchant.merchantInfo?.phone}}
+            </td>
+            <td *ngIf='columnsState.bank_serial_number'>
+              {{merchant.merchantInfo?.bankSerialNumber}}
+            </td>
+            <td *ngIf='columnsState.website'>
+              {{merchant.merchantInfo?.website}}
+            </td>
+            <td *ngIf='columnsState.email'>
+              {{merchant.merchantInfo?.email}}
+            </td>
+            <!-- <td *ngIf='columnsState.sms_phone'>
+              {{merchant.merchantInfo?.smsPhone}}
+            </td> -->
+            <td *ngIf='columnsState.director'>
+              {{merchant.merchantInfo?.director}}
+            </td>
+            <!-- <td *ngIf='columnsState.title'>
+              {{merchant.bank?.title}}
+            </td> -->
+            <td *ngIf='columnsState.tid_api'>
+              {{merchant.merchantArcaDetails?.tidApi}}
+            </td>
+            <td *ngIf='columnsState.tid_api_pass'>
+              {{merchant.merchantArcaDetails?.bpcTidApiPassword}}
+            </td>
+            <td *ngIf='columnsState.tid_binding'>
+              {{merchant.merchantArcaDetails?.tidBinding}}
+            </td>
+            <td *ngIf='columnsState.tid_binding_pass'>
+              {{merchant.merchantArcaDetails?.bpcTidBindingPassword}}
+            </td>
+            <td *ngIf='columnsState.merchant_arca_percent'>
+              {{merchant.merchantPercent?.merchantArcaPercent}}
+            </td>
+            <td *ngIf='columnsState.merchant_local_percent'>
+              {{merchant.merchantPercent?.merchantLocalPercent}}
+            </td>
+            <td *ngIf='columnsState.merchant_outside_percent'>
+              {{merchant.merchantPercent?.merchantOutPercent}}
+            </td>
+            <td *ngIf='columnsState.title && merchant.domain'>
+              {{merchant.domain?.title}}
+            </td>
+            <!-- <td *ngIf='headers[22].status && !merchant.domain'>
+              None
+            </td> -->
+            <td *ngIf='columnsState.mcc'>
+              {{merchant?.mcc}}
+            </td>
+            <!-- <td *ngIf='headers[24].status'>
+              {{merchant?.merchantArcaDetails?.merchantGroupId == 0 ? '-': 'Yes'}}
+            </td> -->
+            <td *ngIf='columnsState.fee_type'>
+              {{merchant?.feeType == 1 ? 'Fixed' : 'Percent'}}
+            </td>
+            <td *ngIf='columnsState.offline_merhcant'>
+              {{merchant?.isOffline ? 'Offline': 'Online'}}
+            </td>
+            <td *ngIf='columnsState.merchant_type'>
+              {{merchant?.merchantType == 1 ? 'Web' : 'Mobile App'}}
+            </td>
+            <td *ngIf='columnsState.bank_internal_tid'>
+              {{merchant?.bankInternalTid}}
+            </td>
+            <td *ngIf='columnsState.bank_internal_mid'>
+              {{merchant?.bankInternalMid}}
+            </td>
+          </tr>
+        </tbody>
+        <!-- <tbody *ngIf="showLoader">
+          <div class="loader">
+            <div class="lds-roller">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          </div>
+        </tbody> -->
+      </table>
+    </div>
+  </section>
+  <div class="loader" *ngIf="showLoader">
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="changetablesettings" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Change table settings</h5>
+        <button #tableSettings type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="status" [(ngModel)]="columnsState.status"
+            (change)="changeColumn()">
+          <label class="form-check-label" for="trx_type">
+            Status
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="merchant_id"
+            [(ngModel)]="columnsState.merchant_id" (change)="changeColumn()">
+          <label class="form-check-label" for="merchant_id">
+            Terminal ID
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="director" [(ngModel)]="columnsState.director"
+            (change)="changeColumn()">
+          <label class="form-check-label" for="director">
+            Director
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="legal_company_name"
+            [(ngModel)]="columnsState.legal_company_name" (change)="changeColumn()">
+          <label class="form-check-label" for="legal_company_name">
+            Legal company name
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="legal_address"
+            [(ngModel)]="columnsState.legal_address" (change)="changeColumn()">
+          <label class="form-check-label" for="legal_address">
+            Legal address
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="bank_serial_number"
+            [(ngModel)]="columnsState.bank_serial_number" (change)="changeColumn()">
+          <label class="form-check-label" for="bank_serial_number">
+            Bank serial number
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="website" [(ngModel)]="columnsState.website"
+            (change)="changeColumn()">
+          <label class="form-check-label" for="website">
+            Website
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="email" [(ngModel)]="columnsState.email"
+            (change)="changeColumn()">
+          <label class="form-check-label" for="email">
+            Email
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="phone" [(ngModel)]="columnsState.phone"
+            (change)="changeColumn()">
+          <label class="form-check-label" for="phone">
+            Phone
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="tin" [(ngModel)]="columnsState.tin"
+            (change)="changeColumn()">
+          <label class="form-check-label" for="tin">
+            TIN
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="company_name_hy"
+            [(ngModel)]="columnsState.company_name_hy" (change)="changeColumn()">
+          <label class="form-check-label" for="company_name_hy">
+            Company name HY
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="company_name_en"
+            [(ngModel)]="columnsState.company_name_en" (change)="changeColumn()">
+          <label class="form-check-label" for="company_name_en">
+            Company name EN
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="company_name_ru"
+            [(ngModel)]="columnsState.company_name_ru" (change)="changeColumn()">
+          <label class="form-check-label" for="company_name_ru">
+            Company name RU
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="address_hy" [(ngModel)]="columnsState.address_hy"
+            (change)="changeColumn()">
+          <label class="form-check-label" for="address_hy">
+            Address HY
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="address_en" [(ngModel)]="columnsState.address_en"
+            (change)="changeColumn()">
+          <label class="form-check-label" for="address_en">
+            Address EN
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="mcc" [(ngModel)]="columnsState.mcc"
+            (change)="changeColumn()">
+          <label class="form-check-label" for="mcc">
+            MCC
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="tid_api" [(ngModel)]="columnsState.tid_api"
+            (change)="changeColumn()">
+          <label class="form-check-label" for="tid_api">
+            API
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="tid_api_pass"
+            [(ngModel)]="columnsState.tid_api_pass" (change)="changeColumn()">
+          <label class="form-check-label" for="tid_api_pass">
+            API password
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="tid_binding"
+            [(ngModel)]="columnsState.tid_binding" (change)="changeColumn()">
+          <label class="form-check-label" for="tid_binding">
+            Binding
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="tid_binding_pass"
+            [(ngModel)]="columnsState.tid_binding_pass" (change)="changeColumn()">
+          <label class="form-check-label" for="tid_binding_pass">
+            Binding password
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="merchant_arca_percent"
+            [(ngModel)]="columnsState.merchant_arca_percent" (change)="changeColumn()">
+          <label class="form-check-label" for="merchant_arca_percent">
+            Arca percent
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="merchant_local_percent"
+            [(ngModel)]="columnsState.merchant_local_percent" (change)="changeColumn()">
+          <label class="form-check-label" for="merchant_local_percent">
+            Local percent
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="merchant_outside_percent"
+            [(ngModel)]="columnsState.merchant_outside_percent" (change)="changeColumn()">
+          <label class="form-check-label" for="merchant_outside_percent">
+            Out percent
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="fee_type" [(ngModel)]="columnsState.fee_type"
+            (change)="changeColumn()">
+          <label class="form-check-label" for="fee_type">
+            Fee type
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="title" [(ngModel)]="columnsState.title"
+            (change)="changeColumn()">
+          <label class="form-check-label" for="title">
+            Bank
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="offline_merhcant"
+            [(ngModel)]="columnsState.offline_merhcant" (change)="changeColumn()">
+          <label class="form-check-label" for="offline_merhcant">
+            Offline\Online
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="merchant_type"
+            [(ngModel)]="columnsState.merchant_type" (change)="changeColumn()">
+          <label class="form-check-label" for="merchant_type">
+            Merchant type
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="bank_internal_tid"
+            [(ngModel)]="columnsState.bank_internal_tid" (change)="changeColumn()">
+          <label class="form-check-label" for="bank_internal_tid">
+            Internal TID
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="bank_internal_mid"
+            [(ngModel)]="columnsState.bank_internal_mid" (change)="changeColumn()">
+          <label class="form-check-label" for="bank_internal_mid">
+            Internal MID
+          </label>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal fade" id="addmerchant" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add new merchant</h5>
+        <button #closeAddMerchant type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal fade" id="filters" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Filters</h5>
+        <button #closeFilters type="button" #closeModal class="btn-close" data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row mb-2">
+          <div class="col">
+            <div class="form-group">
+              <label for="transactionId-filter">Company name EN</label>
+              <input [(ngModel)]="filterSearch.company_name_en" type="text" class="form-control"
+                id="transactionId-filter">
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="form-group">
+              <label for="amout-filter">Company name RU</label>
+              <input [(ngModel)]="filterSearch.company_name_ru" type="text" class="form-control" id="amout-filter">
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="form-group">
+              <label for="merchantId-filter">Company name HY</label>
+              <input [(ngModel)]="filterSearch.company_name_hy" type="text" class="form-control" id="merchantId-filter">
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <div class="col">
+            <div class="form-group">
+              <label for="merchantName-filter">Address EN</label>
+              <input [(ngModel)]="filterSearch.address_en" type="text" class="form-control" id="merchantName-filter">
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="form-group">
+              <label for="authCode-filter">Address HY</label>
+              <input [(ngModel)]="filterSearch.address_hy" type="text" class="form-control" id="authCode-filter">
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="form-group">
+              <label for="payxFee-filter">Legal company name</label>
+              <input [(ngModel)]="filterSearch.legal_company_name" type="text" class="form-control" id="payxFee-filter">
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <div class="col">
+            <div class="form-group">
+              <label for="bankTid-filter">Legal address</label>
+              <input [(ngModel)]="filterSearch.legal_address" type="text" class="form-control" id="bankTid-filter">
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="form-group">
+              <label for="bankName-filter">Tin</label>
+              <input [(ngModel)]="filterSearch.tin" type="text" class="form-control" id="bankName-filter">
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="form-group">
+              <label for="card-number-filter">Phone</label>
+              <input [(ngModel)]="filterSearch.phone" type="text" class="form-control" id="card-number-filter">
+            </div>
+          </div>
+        </div>
+
+
+        <div class="row mb-2">
+          <div class="col">
+            <div class="form-group">
+              <label for="comment-filter">Bank serial number</label>
+              <input [(ngModel)]="filterSearch.bank_serial_number" type="text" class="form-control" id="comment-filter">
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="form-group">
+              <label for="appName-filter">Website</label>
+              <input [(ngModel)]="filterSearch.website" type="text" class="form-control" id="appName-filter">
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="form-group">
+              <label for="Director-filter">Email</label>
+              <input [(ngModel)]="filterSearch.email" type="text" class="form-control" id="Director-filter">
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <div class="col">
+            <div class="form-group">
+              <label for="sms_phone-filter">Sms phone</label>
+              <input [(ngModel)]="filterSearch.sms_phone" type="text" class="form-control" id="sms_phone-filter">
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="form-group">
+              <label for="director-filter">Director</label>
+              <input [(ngModel)]="filterSearch.director" type="text" class="form-control" id="director-filter">
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="form-group">
+              <label for="mccfilter">MCC</label>
+              <input [(ngModel)]="filterSearch.mcc" type="text" class="form-control" id="mccfilter">
+            </div>
+          </div>
+        </div>
+
+        <!-- <div class="row mb-2">
+          <div class="col">
+            <select [(ngModel)]="filterSearch.status">
+              <option [selected]="filterSearch.status == undefined || filterSearch.status == ''" value="">All</option>
+              <option value="0">In process</option>
+              <option value="1">Active</option>
+              <option value="2">Closed</option>
+            </select>
+          </div>
+        </div> -->
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" (click)="filter()">Filter</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,32 @@
+.apple{
+    display: flex;
+    width: 100% !important;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+    border-radius: 12px;
+    height: 48px;
+}
+.apple-pay-button {
+    display: inline-block;
+    -webkit-appearance: -apple-pay-button;
+    -apple-pay-button-type: continue;
+}
+
+.apple-pay-button-black {
+  -apple-pay-button-style: black;
+}
+
+.apple-pay-button-white {
+  -apple-pay-button-style: white;
+}
+
+.apple-pay-button-white-with-line {
+  -apple-pay-button-style: white-outline;
+}
+
+/* .apple{
+  background-color: black;
+  color: white;
+  width: 100%;
+} */
