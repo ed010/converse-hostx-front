@@ -155,19 +155,10 @@ export class TransactionsComponent implements OnInit, OnDestroy {
         let hold_transactions = this.normalizeTransactions(responseBody.transactions)
         this.transactionsCount = this.toSafeNumber(responseBody.totalCount)
         this.transactionsTotalAmount=  this.toSafeNumber(responseBody.totalAmount)
-        if (hold_transactions.length == 0)
-        {
-          this.disableNextButton = true
-        }
-        if (hold_transactions.length < size && hold_transactions.length > 0)
-        {
-          this.disableNextButton = true
-          this.transactions = hold_transactions
-        }
-        if(hold_transactions.length == size)
-        {
-          this.transactions = hold_transactions
-        }
+        this.transactions = hold_transactions
+        // totalCount reflects every applied filter, so it is the authority on whether a next page exists.
+        this.disableNextButton =
+          hold_transactions.length < size || page * size >= this.transactionsCount
 
         this.showLoader = false;
       },

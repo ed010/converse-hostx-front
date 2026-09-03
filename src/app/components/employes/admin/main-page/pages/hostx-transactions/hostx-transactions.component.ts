@@ -145,6 +145,7 @@ export class HostxTransactionsComponent implements OnInit {
         this.filterSearch.keys['title'] = res['title'] != undefined ? res['title'] : ''
         this.filterSearch.keys['transaction_type'] = res['transaction_type'] != undefined ? res['transaction_type'] : ''
         this.filterSearch.keys['transaction_out_or_local'] = res['transaction_out_or_local'] != undefined ? res['transaction_out_or_local'] : ''
+        this.filterSearch.keys['transaction_status'] = res['transaction_status'] != undefined ? res['transaction_status'] : ''
 
         if(res['page']*1 <= 0 || !Number.isInteger(res['page']*1))
           this.page = 1
@@ -178,19 +179,10 @@ export class HostxTransactionsComponent implements OnInit {
         })) as Transactions[]
         this.transactionsCount = Number(responseBody.totalCount) || 0
         this.transactionsTotalAmount = Number(responseBody.totalAmount) || 0
-        if (hold_transactions.length == 0)
-        {
-          this.disableNextButton = true
-        }
-        if (hold_transactions.length < count && hold_transactions.length > 0)
-        {
-          this.disableNextButton = true
-          this.transactions = hold_transactions
-        }
-        if(hold_transactions.length == count)
-        {
-          this.transactions = hold_transactions
-        }
+        this.transactions = hold_transactions
+        // totalCount reflects every applied filter, so it is the authority on whether a next page exists.
+        this.disableNextButton =
+          hold_transactions.length < count || page * count >= this.transactionsCount
 
         this.showLoader = false;
       },
@@ -335,7 +327,9 @@ export class HostxTransactionsComponent implements OnInit {
 
   filter()
   {
-    let queryParams = {}
+    // A new filter set starts from the first page; staying on a deep page could land on an empty list.
+    this.page = 1
+    let queryParams = { 'page': 1 }
 
     for (let i in this.filterSearch.keys){
       if(this.filterSearch.keys[i] != '')
