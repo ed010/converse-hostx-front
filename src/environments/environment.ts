@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   // Empty = same-origin / reverse-proxy. Set when calling API on another host.
-  apiBaseUrl: "http://localhost:8080",
+  apiBaseUrl: "http://localhost:5018",
   // apiBaseUrl: "https://payxapi-test.conversebank.am",
 };
 

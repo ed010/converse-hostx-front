@@ -165,11 +165,19 @@ export class HostxTransactionsComponent implements OnInit {
       {
         this.disableNextButton = false
         this.transactions = []
-        let hold_transactions = res.body as Transactions[]
-        // this.transactions = res.body as Transactions[]
-        // console.log(hold_transactions)
-        this.transactionsCount = parseFloat(res.headers.get('transactioncount'))
-        this.transactionsTotalAmount=  parseFloat(res.headers.get('totalamount'))
+        // SearchOutsideTransactions returns { transactions, totalCount, totalAmount } in the body
+        // (custom headers are not exposed cross-origin).
+        const responseBody: any = res.body || {}
+        let hold_transactions = ((responseBody.transactions || []) as any[]).map((transaction: any) => ({
+          ...transaction,
+          card: {
+            ...transaction?.card,
+            maskedPan: transaction?.card?.maskedPan ?? transaction?.card?.cardNumber ?? '',
+            cardHolderName: transaction?.card?.cardHolderName ?? transaction?.card?.cardFullname ?? '',
+          },
+        })) as Transactions[]
+        this.transactionsCount = Number(responseBody.totalCount) || 0
+        this.transactionsTotalAmount = Number(responseBody.totalAmount) || 0
         if (hold_transactions.length == 0)
         {
           this.disableNextButton = true

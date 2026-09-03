@@ -124,7 +124,9 @@ export class MerchantsComponent implements OnInit, OnDestroy {
     .subscribe(res =>
       {
 
-        this.filterSearch.status, this.status = res['status'] == undefined ? '1': res['status']
+        // No status in the URL means "All"; the status dropdown drives this via filterByStatus().
+        this.status = res['status'] == undefined ? '' : res['status']
+        this.filterSearch.status = this.status
         this.filterSearch.director = res['director'] != undefined ? res['director'] : ''
         this.filterSearch.merchant_id = res['merchant_id'] != undefined ? res['merchant_id'] : ''
         this.filterSearch.legal_company_name = res['legal_company_name'] != undefined ? res['legal_company_name'] : ''
@@ -141,19 +143,19 @@ export class MerchantsComponent implements OnInit, OnDestroy {
         this.filterSearch.address_hy = res['address_hy'] != undefined ? res['address_hy'] : ''
         this.filterSearch.address_en = res['address_en'] != undefined ? res['address_en'] : ''
         this.filterSearch.mcc = res['mcc'] != undefined ? res['mcc'] : ''
-        this.filterSearch.address_en = res['tid_api'] != undefined ? res['tid_api'] : ''
-        this.filterSearch.address_en = res['tid_api_pass'] != undefined ? res['tid_api_pass'] : ''
-        this.filterSearch.address_en = res['tid_binding'] != undefined ? res['tid_binding'] : ''
-        this.filterSearch.address_en = res['tid_binding_pass'] != undefined ? res['tid_binding_pass'] : ''
-        this.filterSearch.address_en = res['merchant_arca_percent'] != undefined ? res['merchant_arca_percent'] : ''
-        this.filterSearch.address_en = res['merchant_local_percent'] != undefined ? res['merchant_local_percent'] : ''
-        this.filterSearch.address_en = res['merchant_outside_percent'] != undefined ? res['merchant_outside_percent'] : ''
-        this.filterSearch.address_en = res['fee_type'] != undefined ? res['fee_type'] : ''
-        this.filterSearch.address_en = res['title'] != undefined ? res['title'] : ''
-        this.filterSearch.address_en = res['offline_merhcant'] != undefined ? res['offline_merhcant'] : ''
-        this.filterSearch.address_en = res['merchant_type'] != undefined ? res['merchant_type'] : ''
-        this.filterSearch.address_en = res['bank_internal_tid'] != undefined ? res['bank_internal_tid'] : ''
-        this.filterSearch.address_en = res['bank_internal_mid'] != undefined ? res['bank_internal_mid'] : ''
+        this.filterSearch.tid_api = res['tid_api'] != undefined ? res['tid_api'] : ''
+        this.filterSearch.tid_api_pass = res['tid_api_pass'] != undefined ? res['tid_api_pass'] : ''
+        this.filterSearch.tid_binding = res['tid_binding'] != undefined ? res['tid_binding'] : ''
+        this.filterSearch.tid_binding_pass = res['tid_binding_pass'] != undefined ? res['tid_binding_pass'] : ''
+        this.filterSearch.merchant_arca_percent = res['merchant_arca_percent'] != undefined ? res['merchant_arca_percent'] : ''
+        this.filterSearch.merchant_local_percent = res['merchant_local_percent'] != undefined ? res['merchant_local_percent'] : ''
+        this.filterSearch.merchant_outside_percent = res['merchant_outside_percent'] != undefined ? res['merchant_outside_percent'] : ''
+        this.filterSearch.fee_type = res['fee_type'] != undefined ? res['fee_type'] : ''
+        this.filterSearch.title = res['title'] != undefined ? res['title'] : ''
+        this.filterSearch.offline_merhcant = res['offline_merhcant'] != undefined ? res['offline_merhcant'] : ''
+        this.filterSearch.merchant_type = res['merchant_type'] != undefined ? res['merchant_type'] : ''
+        this.filterSearch.bank_internal_tid = res['bank_internal_tid'] != undefined ? res['bank_internal_tid'] : ''
+        this.filterSearch.bank_internal_mid = res['bank_internal_mid'] != undefined ? res['bank_internal_mid'] : ''
 
         if(res['page']*1 <= 0 || !Number.isInteger(res['page']*1) ||  res['page'] == undefined)
           this.page = 1
@@ -240,7 +242,10 @@ export class MerchantsComponent implements OnInit, OnDestroy {
   getMerchants(page, filters, count = this.pageSize)
   {
     this.showLoader = true
-    this.merchantService.getMerhcnatFiltersByPage(page, count, filters).subscribe(
+    // SearchMerchants binds a camelCase SearchMerchantsRequest; the snake_case filterSearch
+    // keys are only the URL/query-param representation and are ignored by the API.
+    const body = this.buildSearchBody()
+    this.merchantService.getMerhcnatFiltersByPage(page, count, body).subscribe(
       res =>
       {
         this.merchants = res.body as Merchant[]
@@ -282,7 +287,8 @@ export class MerchantsComponent implements OnInit, OnDestroy {
     return value === "" || value == null ? null : value;
   }
 
-  private buildExportSearchBody() {
+  /** Body for SearchMerchants / ExportMerchantsForAdmin (camelCase SearchMerchantsRequest). */
+  private buildSearchBody() {
     return {
       addressEn: this.toNullableFilter(this.filterSearch.address_en),
       addressHy: this.toNullableFilter(this.filterSearch.address_hy),
@@ -321,7 +327,7 @@ export class MerchantsComponent implements OnInit, OnDestroy {
     this.downloadExcelLoader = true;
 
     const page = this.page > 0 ? this.page : 1;
-    const body = this.buildExportSearchBody();
+    const body = this.buildSearchBody();
 
     this.merchantService.exportMerchantsForAdmin(page, this.exportCount, body).subscribe(
       (res) => {

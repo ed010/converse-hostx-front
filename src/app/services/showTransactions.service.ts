@@ -94,19 +94,39 @@ export class ShowTransactionsService {
     );
   }
   getTransactionFilterByPage(page, size, filters) {
+    const body = this.buildSearchBody(page, size, filters, "transactions.id");
+    return this.http.post(
+      `/api/Payment/SearchTransactions`,
+      body,
+      {
+        observe: "response",
+      }
+    );
+  }
+
+  /**
+   * Maps the snake_case `filterSearch` model used by the admin transaction pages onto the
+   * camelCase SearchTransactionsRequest the API binds. `idKey` is the name of the id filter in
+   * `keys` ("transactions.id" or "outside_transactions.id").
+   */
+  private buildSearchBody(page, size, filters, idKey: string) {
     const keys = filters?.keys || {};
-    const body = {
+    return {
       page: this.toPositiveNumber(page, 1),
       size: this.toPositiveNumber(size, 100),
-      transactionId: this.toNumber(keys["transactions.id"]),
+      transactionId: this.toNumber(keys[idKey]),
       amount: this.toNumber(keys["amount"]),
       merchantId: this.toNumber(keys["merchant_id"]),
       companyNameEn: this.toNullableString(keys["company_name_en"]),
       authCode: this.toNullableString(keys["auth_code"]),
       bankTid: this.toNullableString(keys["bank_tid"]),
+      bankName: this.toNullableString(keys["bank_name"]),
+      payxFee: this.toNumber(keys["payx_fee"]),
       cardNumber: this.toNullableString(keys["card_number"]),
       comment: this.toNullableString(keys["comment"]),
       appName: this.toNullableString(keys["app_name"]),
+      mcc: this.toNullableString(keys["mcc"]),
+      title: this.toNullableString(keys["title"]),
       transactionType: this.toNumber(keys["transaction_type"]),
       transactionOutOrLocal: this.toNumber(keys["transaction_out_or_local"]),
       transactionStatus: this.toNumber(keys["transaction_status"]),
@@ -115,14 +135,6 @@ export class ShowTransactionsService {
       paymentDateStart: this.toNullableValue(filters?.paymentDateStart),
       paymentDateEnd: this.toNullableValue(filters?.paymentDateEnd),
     };
-
-    return this.http.post(
-      `/api/Payment/SearchTransactions`,
-      body,
-      {
-        observe: "response",
-      }
-    );
   }
 
   private toNumber(value) {
@@ -148,9 +160,9 @@ export class ShowTransactionsService {
   }
 
   getHosXTransactionFilterByPage(page, count, filters) {
-    let body = filters;
+    const body = this.buildSearchBody(page, count, filters, "outside_transactions.id");
     return this.http.post(
-      `/api/Payment/SearchOutsideTransactions?page=${page}&count=${count}`,
+      `/api/Payment/SearchOutsideTransactions`,
       body,
       {
         observe: "response",
