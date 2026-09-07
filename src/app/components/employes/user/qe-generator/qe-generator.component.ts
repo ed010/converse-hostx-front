@@ -25,8 +25,6 @@ import { SignalRService } from "src/app/services/signalR.service";
 // import { SignalRService } from "src/app/services/signalR.service";
 import { SmsService } from "src/app/services/sms.service";
 
-import { COUNTRY_LIST } from "src/app/enums/countries";
-
 @Component({
   selector: "app-qe-generator",
   templateUrl: "./qe-generator.component.html",
@@ -62,10 +60,15 @@ export class QeGeneratorComponent implements OnInit, OnDestroy {
 
   canChangeComments: boolean = false;
   changedComment: boolean = false;
-  public readonly countries = COUNTRY_LIST
 
-  selectedCountry = { name: 'Armenia', code: 'AM', dialCode: '+374', mask: '00 00 00 00' };
-  countrySearchText = '';
+  // SMS is Armenia-only (matches backend PhoneHelper.FixPhone).
+  readonly phoneDialCode = "+374";
+  readonly phoneMask = "00 00 00 00";
+  // Valid Armenian mobile prefixes (same whitelist as legacy PayX).
+  private readonly phonePrefixes = [
+    "91", "93", "94", "95", "96", "97", "98", "99",
+    "77", "55", "41", "42", "43", "44", "33",
+  ];
 
 
   @ViewChild("closeModal") closeModal: ElementRef;
@@ -144,25 +147,6 @@ export class QeGeneratorComponent implements OnInit, OnDestroy {
     //   }
     // )
     this.selectedMerchantId = this.dataEx.retId();
-  }
-
-  get filteredCountries() {
-    if (!this.countrySearchText) {
-      return this.countries;
-    }
-    const searchLower = this.countrySearchText.toLowerCase();
-    return this.countries.filter(country => 
-      country.name.toLowerCase().includes(searchLower) || 
-      country.dialCode.includes(searchLower)
-    );
-  }
-
-  selectCountry(country: any) {
-    this.selectedCountry = country;
-  }
-
-  get phoneMask(): string {
-    return this.selectedCountry.mask;
   }
 
   getCurrencySuffix(): string {
@@ -287,7 +271,6 @@ export class QeGeneratorComponent implements OnInit, OnDestroy {
     this.invalidPhoneNumber = false;
     this.successPhone = false;
     this.sendSmsButton = true;
-    this.countrySearchText = "";
   }
 
   copyLink() {
@@ -325,36 +308,21 @@ export class QeGeneratorComponent implements OnInit, OnDestroy {
     this.invalidPhoneNumber = false;
     this.successPhone = false;
 
-    // Remove spaces from phone number
-    const cleanPhone = this.phoneNumber?.replace(/\s/g, '') || '';
-    
-    // Validation based on selected country
-    if (this.selectedCountry.dialCode === '+374') {
-      // Armenia specific validation
-      let phoneCodes = "91939495969798997755414243434433";
-      let sendNumber = cleanPhone.slice(0, 2);
-      
-      if (cleanPhone.length < 8 || !phoneCodes.includes(sendNumber)) {
-        this.invalidPhoneNumber = true;
-        this.sendSmsButton = true;
-        return;
-      }
-    } else {
-      // General validation for other countries (minimum 6 digits)
-      if (cleanPhone.length < 6) {
-        this.invalidPhoneNumber = true;
-        this.sendSmsButton = true;
-        return;
-      }
+    // Armenian mobile number: exactly 8 digits with a known operator prefix.
+    const cleanPhone = (this.phoneNumber || "").replace(/\D/g, "");
+    if (
+      cleanPhone.length !== 8 ||
+      !this.phonePrefixes.includes(cleanPhone.slice(0, 2))
+    ) {
+      this.invalidPhoneNumber = true;
+      this.sendSmsButton = true;
+      return;
     }
-    
-    // Build the full phone number with country code
-    const fullPhoneNumber = this.selectedCountry.dialCode + cleanPhone;
-    
+
     let body: SmsModel = {
       merchantId: this.selectedMerchantId,
       transactionId: String(this.transactionID),
-      phone: fullPhoneNumber,
+      phone: this.phoneDialCode + cleanPhone,
     };
 
     this.SMSservice.sendSMS(body).subscribe(

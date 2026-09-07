@@ -172,6 +172,17 @@
                 {{ "qrModal.copyLinkAndSend" | translate }}
               </button>
             </div>
+            <div class="sms">
+              <button
+                type="button"
+                class="btn btn-success btn-for-qr btn-for-qr-y"
+                data-bs-toggle="modal"
+                data-bs-target="#phoneModal"
+                (click)="openSmsModal()"
+              >
+                {{ "qrModal.sendSMSRequest" | translate }}
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -185,37 +196,22 @@
           <label for="phoneNumber" class="form-label">{{
             "qrModal.phoneNumber" | translate
             }}</label>
-          <div class="d-flex gap-2">
-            <div class="dropdown">
-              <button class="btn btn-outline-secondary dropdown-toggle d-flex align-items-center gap-2" type="button"
-                id="countryCodeDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="min-width: 100px;">
-                <span class="fi fi-{{selectedCountry.code.toLowerCase()}}"></span>
-                <span>{{selectedCountry.dialCode}}</span>
-              </button>
-              <ul class="dropdown-menu" aria-labelledby="countryCodeDropdown"
-                style="max-height: 300px; overflow-y: auto;">
-                <li>
-                  <input type="text" class="form-control mx-2 mb-2" [placeholder]="'qrModal.search' | translate" [(ngModel)]="countrySearchText"
-                    (click)="$event.stopPropagation()" style="width: calc(100% - 1rem);">
-                </li>
-                <li *ngFor="let country of filteredCountries">
-                  <a class="dropdown-item d-flex align-items-center gap-2" href="javascript:void(0)"
-                    (click)="selectCountry(country)">
-                    <span class="fi fi-{{country.code.toLowerCase()}}"></span>
-                    <span>{{country.name}} {{country.dialCode}}</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <input 
-              id="phoneNumber" 
-              type="text" 
-              class="form-control flex-grow-1"
-              [mask]="phoneMask" 
+          <div class="input-group">
+            <span class="input-group-text d-flex align-items-center gap-2">
+              <span class="fi fi-am"></span>
+              <span>{{ phoneDialCode }}</span>
+            </span>
+            <input
+              id="phoneNumber"
+              type="tel"
+              inputmode="numeric"
+              class="form-control"
+              [mask]="phoneMask"
               [(ngModel)]="phoneNumber"
               [placeholder]="phoneMask"
-              onkeydown="return event.keyCode !== 69 && event.keyCode !== 189" 
-              />
+              (keyup.enter)="sendSMS()"
+              onkeydown="return event.keyCode !== 69 && event.keyCode !== 189"
+            />
           </div>
           <div class="alert alert-danger mt-3" *ngIf="invalidPhoneNumber" role="alert">
             {{ "qrModal.invalidPhone" | translate }}
@@ -289,6 +285,17 @@
             </div>
             <button class="btn btn-success btn-for-qr" (click)="copyLink()">
               {{ "qrModal.copyLinkAndSend" | translate }}
+            </button>
+          </div>
+          <div class="sms">
+            <button
+              type="button"
+              class="btn btn-success btn-for-qr btn-for-qr-y"
+              data-bs-toggle="modal"
+              data-bs-target="#phoneModal"
+              (click)="openSmsModal()"
+            >
+              {{ "qrModal.sendSMSRequest" | translate }}
             </button>
           </div>
         </div>

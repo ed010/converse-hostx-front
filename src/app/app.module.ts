@@ -206,11 +206,8 @@ const appRouts: Routes = [
     component: MainComponent,
     children: [{ path: "", component: PaymentComponent }],
   },
-  {
-    path: "pxtransfer/:id",
-    component: MainComponent,
-    children: [{ path: "", component: PaymentComponent }],
-  },
+  // Underscore-free alias used in SMS links (carriers may drop "_"); query params are preserved.
+  { path: "pxtransfer/:id", redirectTo: "px_transfer/:id", pathMatch: "full" },
   {
     path: "transfer_success/:id",
     component: MainComponent,
