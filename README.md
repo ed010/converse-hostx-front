@@ -25,3 +25,15 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+## Production deployment
+
+The production build is **served by the API** (ConverseRefactor), not by a separate web server:
+`environment.prod.ts` has `apiBaseUrl: ""` (same-origin): the app calls the host it was served from, so one build works on localhost and in production.
+
+```bash
+NODE_OPTIONS=--openssl-legacy-provider npx ng build --prod   # -> dist/ad-page/ (flag needed for Angular 11 on Node >= 17)
+cp -r dist/ad-page/. ../ConverseRefactor/src/Converse.MerchantX/ClientApp/
+```
+
+Then publish/deploy the API as usual — see `ConverseRefactor/docs/SPA_HOSTING.md`.

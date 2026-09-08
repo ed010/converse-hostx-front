@@ -248,9 +248,10 @@ export class MerchantsComponent implements OnInit, OnDestroy {
     this.merchantService.getMerhcnatFiltersByPage(page, count, body).subscribe(
       res =>
       {
-        this.merchants = res.body as Merchant[]
-        if (this.merchants.length != count)
-          this.disableNextPage = true
+        this.merchants = (res.body as Merchant[]) || []
+        // Re-evaluated on every load: a short page is the last one; a full page re-enables Next
+        // after coming back from the last page or clearing a filter (it used to stick at true).
+        this.disableNextPage = this.merchants.length < count
         this.showLoader = false;
       },
       err => {
