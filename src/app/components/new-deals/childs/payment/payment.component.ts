@@ -9,6 +9,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
 import { Subscription } from "rxjs";
+import { ApplePayComponentResponse } from "src/app/models/apple-pay/ApplePayComponentResponse.model";
 import { MerchantPaymentInfoModel } from "src/app/models/merchantInfoPayment.model";
 import { readPayApiErrorMessage } from "src/app/models/payment-pay-response.model";
 import { Transactions } from "src/app/models/transactions.model";
@@ -41,8 +42,10 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   getNotification: Subscription;
 
-  /** Spinner for the Apple Pay / Google Pay button (the card button uses isSmallLoading). */
-  isWalletLoading: boolean = false;
+  showApplePayButton: boolean = false;
+
+  onlyApplePay: boolean = false;
+  canRedirectToURL: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -57,7 +60,21 @@ export class PaymentComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route.paramMap.subscribe((paramMap) => {
       this.transferId = paramMap.get("id");
+      if (!this.transferId) {
+        this.route.queryParamMap.subscribe({
+          next: (queryParamMap) => {
+            this.onlyApplePay = true;
+            this.transferId = queryParamMap.get("pxNumber");
+            this.canRedirectToURL = true;
+          },
+        });
+      }
+
       this.getTransactionDetails(this.transferId);
+
+      if (typeof ApplePaySession !== "undefined") {
+        this.showApplePayButton = true;
+      }
     });
   }
 
@@ -120,21 +137,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
     console.log(typeof this.changedAmount);
   }
 
-  /**
-   * Registers the ARCA order and redirects to the bank's hosted form.
-   * `isWallet` = the Apple Pay / Google Pay button: same call, but the API registers the order on
-   * the merchant's `_token` EPG login so EPG's page offers the wallet. iPay merchants are rejected
-   * by the API with a clear message.
-   */
-  payByCard(isWallet: boolean = false) {
-    if (this.isSmallLoading || this.isWalletLoading) {
-      return;
-    }
-    const setLoading = (value: boolean) => {
-      if (isWallet) this.isWalletLoading = value;
-      else this.isSmallLoading = value;
-    };
-    setLoading(true);
+  payByCard() {
+    this.isSmallLoading = true;
     if (this.transaction.amount == 0) {
       if (
         Number.parseInt(this.changedAmount) == 0 ||
@@ -143,7 +147,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
         this.changedAmount == null
       ) {
         this.amountError = true;
-        setLoading(false);
+        this.isSmallLoading = false;
         return;
       }
       if (this.changedAmount.toString().length > 11) {
@@ -154,7 +158,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
             duration: 7000,
           }
         );
-        setLoading(false);
+        this.isSmallLoading = false;
         return;
       }
     }
@@ -167,11 +171,10 @@ export class PaymentComponent implements OnInit, OnDestroy {
       amount,
       transferId: Number(this.transaction.transactionId ?? 0),
       comment: this.newComment != null ? String(this.newComment) : "",
-      isWallet,
     };
     this.paymentService.pay(payBody).subscribe(
       (res) => {
-        setLoading(false);
+        this.isSmallLoading = false;
         const body = res.body as any;
         const apiErr = readPayApiErrorMessage(body);
         if (apiErr) {
@@ -190,7 +193,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
         }
       },
       (err) => {
-        setLoading(false);
+        this.isSmallLoading = false;
         const errmer =
           readPayApiErrorMessage(err?.error) ||
           err?.error?.message ||
@@ -207,6 +210,22 @@ export class PaymentComponent implements OnInit, OnDestroy {
     let domainPattern = /^(http:\/\/)([^\/]+)(.*)$/;
     let newUrl = originalUrl.replace(domainPattern, "$1pay.conversebank.am$3");
     return newUrl;
+  }
+
+  onApplePayCompleted(data: ApplePayComponentResponse) {
+    console.log(data.status, data.redirect);
+    if (data.status == "success") {
+      if (data.redirect && data.redirect_url) {
+        this.router.navigateByUrl(`transfer_success/${this.transferId}`);
+      }
+    } else if (data.status === "failure") {
+      this.translateService.get("deals").subscribe((res) => {
+        const errMessage = res.errorMessage1 || "Payment failed";
+        this._snackBar.open(errMessage, "", {
+          duration: 7000,
+        });
+      });
+    }
   }
 
   ngOnDestroy(): void {

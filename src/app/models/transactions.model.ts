@@ -19,8 +19,6 @@ export class Transactions {
   domain?: any;
   mcc: string;
   isMulti: boolean;
-  /** Merchant is on EPG; the wallet (Apple Pay / Google Pay) button is shown only when true. */
-  isEpg?: boolean;
   transactionStatus: number;
   merchantName: string;
   merchantUsername: string;

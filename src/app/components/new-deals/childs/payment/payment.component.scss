@@ -187,56 +187,6 @@ p {
           .mat-spinner circle {
             stroke: white;
           }
-          &:disabled {
-            opacity: 0.6;
-            cursor: default;
-          }
-        }
-      }
-
-      // Unified Apple Pay / Google Pay button: same size and radius as the card button,
-      // black like the wallets' own branding, with both marks side by side.
-      &.wallet_pay_cont {
-        margin-top: -6px;
-        button.wallet_btn {
-          background-color: #000;
-          gap: 10px;
-          cursor: pointer;
-          .wallet_label {
-            white-space: nowrap;
-          }
-          .wallet_marks {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            color: #fff;
-          }
-          .wallet_mark {
-            display: inline-flex;
-            align-items: center;
-            gap: 3px;
-          }
-          .wallet_logo {
-            width: 20px;
-            height: 20px;
-            flex: none;
-          }
-          .apple_logo {
-            margin-top: -2px;
-          }
-          .wallet_mark_text {
-            font-size: 17px;
-            font-weight: 600;
-            letter-spacing: -0.3px;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-              Helvetica, Arial, sans-serif;
-            line-height: 1;
-          }
-          .wallet_divider {
-            width: 1px;
-            height: 20px;
-            background-color: rgba(255, 255, 255, 0.45);
-          }
         }
       }
 
@@ -307,3 +257,7 @@ p {
   align-items: center;
 }
 
+.apple-pay-cont {
+  display: flex;
+  align-items: center;
+}
