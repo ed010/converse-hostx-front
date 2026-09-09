@@ -195,10 +195,18 @@ const appRouts: Routes = [
     ],
   },
   { path: "ecommerce_pay/webX", component: WebXComponent },
+  // HostX wallet (Apple Pay / Google Pay) redirect page: same auto-redirect as the card page, but the
+  // order is registered on the merchant's "_token" EPG login and EPG's hosted page shows the wallet.
+  {
+    path: "ecommerce_pay_wallet/webX",
+    component: WebXComponent,
+    data: { wallet: true },
+  },
+  // Deprecated (is_apple_pay) alias of the wallet page, kept for partners with the old URL.
   {
     path: "ecommerce_pay_applePay/webX",
-    component: MainComponent,
-    children: [{ path: "", component: PaymentComponent }],
+    component: WebXComponent,
+    data: { wallet: true },
   },
   // { path: "px_transfer/:id", component: MakePaymentComponent },
   {

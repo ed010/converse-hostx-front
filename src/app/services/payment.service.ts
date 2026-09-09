@@ -87,6 +87,7 @@ export class PaymentService {
     const transactionStatus = Number(b?.status ?? 0);
     const isBlocked = !!b?.isBlocked;
     const isMulti = !!b?.isMulti;
+    const isEpg = !!b?.isEpg;
     const merchantName = String(b?.merchantName ?? "").trim();
     const idFromQuery = String(merchantUserId ?? "").trim();
     const idFromBody = String(b?.merchantUserId ?? "").trim();
@@ -120,6 +121,7 @@ export class PaymentService {
         isBlocked,
         transactionStatus,
         isMulti,
+        isEpg,
         qr: "",
         link: "",
         transactionId: transferId,

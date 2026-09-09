@@ -12,4 +12,6 @@ export interface GetTransactionByHashResponse {
   isBlocked?: boolean;
   isMulti?: boolean;
   merchantName?: string;
+  /** Merchant is on EPG: Apple Pay / Google Pay is available. */
+  isEpg?: boolean;
 }

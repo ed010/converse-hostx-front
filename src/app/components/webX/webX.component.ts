@@ -27,6 +27,13 @@ export class WebXComponent implements OnInit {
 
   link: string = "";
 
+  /**
+   * Set by the route data (`ecommerce_pay_wallet/webX`): register the order for Apple Pay /
+   * Google Pay on the merchant's `_token` EPG login instead of the card `_api` login. The page
+   * itself is only an intermediate redirect either way.
+   */
+  isWallet: boolean = false;
+
   constructor(
     private roleCkeck: UserService,
     private router: Router,
@@ -52,22 +59,18 @@ export class WebXComponent implements OnInit {
         }
       );
     }
+    this.isWallet = this.aRoute.snapshot.data?.["wallet"] === true;
     this.aRoute.queryParams.subscribe((params) => {
       this.pxNumber = params["pxNumber"];
       this.bind = params["IsBind"];
       this.client_id = params["client_id"];
-      let isArca = params["isArca"];
       this.webXService.getTransaction(this.pxNumber).subscribe(
         (res) => {
           this.qr = res.body["qr"];
           this.link = `${window.location.origin}/px_transfer/${this.pxNumber}`;
+          // Auto-redirect: register the ARCA order once and send the payer to the bank form.
+          // (This used to be called twice when isArca=true, registering two orders.)
           this.onClickPayByCard();
-
-          if (isArca == "true") {
-            this.onClickPayByCard();
-          } else {
-            this.loadingToggle = false;
-          }
         },
         (err) => {
           if (err.status == 302) {
@@ -112,9 +115,21 @@ export class WebXComponent implements OnInit {
       b = false;
     }
     let cId = this.client_id ? this.client_id.toString() : "-1";
-    this.webXService.payByCard(this.pxNumber, b, cId).subscribe((res) => {
-      location.href = res["formUrl"];
-    });
+    this.webXService.payByCard(this.pxNumber, b, cId, this.isWallet).subscribe(
+      (res) => {
+        location.href = res["formUrl"];
+      },
+      (err) => {
+        // Already paid / bound-card fallbacks come back as 302 with the merchant URL; anything
+        // else (e.g. WALLET_NOT_SUPPORTED for an iPay merchant) lands on the failure page.
+        const redirect = err?.error?.formUrl || err?.error?.returnUrl;
+        if (err?.status == 302 && redirect) {
+          location.href = redirect;
+          return;
+        }
+        location.href = `/400?transactionId=${this.pxNumber}`;
+      }
+    );
   }
 
   payByUser() {
