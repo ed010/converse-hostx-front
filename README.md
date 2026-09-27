@@ -28,12 +28,22 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## Production deployment
 
-The production build is **served by the API** (ConverseRefactor), not by a separate web server:
-`environment.prod.ts` has `apiBaseUrl: ""` (same-origin): the app calls the host it was served from, so one build works on localhost and in production.
+The build is deployed **standalone** on `pay.conversebank.am` and calls the API on its own host
+(`payapi.conversebank.am`) cross-origin. `environment.prod.ts` pins that host in `apiBaseUrl`; every
+`HttpClient` call is prefixed by `BaseUrlInterceptor` and `SignalRService` builds the `/orderHub` URL
+from the same value. The API no longer serves this app.
 
 ```bash
 NODE_OPTIONS=--openssl-legacy-provider npx ng build --prod   # -> dist/ad-page/ (flag needed for Angular 11 on Node >= 17)
-cp -r dist/ad-page/. ../ConverseRefactor/src/Converse.MerchantX/ClientApp/
 ```
 
-Then publish/deploy the API as usual — see `ConverseRefactor/docs/SPA_HOSTING.md`.
+Hand `dist/ad-page/` to the web server. Two things it must do (sysadmin side — see
+`ConverseRefactor/docs/DEPLOYMENT.md`):
+
+- rewrite any unmatched path to `index.html`, so Angular routes resolve;
+- answer 200 on `/.well-known/apple-developer-merchantid-domain-association` — Apple validates the
+  domain that starts the payment session, i.e. this host. The content is what the API serves at that
+  same path; proxying it to the API or hosting a copy both work. Apple Pay breaks without it.
+
+If the API host ever changes, update `apiBaseUrl` in `src/environments/environment.prod.ts` and rebuild.
+Local development (`ng serve` on 4200) uses `environment.ts` with `apiBaseUrl: "http://localhost:5018"`.

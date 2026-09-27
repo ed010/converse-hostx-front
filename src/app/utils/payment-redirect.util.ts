@@ -1,6 +1,6 @@
 /**
  * Pay API often returns formUrl / redirectUrl pointing at the deployed frontend
- * (e.g. https://payx-test.comversebank.am/400?...). When developing on localhost,
+ * (e.g. https://payx-test.conversebank.am/400?...). When developing on localhost,
  * rewrite those app routes onto the current origin; leave bank/ACS URLs alone.
  */
 export function resolvePaymentRedirectUrl(rawUrl: string | null | undefined): string | null {

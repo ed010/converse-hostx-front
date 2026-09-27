@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import * as signalR from '@aspnet/signalr'
 import { DataExchangeService } from './dataExchange.service';
 import { NotificationService } from './notification.service';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -19,8 +20,11 @@ export class SignalRService {
     ) { }
 
     public startConnection = (token) => {
+      // The hub is on the API host, which is a different origin than this app: HubConnectionBuilder
+      // resolves a relative URL against the page, so build it from apiBaseUrl (empty = same origin).
+      const hubUrl = `${(environment.apiBaseUrl ?? '').trim().replace(/\/+$/, '')}/orderHub`;
       this.hubConnection = new signalR.HubConnectionBuilder()
-                              .withUrl('/orderHub', {accessTokenFactory: ()=> token})
+                              .withUrl(hubUrl, {accessTokenFactory: ()=> token})
                               .withAutomaticReconnect()
                               .build();
       this.hubConnection
