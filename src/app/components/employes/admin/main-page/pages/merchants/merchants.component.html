@@ -14,12 +14,18 @@
 
         </div>
         <div class="pagination">
-          <button [disabled]="page == 1" class="btn my-btn-color" (click)="goToPage(-1)"
-            style="width: 100px; cursor: pointer;">&laquo; Previous
+          <button [disabled]="page <= 1" class="btn my-btn-color" (click)="goToPage(page - 1)">
+            &laquo; Previous
           </button>
-          <button [disabled]="disableNextPage" class="btn my-btn-color" (click)="goToPage(1)"
-            style="width: 100px; cursor: pointer; margin-left: 20px;">Next
-            &raquo;</button>
+          <ng-container *ngFor="let p of pageNumbers">
+            <span *ngIf="p === null" class="page-gap">&hellip;</span>
+            <button *ngIf="p !== null" type="button" class="btn page-btn" [class.active]="p === page"
+              (click)="goToPage(p)">{{ p }}</button>
+          </ng-container>
+          <button [disabled]="page >= totalPages" class="btn my-btn-color" (click)="goToPage(page + 1)">
+            Next &raquo;
+          </button>
+          <span class="page-meta">{{ totalCount }} total</span>
         </div>
         <div class="excel">
           <button class="btn btn-success" (click)="createExcelModel()">Download Excel</button>

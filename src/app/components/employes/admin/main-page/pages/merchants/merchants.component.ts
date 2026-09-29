@@ -29,7 +29,7 @@ export class MerchantsComponent implements OnInit, OnDestroy {
 
 
   showLoader: boolean = false;
-  disableNextPage: boolean = false
+  totalCount: number = 0
 
   @ViewChild('closeModal') closeModal: ElementRef
   @ViewChild('closeFilters') closeFilters: ElementRef
@@ -168,9 +168,35 @@ export class MerchantsComponent implements OnInit, OnDestroy {
       })
   }
 
+  get totalPages(): number {
+    return Math.max(1, Math.ceil(this.totalCount / this.pageSize))
+  }
+
+  /**
+   * Page buttons: first, last and two pages either side of the current one; null marks a gap.
+   * A gap that would hide a single page shows that page instead of "…".
+   */
+  get pageNumbers(): (number | null)[] {
+    const total = this.totalPages
+    const pages: (number | null)[] = []
+    let last = 0
+    for (let p = 1; p <= total; p++) {
+      if (p !== 1 && p !== total && Math.abs(p - this.page) > 2)
+        continue
+      if (p - last === 2)
+        pages.push(last + 1)
+      else if (p - last > 2)
+        pages.push(null)
+      pages.push(p)
+      last = p
+    }
+    return pages
+  }
+
   filter()
   {
-    let queryParams = {}
+    // A new filter starts from the first page; the old page may not exist in the new result.
+    let queryParams: Params = { page: 1 }
 
     for (let i in this.filterSearch){
       if(this.filterSearch[i] != '')
@@ -192,13 +218,11 @@ export class MerchantsComponent implements OnInit, OnDestroy {
   }
 
 
-  goToPage(val)
+  goToPage(target: number)
   {
-    if (this.page == 1 && val == -1)
-    return
-    this.page *= 1
-    this.page += val*1
-    const queryParams: Params = { page: `${this.page}` };
+    if (target < 1 || target > this.totalPages || target === this.page)
+      return
+    const queryParams: Params = { page: `${target}` };
     this.router.navigate([],{
       queryParamsHandling: 'merge',
       relativeTo: this.route,
@@ -208,7 +232,7 @@ export class MerchantsComponent implements OnInit, OnDestroy {
 
   filterByStatus()
   {
-    let queryParams = {}
+    let queryParams: Params = { page: 1 }
 
     for (let i in this.filterSearch){
       if(this.filterSearch[i] != '')
@@ -245,14 +269,16 @@ export class MerchantsComponent implements OnInit, OnDestroy {
     // SearchMerchants binds a camelCase SearchMerchantsRequest; the snake_case filterSearch
     // keys are only the URL/query-param representation and are ignored by the API.
     const body = this.buildSearchBody()
-    this.merchantService.getMerhcnatFiltersByPage(page, count, body).subscribe(
+    this.merchantService.searchMerchants<Merchant>((page - 1) * count, count, body).subscribe(
       res =>
       {
-        this.merchants = (res.body as Merchant[]) || []
-        // Re-evaluated on every load: a short page is the last one; a full page re-enables Next
-        // after coming back from the last page or clearing a filter (it used to stick at true).
-        this.disableNextPage = this.merchants.length < count
+        this.merchants = res?.items || []
+        this.totalCount = res?.totalCount || 0
         this.showLoader = false;
+        // A stale URL (e.g. ?page=40 after filtering) lands past the end: jump to the last page.
+        if (this.merchants.length === 0 && this.totalCount > 0 && page > this.totalPages) {
+          this.goToPage(this.totalPages)
+        }
       },
       err => {
         this.showLoader = false

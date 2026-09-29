@@ -9,6 +9,12 @@ import { MerchantArcaDetail } from '../models/merchantArcaDetail.model';
 import { MerchantInfo } from '../models/merchantInfo.model';
 import { DomainService } from './domain.service';
 
+/** SearchMerchants response: one page of merchants plus the total matching the filters. */
+export interface MerchantSearchPage<T = any> {
+  items: T[];
+  totalCount: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -145,11 +151,11 @@ export class MerchantService {
     return this.http.get(`/api/Merchant/GetMerchantsByPage`,{params,observe:'response'})
   }
 
-  getMerhcnatFiltersByPage(page:number, count: number, body:any){
-    const params=new HttpParams()
-    .set("page",page.toString())
-    .set("count", count.toString())
-    return this.http.post(`/api/v1/Merchant/SearchMerchants`,  body, {params,observe:'response'})
+  searchMerchants<T = any>(skip: number, take: number, body: any) {
+    const params = new HttpParams()
+      .set("skip", skip.toString())
+      .set("take", take.toString())
+    return this.http.post<MerchantSearchPage<T>>(`/api/v1/Merchant/SearchMerchants`, body, { params })
   }
 
 

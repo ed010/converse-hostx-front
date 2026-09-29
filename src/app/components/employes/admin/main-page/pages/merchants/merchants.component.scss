@@ -66,6 +66,35 @@ section {
   background-color: var(--maibhover-color);
 }
 
+.pagination {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+
+  .page-btn {
+    min-width: 38px;
+    border: 1px solid var(--maibhover-color);
+    color: var(--maibhover-color);
+    background: white;
+
+    &.active {
+      color: white;
+      background-color: var(--maibhover-color);
+    }
+  }
+
+  .page-gap {
+    padding: 0 4px;
+  }
+
+  .page-meta {
+    margin-left: 8px;
+    white-space: nowrap;
+    color: #555;
+  }
+}
+
 .left-side {
   display: flex;
   align-items: center;

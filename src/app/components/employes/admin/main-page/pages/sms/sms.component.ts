@@ -67,16 +67,16 @@ export class SmsComponent implements OnInit {
     };
 
     this.merchantService
-      .getMerhcnatFiltersByPage(
-        this.merchantPage,
+      .searchMerchants<Merchant>(
+        (this.merchantPage - 1) * this.merchantPageSize,
         this.merchantPageSize,
         body
       )
       .subscribe(
         (res) => {
-          this.merchants = (res.body as Merchant[]) || [];
+          this.merchants = res?.items || [];
           this.disableMerchantNext =
-            this.merchants.length < this.merchantPageSize;
+            this.merchantPage * this.merchantPageSize >= (res?.totalCount || 0);
           this.showLoader = false;
         },
         (err) => this.handleError(err)
