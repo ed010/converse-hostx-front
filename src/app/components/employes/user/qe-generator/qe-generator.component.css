@@ -30,6 +30,12 @@
   z-index: 1051;
 }
 
+.country-dropdown {
+  max-height: 300px;
+  min-width: 280px;
+  overflow-y: auto;
+}
+
 .modal-backdrop {
   z-index: 1050 !important;
 }

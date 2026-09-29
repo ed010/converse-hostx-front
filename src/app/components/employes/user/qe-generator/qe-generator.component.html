@@ -196,16 +196,49 @@
           <label for="phoneNumber" class="form-label">{{
             "qrModal.phoneNumber" | translate
             }}</label>
-          <div class="input-group">
-            <span class="input-group-text d-flex align-items-center gap-2">
-              <span class="fi fi-am"></span>
-              <span>{{ phoneDialCode }}</span>
-            </span>
+          <div class="d-flex gap-2">
+            <div class="dropdown" #countryDropdown>
+              <button
+                id="countryCodeDropdown"
+                type="button"
+                class="btn btn-outline-secondary dropdown-toggle d-flex align-items-center gap-2 h-100"
+                [attr.aria-expanded]="countryDropdownOpen"
+                (click)="countryDropdownOpen = !countryDropdownOpen"
+              >
+                <span [class]="flagClass(selectedCountry)"></span>
+                <span>{{ selectedCountry.dialCode }}</span>
+              </button>
+              <ul
+                class="dropdown-menu country-dropdown"
+                [class.show]="countryDropdownOpen"
+                aria-labelledby="countryCodeDropdown"
+              >
+                <li class="px-2 pb-2">
+                  <input
+                    type="text"
+                    class="form-control"
+                    [placeholder]="'qrModal.search' | translate"
+                    [(ngModel)]="countrySearchText"
+                  />
+                </li>
+                <li *ngFor="let country of filteredCountries">
+                  <a
+                    class="dropdown-item d-flex align-items-center gap-2"
+                    [class.active]="country === selectedCountry"
+                    href="javascript:void(0)"
+                    (click)="selectCountry(country)"
+                  >
+                    <span [class]="flagClass(country)"></span>
+                    <span>{{ country.name }} {{ country.dialCode }}</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
             <input
               id="phoneNumber"
               type="tel"
               inputmode="numeric"
-              class="form-control"
+              class="form-control flex-grow-1"
               [mask]="phoneMask"
               [(ngModel)]="phoneNumber"
               [placeholder]="phoneMask"

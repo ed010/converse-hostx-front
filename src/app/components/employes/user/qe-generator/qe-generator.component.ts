@@ -1,6 +1,7 @@
 import {
   Component,
   ElementRef,
+  HostListener,
   Input,
   OnDestroy,
   OnInit,
@@ -24,6 +25,9 @@ import { QrGeneratorService } from "src/app/services/qrGenerator.service";
 import { SignalRService } from "src/app/services/signalR.service";
 // import { SignalRService } from "src/app/services/signalR.service";
 import { SmsService } from "src/app/services/sms.service";
+import { COUNTRY_LIST } from "src/app/enums/countries";
+
+type Country = (typeof COUNTRY_LIST)[number];
 
 @Component({
   selector: "app-qe-generator",
@@ -61,9 +65,18 @@ export class QeGeneratorComponent implements OnInit, OnDestroy {
   canChangeComments: boolean = false;
   changedComment: boolean = false;
 
-  // SMS is Armenia-only (matches backend PhoneHelper.FixPhone).
-  readonly phoneDialCode = "+374";
-  readonly phoneMask = "00 00 00 00";
+  // Armenia pinned first, the rest alphabetical.
+  readonly countries: Country[] = [
+    ...COUNTRY_LIST.filter((c) => c.code === "AM"),
+    ...COUNTRY_LIST.filter((c) => c.code !== "AM").sort((a, b) =>
+      a.name.localeCompare(b.name)
+    ),
+  ];
+  private readonly defaultCountry = this.countries[0];
+  selectedCountry: Country = this.defaultCountry;
+  countrySearchText = "";
+  countryDropdownOpen = false;
+  @ViewChild("countryDropdown") countryDropdown: ElementRef<HTMLElement>;
   // Valid Armenian mobile prefixes (same whitelist as legacy PayX).
   private readonly phonePrefixes = [
     "91", "93", "94", "95", "96", "97", "98", "99",
@@ -271,6 +284,49 @@ export class QeGeneratorComponent implements OnInit, OnDestroy {
     this.invalidPhoneNumber = false;
     this.successPhone = false;
     this.sendSmsButton = true;
+    this.selectedCountry = this.defaultCountry;
+    this.countrySearchText = "";
+    this.countryDropdownOpen = false;
+  }
+
+  get filteredCountries(): Country[] {
+    const search = this.countrySearchText.trim().toLowerCase();
+    if (!search) {
+      return this.countries;
+    }
+    const digits = search.replace(/\D/g, "");
+    return this.countries.filter(
+      (c) =>
+        c.name.toLowerCase().includes(search) ||
+        (digits && c.dialCode.slice(1).startsWith(digits))
+    );
+  }
+
+  // Toggled in Angular: Bootstrap 5's dropdown JS needs Popper v2, but only popper.js v1 is loaded.
+  @HostListener("document:click", ["$event"])
+  closeCountryDropdownOnOutsideClick(event: MouseEvent) {
+    if (
+      this.countryDropdownOpen &&
+      !this.countryDropdown?.nativeElement.contains(event.target as Node)
+    ) {
+      this.countryDropdownOpen = false;
+    }
+  }
+
+  selectCountry(country: Country) {
+    this.selectedCountry = country;
+    this.countryDropdownOpen = false;
+    this.phoneNumber = undefined;
+    this.invalidPhoneNumber = false;
+  }
+
+  get phoneMask(): string {
+    return this.selectedCountry.mask;
+  }
+
+  // flag-icons has no sub-region flags (e.g. "TZ-Z"), so fall back to the country.
+  flagClass(country: Country): string {
+    return "fi fi-" + country.code.slice(0, 2).toLowerCase();
   }
 
   copyLink() {
@@ -308,12 +364,21 @@ export class QeGeneratorComponent implements OnInit, OnDestroy {
     this.invalidPhoneNumber = false;
     this.successPhone = false;
 
-    // Armenian mobile number: exactly 8 digits with a known operator prefix.
-    const cleanPhone = (this.phoneNumber || "").replace(/\D/g, "");
-    if (
-      cleanPhone.length !== 8 ||
-      !this.phonePrefixes.includes(cleanPhone.slice(0, 2))
-    ) {
+    // Drop a leading trunk "0" typed out of local habit (e.g. AU 0412..., AM 091...).
+    const cleanPhone = (this.phoneNumber || "")
+      .replace(/\D/g, "")
+      .replace(/^0+/, "");
+    const isArmenia = this.selectedCountry.code === "AM";
+    // Armenia: 8 digits with a known operator prefix. Others: the country masks are
+    // approximate (some count the trunk 0), so only enforce E.164 bounds: 6+ national
+    // digits and at most 15 digits including the dial code.
+    const totalDigits =
+      this.selectedCountry.dialCode.replace(/\D/g, "").length + cleanPhone.length;
+    const valid = isArmenia
+      ? cleanPhone.length === 8 &&
+        this.phonePrefixes.includes(cleanPhone.slice(0, 2))
+      : cleanPhone.length >= 6 && totalDigits <= 15;
+    if (!valid) {
       this.invalidPhoneNumber = true;
       this.sendSmsButton = true;
       return;
@@ -322,7 +387,7 @@ export class QeGeneratorComponent implements OnInit, OnDestroy {
     let body: SmsModel = {
       merchantId: this.selectedMerchantId,
       transactionId: String(this.transactionID),
-      phone: this.phoneDialCode + cleanPhone,
+      phone: this.selectedCountry.dialCode + cleanPhone,
     };
 
     this.SMSservice.sendSMS(body).subscribe(
