@@ -308,6 +308,8 @@
                   ? "SMS"
                   : transaction.isLink == 1
                   ? "Link"
+                  : transaction.isLink == 3
+                  ? "SMS"
                   : "HostX"
               }}
             </td>
@@ -369,6 +371,8 @@
                   ? "SMS"
                   : transaction.isLink == 1
                   ? "Link"
+                  : transaction.isLink == 3
+                  ? "SMS"
                   : "HostX"
               }}
             </td>
@@ -544,6 +548,8 @@
                     ? "SMS"
                     : currentTransaction.isLink == 1
                     ? "Link"
+                    : currentTransaction.isLink == 3
+                    ? "SMS"
                     : "HostX"
                 }}
               </h5>
