@@ -123,8 +123,10 @@ export class PhysicalUserLoginComponent implements OnInit {
           this.router.navigateByUrl("user/qr");
         },
         (err) => {
-          if (err.status == 401 || err.status == 400) {
-            this.errorMessage = err?.error?.message;
+          // 429: too many attempts from this IP. The API's error body carries `errorMessage`
+          // (e.g. the account-lockout text); older responses used `message`.
+          if (err.status == 401 || err.status == 400 || err.status == 429) {
+            this.errorMessage = err?.error?.errorMessage ?? err?.error?.message;
             this.loginIsValid = false;
           }
         }
