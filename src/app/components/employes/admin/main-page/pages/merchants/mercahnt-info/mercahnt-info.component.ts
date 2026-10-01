@@ -346,8 +346,9 @@ export class MercahntInfoComponent implements OnInit, OnDestroy {
       )
         .trim()
         .split(" "),
-      MerchantId:
-        this.registerMerchantApplePayFormGroup.get("MerchantId").value,
+      partnerInternalMerchantIdentifier: String(
+        this.registerMerchantApplePayFormGroup.get("MerchantId").value
+      ),
       partnerMerchantName: this.registerMerchantApplePayFormGroup.get(
         "partnerMerchantName"
       ).value,

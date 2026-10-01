@@ -11,14 +11,14 @@ export class ApplePayService {
   constructor(private http: HttpClient) {}
 
   registerMerchant(body: RegisterApplePayModel) {
-    return this.http.post("/api/Merchant/RegisterMerchantToApplePay", body, {
+    return this.http.post("/api/v1/Merchant/RegisterMerchantToApplePay", body, {
       observe: "response",
     });
   }
 
   unergisterMerchant(body: UnregisterApplePayModel) {
     return this.http.post(
-      "/api/Merchant/UnregisterMerchantFromApplePay",
+      "/api/v1/Merchant/UnregisterMerchantFromApplePay",
       body,
       { observe: "response" }
     );
@@ -26,7 +26,7 @@ export class ApplePayService {
 
   getMerchantApplePayDetails(id: string) {
     return this.http.get(
-      `/api/Merchant/GetMerchantApplePayDetails?merchantId=${id}`,
+      `/api/v1/Merchant/GetMerchantApplePayDetails?merchantId=${id}`,
       { observe: "response" }
     );
   }

@@ -1,5 +1,5 @@
 export type UnregisterApplePayModel = {
   domainNames: string[];
-  MerchantId: string;
-  Reason: string;
+  partnerInternalMerchantIdentifier: string;
+  reason: string;
 }
