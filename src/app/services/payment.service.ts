@@ -88,6 +88,7 @@ export class PaymentService {
     const isBlocked = !!b?.isBlocked;
     const isMulti = !!b?.isMulti;
     const merchantName = String(b?.merchantName ?? "").trim();
+    const merchantId = Number(b?.merchantId ?? 0);
     const idFromQuery = String(merchantUserId ?? "").trim();
     const idFromBody = String(b?.merchantUserId ?? "").trim();
     const resolvedMerchantUserId = idFromQuery || idFromBody;
@@ -127,7 +128,7 @@ export class PaymentService {
         createDate: new Date(),
         transactionDate: new Date(),
         transactionType: 0,
-        merchantId: 0,
+        merchantId,
         authCode: "",
         bankTid: "",
         bankName: "",
@@ -153,7 +154,7 @@ export class PaymentService {
         isGeneralUser: false,
         isBlocked,
         merchants: [],
-        merchant: 0,
+        merchant: merchantId,
         canChangeComment,
         username: "",
         password: "",

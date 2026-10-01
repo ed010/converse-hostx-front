@@ -12,4 +12,6 @@ export interface GetTransactionByHashResponse {
   isBlocked?: boolean;
   isMulti?: boolean;
   merchantName?: string;
+  /** Internal merchant id — Apple Pay merchant validation (GetSessionToken) needs it. */
+  merchantId?: number;
 }
