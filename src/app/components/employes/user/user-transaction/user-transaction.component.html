@@ -227,14 +227,14 @@
             <!-- <th scope="row">{{transaction.id}}</th> -->
             <td scope="row">{{ transaction.transactionId }}</td>
             <td *ngIf="inqDate">
-              {{ transaction.createDate | date : "dd/MM/yy HH:mm" }}
+              {{ transaction.createDate | gmt4: "dd/MM/yy HH:mm" }}
             </td>
             <td>
               {{
                 getFullYear(transaction.transactionDate) > 2028 ||
                 getFullYear(transaction.transactionDate) < 2018
                   ? "-"
-                  : (transaction.transactionDate | date : "dd/MM/yy HH:mm")
+                  : (transaction.transactionDate | gmt4: "dd/MM/yy HH:mm")
               }}
             </td>
             <td *ngIf="state">{{ transaction.merchantUsername }}</td>
@@ -358,7 +358,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let transaction of transactions">
-            <th>{{ transaction.createDate | date : "dd/MM/yy HH:mm" }}</th>
+            <th>{{ transaction.createDate | gmt4: "dd/MM/yy HH:mm" }}</th>
             <td>{{ transaction.amount }} {{transaction.currency | currencySymbol}}</td>
             <td
               (click)="openReciept(transaction)"
@@ -427,7 +427,7 @@
           <div class="data-side" *ngIf="modalIf">
             <div class="data">
               <h6>{{ "transactions.inqDate" | translate }}</h6>
-              <h5>{{ showData.createDate | date : "dd/MM/yy HH:mm" }}</h5>
+              <h5>{{ showData.createDate | gmt4: "dd/MM/yy HH:mm" }}</h5>
             </div>
             <div class="data">
               <h6 scope="col">{{ "transactions.payDate" | translate }}</h6>
@@ -436,7 +436,7 @@
                   getFullYear(showData.transactionDate) > 2028 ||
                   getFullYear(showData.transactionDate) < 2018
                     ? "-"
-                    : (showData.transactionDate | date : "dd/MM/yy HH:mm")
+                    : (showData.transactionDate | gmt4: "dd/MM/yy HH:mm")
                 }}
               </h5>
             </div>
@@ -558,7 +558,7 @@
             <div class="data">
               <h6>{{ "transactions.inqDate" | translate }}</h6>
               <h5>
-                {{ currentTransaction.createDate | date : "dd/MM/yy HH:mm" }}
+                {{ currentTransaction.createDate | gmt4: "dd/MM/yy HH:mm" }}
               </h5>
             </div>
 
@@ -571,7 +571,7 @@
                 "
               >
                 {{
-                  currentTransaction.transactionDate | date : "dd/MM/yy HH:mm"
+                  currentTransaction.transactionDate | gmt4: "dd/MM/yy HH:mm"
                 }}
               </h5>
               <h5
@@ -831,7 +831,7 @@
               </thead>
               <tbody>
                 <tr *ngFor="let rt of refundHistory">
-                  <td>{{ rt.date | date : "dd/MM/yy HH:mm" }}</td>
+                  <td>{{ rt.date | gmt4: "dd/MM/yy HH:mm" }}</td>
                   <td>{{ rt.amount }}</td>
                 </tr>
               </tbody>

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, LOCALE_ID, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Params, Router } from '@angular/router';
@@ -6,6 +6,7 @@ import { Transactionfilter } from 'src/app/models/transactionfilter';
 import { Transactions } from 'src/app/models/transactions.model';
 import { ShowTransactionsService } from 'src/app/services/showTransactions.service';
 import { DatePipe } from '@angular/common';
+import { toGmt4 } from 'src/app/pipes/gmt4-date.pipe';
 
 @Component({
   selector: 'app-transactions',
@@ -98,7 +99,8 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private shTrSer: ShowTransactionsService,
     private _snackBar: MatSnackBar,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    @Inject(LOCALE_ID) private locale: string
 
   ) { }
 
@@ -673,7 +675,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       return "-";
     }
 
-    return this.datePipe.transform(date, "dd/MM/yy HH:mm");
+    return toGmt4(date, "dd/MM/yy HH:mm", this.locale);
   }
 
   checkTransactionStatus(transaction: Transactions) {

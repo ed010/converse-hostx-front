@@ -136,7 +136,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let h of history">
-            <td>{{ h?.sendDate | date: "dd/MM/yy HH:mm" }}</td>
+            <td>{{ h?.sendDate | gmt4: "dd/MM/yy HH:mm" }}</td>
             <td>{{ h?.merchantUser }}</td>
             <td>{{ h?.transactionId }}</td>
             <td>{{ h?.receiver }}</td>

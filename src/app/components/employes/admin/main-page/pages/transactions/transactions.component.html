@@ -432,7 +432,7 @@
               {{ transaction.transactionId }}
             </th>
             <td *ngIf="show_createDate">
-              {{ transaction.createDate | date : "dd/MM/yy HH:mm" }}
+              {{ transaction.createDate | gmt4: "dd/MM/yy HH:mm" }}
             </td>
             <td *ngIf="show_transactionDate">
               {{ getTransactionDate(transaction.transactionDate) }}

@@ -9,7 +9,7 @@
     <select #selectedValue class="form-select">
       <option selected value="-1">Select and download old file</option>
       <ng-container *ngFor="let h of historyObj">
-        <option [value]="h.id">{{h.from| date: 'dd/MM/yy HH:mm'}} -> {{h.to| date: 'dd/MM/yy HH:mm'}}</option>
+        <option [value]="h.id">{{h.from| gmt4: 'dd/MM/yy HH:mm'}} -> {{h.to| gmt4: 'dd/MM/yy HH:mm'}}</option>
       </ng-container>
     </select>
     <div class="button">
@@ -27,8 +27,8 @@
       </thead>
       <tbody>
         <tr *ngFor="let h of historyObj">
-          <td>{{h.from | date: 'dd/MM/yy HH:mm'}}</td>
-          <td>{{h.to | date: 'dd/MM/yy HH:mm'}}</td>
+          <td>{{h.from | gmt4: 'dd/MM/yy HH:mm'}}</td>
+          <td>{{h.to | gmt4: 'dd/MM/yy HH:mm'}}</td>
           <td>
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#reportfile">DOWNLOAD</button>
           </td>

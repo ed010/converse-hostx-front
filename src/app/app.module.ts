@@ -86,6 +86,7 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { ApTestComponent } from "./components/deals/ap-test/ap-test.component";
 import { LastFourDigitsPipe } from "./pipes/card-four-digits.pipe";
 import { CurrencySymbolPipe } from "./pipes/currency-symbol.pipe";
+import { Gmt4DatePipe } from "./pipes/gmt4-date.pipe";
 import { MainComponent } from "./components/new-deals/main/main.component";
 import { HeaderComponent } from "./components/new-deals/header/header.component";
 import { PaymentComponent } from "./components/new-deals/childs/payment/payment.component";
@@ -286,6 +287,7 @@ const appRouts: Routes = [
     ApTestComponent,
     LastFourDigitsPipe,
     CurrencySymbolPipe,
+    Gmt4DatePipe,
     MainComponent,
     HeaderComponent,
     PaymentComponent,

@@ -201,7 +201,7 @@
           (click)="openArcaDetail(row)"
           [class.row-fail]="!row.isSuccess"
         >
-          <td>{{ formatUtc(row.createdAt) | date: "dd/MM/yy HH:mm:ss" }}</td>
+          <td>{{ formatUtc(row.createdAt) | gmt4: "dd/MM/yy HH:mm:ss" }}</td>
           <td>{{ row.apiType }}</td>
           <td>{{ row.httpMethod }}</td>
           <td>{{ row.responseStatusCode }}</td>
@@ -247,7 +247,7 @@
           (click)="openHostxDetail(row)"
           [class.row-fail]="!row.isSuccess"
         >
-          <td>{{ formatUtc(row.createdAt) | date: "dd/MM/yy HH:mm:ss" }}</td>
+          <td>{{ formatUtc(row.createdAt) | gmt4: "dd/MM/yy HH:mm:ss" }}</td>
           <td>{{ row.action }}</td>
           <td>{{ row.httpMethod }}</td>
           <td class="mono">{{ row.path }}{{ row.queryString || "" }}</td>
@@ -289,7 +289,7 @@
           <h6>Inbound ({{ trace.inboundRequests?.length || 0 }})</h6>
           <ul>
             <li *ngFor="let inb of trace.inboundRequests">
-              {{ formatUtc(inb.createdAt) | date: "dd/MM/yy HH:mm:ss" }} ·
+              {{ formatUtc(inb.createdAt) | gmt4: "dd/MM/yy HH:mm:ss" }} ·
               {{ inb.action }} · {{ inb.responseStatusCode }}
               <span class="badge" [class.ok]="inb.isSuccess" [class.fail]="!inb.isSuccess">
                 {{ inb.isSuccess ? "OK" : "FAIL" }}
@@ -302,7 +302,7 @@
           <h6>ARCA ({{ trace.arcaRequests?.length || 0 }})</h6>
           <ul>
             <li *ngFor="let ar of trace.arcaRequests">
-              {{ formatUtc(ar.createdAt) | date: "dd/MM/yy HH:mm:ss" }} ·
+              {{ formatUtc(ar.createdAt) | gmt4: "dd/MM/yy HH:mm:ss" }} ·
               {{ ar.apiType }} · {{ ar.responseStatusCode }}
               <span class="badge" [class.ok]="ar.isSuccess" [class.fail]="!ar.isSuccess">
                 {{ ar.isSuccess ? "OK" : "FAIL" }}
@@ -350,7 +350,7 @@
       </div>
       <div class="modal-body" *ngIf="detailType === 'arca' && selectedArca">
         <div class="detail-meta">
-          <div><label>Created (UTC)</label>{{ formatUtc(selectedArca.createdAt) | date: "yyyy-MM-dd HH:mm:ss" }}</div>
+          <div><label>Created (GMT+4)</label>{{ formatUtc(selectedArca.createdAt) | gmt4: "yyyy-MM-dd HH:mm:ss" }}</div>
           <div><label>Method</label>{{ selectedArca.httpMethod }}</div>
           <div><label>Status</label>{{ selectedArca.responseStatusCode }}</div>
           <div><label>Duration</label>{{ selectedArca.durationMs }} ms</div>
@@ -378,7 +378,7 @@
       </div>
       <div class="modal-body" *ngIf="detailType === 'hostx' && selectedHostx">
         <div class="detail-meta">
-          <div><label>Created (UTC)</label>{{ formatUtc(selectedHostx.createdAt) | date: "yyyy-MM-dd HH:mm:ss" }}</div>
+          <div><label>Created (GMT+4)</label>{{ formatUtc(selectedHostx.createdAt) | gmt4: "yyyy-MM-dd HH:mm:ss" }}</div>
           <div><label>Method</label>{{ selectedHostx.httpMethod }}</div>
           <div><label>Status</label>{{ selectedHostx.responseStatusCode }}</div>
           <div><label>Duration</label>{{ selectedHostx.durationMs }} ms</div>
@@ -441,7 +441,7 @@
         <h6>Inbound requests ({{ selectedTrace.inboundRequests?.length || 0 }})</h6>
         <div class="trace-item" *ngFor="let inb of selectedTrace.inboundRequests">
           <div class="trace-item-head">
-            {{ formatUtc(inb.createdAt) | date: "dd/MM/yy HH:mm:ss" }} ·
+            {{ formatUtc(inb.createdAt) | gmt4: "dd/MM/yy HH:mm:ss" }} ·
             {{ inb.httpMethod }} {{ inb.path }}{{ inb.queryString || "" }} ·
             {{ inb.action }} · {{ inb.responseStatusCode }} ({{ inb.durationMs }} ms)
             <span class="badge" [class.ok]="inb.isSuccess" [class.fail]="!inb.isSuccess">
@@ -456,7 +456,7 @@
         <h6 class="mt-3">ARCA requests ({{ selectedTrace.arcaRequests?.length || 0 }})</h6>
         <div class="trace-item" *ngFor="let ar of selectedTrace.arcaRequests">
           <div class="trace-item-head">
-            {{ formatUtc(ar.createdAt) | date: "dd/MM/yy HH:mm:ss" }} ·
+            {{ formatUtc(ar.createdAt) | gmt4: "dd/MM/yy HH:mm:ss" }} ·
             {{ ar.apiType }} · {{ ar.responseStatusCode }} ({{ ar.durationMs }} ms)
             <span class="badge" [class.ok]="ar.isSuccess" [class.fail]="!ar.isSuccess">
               {{ ar.isSuccess ? "OK" : "FAIL" }}

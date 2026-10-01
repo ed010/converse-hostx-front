@@ -117,7 +117,7 @@
               <tbody>
                 <tr>
                   <td>{{selectedHistory.amount}}</td>
-                  <td>{{selectedHistory.date | date: 'mediumDate'}}</td>
+                  <td>{{selectedHistory.date | gmt4: 'mediumDate'}}</td>
                   <td>{{selectedHistory.tranasctionId}}</td>
                   <td>{{selectedHistory.comment == ''? 'No Comment' : selectedHistory.comment}}</td>
                 </tr>
