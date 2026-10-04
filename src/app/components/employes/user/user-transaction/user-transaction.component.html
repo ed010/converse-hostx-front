@@ -248,26 +248,11 @@
               }}
             </td>
             <td *ngIf="cardType" class="img-td">
-              <img
-                class="visa"
-                src="../../../../../assets/image/arca_visa_master/visa.png"
-                alt="visa"
-                *ngIf="transaction.card.maskedPan[0] == '4'"
-              />
-              <img
-                src="../../../../../assets/image/arca_visa_master/master.png"
-                alt="mastercard"
-                *ngIf="
-                  transaction.card.maskedPan[0] == '5' ||
-                  transaction.card.maskedPan[0] == '6'
-                "
-              />
-              <img
-                class="visa"
-                src="../../../../../assets/image/arca-removebg-preview.png"
-                alt="arca"
-                *ngIf="transaction.card.maskedPan[0] == '9'"
-              />
+              <app-card-logo
+                [logo]="transaction.card.cardLogo"
+                [name]="transaction.card.cardTypeName"
+                [code]="transaction.card.cardType"
+              ></app-card-logo>
             </td>
             <!-- <td>{{transaction.card.maskedPan[0] == '5' || transaction.card.maskedPan[0] == '6' ? 'MasterCard' : transaction.card.maskedPan[0] == '4' ? 'Visa' : transaction.card.maskedPan[0] == '9' ? 'Arca' : '-'}}</td> -->
             <!-- <td>{{transaction.transactionStatus == 2 ? ('transactions.selectPaidUnpaid.paid' | translate ) : transaction.transactionStatus == 4 ? ('transactions.selectPaidUnpaid.reverce' | translate ) : ('transactions.selectPaidUnpaid.unPaid' | translate)}}</td> -->
@@ -467,16 +452,13 @@
             <div class="data">
               <h6 scope="col">{{ "transactions.cardType" | translate }}</h6>
               <h5>
-                {{
-                  showData.card.maskedPan[0] == "5" ||
-                  showData.card.maskedPan[0] == "6"
-                    ? "MasterCard"
-                    : showData.card.maskedPan[0] == "4"
-                    ? "Visa"
-                    : showData.card.maskedPan[0] == "9"
-                    ? "Arca"
-                    : "-"
-                }}
+                <app-card-logo
+                  [logo]="showData.card.cardLogo"
+                  [name]="showData.card.cardTypeName"
+                  [code]="showData.card.cardType"
+                  emptyText="-"
+                  [size]="24"
+                ></app-card-logo>
               </h5>
             </div>
             <div class="data">
@@ -611,16 +593,13 @@
             <div class="data">
               <h6 scope="col">{{ "transactions.cardType" | translate }}</h6>
               <h5>
-                {{
-                  currentTransaction.card.maskedPan[0] == "5" ||
-                  currentTransaction.card.maskedPan[0] == "6"
-                    ? "MasterCard"
-                    : currentTransaction.card.maskedPan[0] == "4"
-                    ? "Visa"
-                    : currentTransaction.card.maskedPan[0] == "9"
-                    ? "Arca"
-                    : "-"
-                }}
+                <app-card-logo
+                  [logo]="currentTransaction.card.cardLogo"
+                  [name]="currentTransaction.card.cardTypeName"
+                  [code]="currentTransaction.card.cardType"
+                  emptyText="-"
+                  [size]="24"
+                ></app-card-logo>
               </h5>
             </div>
 

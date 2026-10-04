@@ -69,6 +69,8 @@ import { MerchantCrudUpdateComponent } from "./components/employes/admin/main-pa
 import { SettingsNavbarComponent } from "./components/employes/admin/main-page/pages/settings/settings-navbar/settings-navbar.component";
 import { BanksComponent } from "./components/employes/admin/main-page/pages/settings/banks/banks.component";
 import { DomainsComponent } from "./components/employes/admin/main-page/pages/settings/domains/domains.component";
+import { CardTypesComponent } from "./components/employes/admin/main-page/pages/settings/card-types/card-types.component";
+import { CardLogoComponent } from "./components/shared/card-logo/card-logo.component";
 import { MccComponent } from "./components/employes/admin/main-page/pages/settings/mcc/mcc.component";
 import { GroupsComponent } from "./components/employes/admin/main-page/pages/settings/groups/groups.component";
 import { AddGroupComponent } from "./components/employes/admin/main-page/pages/settings/groups/add-group/add-group.component";
@@ -177,6 +179,7 @@ const appRouts: Routes = [
           { path: "parters", component: PartnersComponent },
           // {path: 'report', component: ReportComponent},
           { path: "employees", component: EmployeesComponent },
+          { path: "card-types", component: CardTypesComponent },
           { path: "change-password", component: AdminChangePasswordComponent },
           { path: "groups/new-group", component: AddGroupComponent },
         ],
@@ -273,6 +276,8 @@ const appRouts: Routes = [
     SettingsNavbarComponent,
     BanksComponent,
     DomainsComponent,
+    CardTypesComponent,
+    CardLogoComponent,
     MccComponent,
     GroupsComponent,
     AddGroupComponent,

@@ -205,6 +205,9 @@ export class GetMerchantForUserService {
         maskedPan,
         expiryDate: raw.card?.expiryDate ?? 0,
         cardHolderName: holder.length > 0 ? holder : ' ',
+        cardType: raw.cardType ?? raw.card?.cardType ?? null,
+        cardTypeName: raw.cardTypeName ?? raw.card?.cardTypeName ?? null,
+        cardLogo: raw.cardLogo ?? raw.card?.cardLogo ?? null,
       },
       canChangeComment: this.normalizeFlag(raw.canChangeComment ?? raw.canChange),
     };

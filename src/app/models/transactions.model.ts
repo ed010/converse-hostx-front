@@ -38,6 +38,11 @@ export class Card {
   maskedPan: string;
   expiryDate: number;
   cardHolderName: string;
+  /** Scheme code resolved by the backend from the BIN (VISA, MASTERCARD, UNKNOWN, ...); null until paid. */
+  cardType?: string | null;
+  cardTypeName?: string | null;
+  /** Logo URL of the scheme, or of the "unknown card" logo when no BIN range matched; null until paid. */
+  cardLogo?: string | null;
   bindingId?: any;
   color?: any;
   name?: any;

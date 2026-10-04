@@ -1,0 +1,16 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-logo {
+  max-width: 72px;
+  object-fit: contain;
+  vertical-align: middle;
+}
+
+.card-logo-text {
+  font-size: 0.85em;
+  white-space: nowrap;
+}

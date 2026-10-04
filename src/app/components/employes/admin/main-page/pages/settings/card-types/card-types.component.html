@@ -1,0 +1,166 @@
+<div class="wrapper">
+  <div class="toolbar">
+    <button class="btn my-btn-color" data-bs-toggle="modal" data-bs-target="#cardTypeModal" (click)="startAdd()">
+      Add card type
+    </button>
+    <span class="hint">
+      A transaction's card is recognised by the first six digits of its masked PAN against these ranges.
+      Cards that match no range get the "unknown" logo.
+    </span>
+  </div>
+
+  <app-loading *ngIf="loading"></app-loading>
+
+  <div class="card-type" *ngFor="let cardType of cardTypes; trackBy: trackById" [class.is-default]="cardType.isDefault">
+    <div class="head">
+      <div class="logo">
+        <img *ngIf="cardType.logoUrl; else noLogo" [src]="cardType.logoUrl" [alt]="cardType.name" />
+        <ng-template #noLogo><span class="no-logo">no logo</span></ng-template>
+      </div>
+      <div class="title">
+        <div class="name">{{ cardType.name }}</div>
+        <div class="code">
+          {{ cardType.code }}
+          <span *ngIf="cardType.isDefault" class="badge bg-secondary">fallback for unmatched cards</span>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#cardTypeModal"
+          (click)="startEdit(cardType)">Edit</button>
+        <button *ngIf="!cardType.isDefault" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
+          data-bs-target="#rangeModal" (click)="startAddRange(cardType)">Add range</button>
+        <button *ngIf="!cardType.isDefault" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+          data-bs-target="#deleteModal" (click)="deleteTarget = cardType">Delete</button>
+      </div>
+    </div>
+
+    <table class="table table-sm ranges" *ngIf="!cardType.isDefault">
+      <thead>
+        <tr>
+          <th>Range start</th>
+          <th>Range end</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let range of cardType.ranges; trackBy: trackById">
+          <td class="mono">{{ range.rangeStart }}</td>
+          <td class="mono">{{ range.rangeEnd }}</td>
+          <td class="text-end">
+            <button class="btn btn-link btn-sm text-danger" (click)="deleteRange(range.id)">remove</button>
+          </td>
+        </tr>
+        <tr *ngIf="!cardType.ranges?.length">
+          <td colspan="3" class="text-muted">No ranges: this card type is never matched.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Add / edit card type -->
+<div class="modal fade" id="cardTypeModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ editing ? 'Edit card type' : 'Add card type' }}</h5>
+        <button #closeEditModal type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label">Code</label>
+            <input type="text" class="form-control text-uppercase" [(ngModel)]="form.code"
+              [disabled]="editing?.isDefault" placeholder="VISA" maxlength="50" />
+          </div>
+          <div class="col-md-5">
+            <label class="form-label">Name</label>
+            <input type="text" class="form-control" [(ngModel)]="form.name" placeholder="Visa" maxlength="100" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Sort order</label>
+            <input type="number" class="form-control" [(ngModel)]="form.sortOrder" />
+          </div>
+          <div class="col-12">
+            <label class="form-label">Logo</label>
+            <div class="logo-row">
+              <div class="logo preview">
+                <img *ngIf="logoPreview; else noPreview" [src]="logoPreview" alt="logo preview" />
+                <ng-template #noPreview><span class="no-logo">no logo</span></ng-template>
+              </div>
+              <input type="file" class="form-control" accept="image/png, image/jpeg, image/svg+xml, image/webp"
+                (change)="onLogoSelected($event)" />
+            </div>
+          </div>
+
+          <div class="col-12" *ngIf="!editing">
+            <label class="form-label">BIN ranges</label>
+            <div class="range-row" *ngFor="let range of newRanges; let i = index">
+              <input type="text" class="form-control mono" [(ngModel)]="range.rangeStart" placeholder="4000000000000000"
+                inputmode="numeric" maxlength="19" />
+              <span>–</span>
+              <input type="text" class="form-control mono" [(ngModel)]="range.rangeEnd" placeholder="4999999999999999"
+                inputmode="numeric" maxlength="19" />
+              <button type="button" class="btn btn-link text-danger" (click)="removeDraftRange(i)">remove</button>
+            </div>
+            <button type="button" class="btn btn-outline-secondary btn-sm" (click)="addDraftRange()">+ range</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-warning" (click)="save()">{{ editing ? 'Save' : 'Add' }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add BIN range to an existing card type -->
+<div class="modal fade" id="rangeModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add range to {{ rangeTarget?.name }}</h5>
+        <button #closeRangeModal type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">Range start</label>
+          <input type="text" class="form-control mono" [(ngModel)]="rangeDraft.rangeStart" inputmode="numeric"
+            maxlength="19" placeholder="4000000000000000" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Range end</label>
+          <input type="text" class="form-control mono" [(ngModel)]="rangeDraft.rangeEnd" inputmode="numeric"
+            maxlength="19" placeholder="4999999999999999" />
+        </div>
+        <small class="text-muted">Digits only, 6 to 19 long, both bounds the same length. Only the first six digits are
+          compared, since that is all a masked PAN reveals.</small>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-warning" (click)="saveRange()">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete card type -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header back-orange">
+        <h5 class="modal-title">Warning</h5>
+        <button #closeDeleteModal type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h4>Delete {{ deleteTarget?.name }} and its {{ deleteTarget?.ranges?.length || 0 }} range(s)?</h4>
+        <p class="text-muted">Transactions with those BINs will show the unknown card logo.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+        <button type="button" class="btn btn-danger" (click)="confirmDelete()">Yes, delete</button>
+      </div>
+    </div>
+  </div>
+</div>

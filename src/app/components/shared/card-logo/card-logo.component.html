@@ -1,0 +1,12 @@
+<img
+  *ngIf="hasLogo; else textLabel"
+  class="card-logo"
+  [src]="logo"
+  [alt]="label"
+  [title]="label"
+  [style.height.px]="size"
+  (error)="imageFailed = true"
+/>
+<ng-template #textLabel>
+  <span class="card-logo-text" [title]="label">{{ label || emptyText }}</span>
+</ng-template>

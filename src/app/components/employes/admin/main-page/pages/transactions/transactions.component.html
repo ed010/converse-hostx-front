@@ -478,16 +478,12 @@
             <td *ngIf="show_fee">{{ transaction.payxFee.toLocaleString() }}</td>
             <!-- <td>Card Type</td> -->
             <td *ngIf="show_cardtype" class="img-td">
-              {{
-                transaction.card.maskedPan[0] == "4"
-                  ? "Visa"
-                  : transaction.card.maskedPan[0] == "5" ||
-                    transaction.card.maskedPan[0] == "6"
-                  ? "MasterCard"
-                  : transaction.card.maskedPan[0] == "9"
-                  ? "Arca"
-                  : "Not paid"
-              }}
+              <app-card-logo
+                [logo]="transaction.card.cardLogo"
+                [name]="transaction.card.cardTypeName"
+                [code]="transaction.card.cardType"
+                emptyText="Not paid"
+              ></app-card-logo>
             </td>
             <td *ngIf="show_cardHolderName">
               {{ transaction.card.maskedPan }}
