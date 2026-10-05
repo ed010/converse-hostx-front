@@ -1,0 +1,27 @@
+.wrapper {
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+}
+
+.hint {
+  color: #6c757d;
+  font-size: 0.9em;
+}
+
+.platform {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 12px 16px;
+
+  .actions {
+    margin-top: 12px;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+.my-btn-color {
+  color: white;
+  background-color: var(--maibhover-color);
+}
