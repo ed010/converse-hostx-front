@@ -98,7 +98,11 @@ export class ApplePayComponent implements OnInit {
           } else {
             if (res.status == "Failed") {
               location.href = `/400?transactionId=${this.transactionHash}`;
-            } else location.reload();
+            } else {
+              // Go to the receipt of the transaction actually paid. A multi QR is paid through a new
+              // child transaction, so reloading would show the parent's (still payable) form again.
+              location.href = `/transfer_success/${res.hashOrderId || this.transactionHash}`;
+            }
           }
           // this.onApplePayCompleted.emit({
           //   status: "success",
