@@ -292,6 +292,19 @@
               />
             </div>
           </div>
+
+          <div class="bl">
+            <div class="name">Google Pay:&nbsp;</div>
+            <div class="data">
+              <input
+                (change)="changeGooglePayStatus($event)"
+                class="form-check-input"
+                [checked]="merchant?.isGooglePayEnabled"
+                type="checkbox"
+                title="Show the Google Pay button on this merchant's payment pages"
+              />
+            </div>
+          </div>
           <!-- <div class="bl">
             <div class="name">EPG:&nbsp;</div>
             <div class="data">

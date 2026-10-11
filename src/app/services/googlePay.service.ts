@@ -2,6 +2,8 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import {
   GooglePayConfig,
+  GooglePaySettings,
+  GooglePaySettingsRequest,
   ProcessGooglePay,
   ProcessGooglePayResponse,
 } from "../models/google-pay/google-pay.model";
@@ -27,6 +29,20 @@ export class GooglePayService {
       "/api/Payment/ProcessGooglePayTransaction",
       body
     );
+  }
+
+  /** Admin: Google Pay settings (Settings → Google Pay). */
+  getSettings() {
+    return this.http.get<GooglePaySettings>("/api/GooglePay/Settings");
+  }
+
+  updateSettings(request: GooglePaySettingsRequest) {
+    return this.http.put<GooglePaySettings>("/api/GooglePay/Settings", request);
+  }
+
+  /** Admin: show or hide the Google Pay button for one merchant. */
+  setMerchantEnabled(merchantId: number, enabled: boolean) {
+    return this.http.put("/api/v1/Merchant/SetGooglePay", { merchantId, enabled });
   }
 
   /** Loads Google's pay.js once, only on the pages that show the button. */

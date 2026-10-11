@@ -71,6 +71,7 @@ import { BanksComponent } from "./components/employes/admin/main-page/pages/sett
 import { DomainsComponent } from "./components/employes/admin/main-page/pages/settings/domains/domains.component";
 import { CardTypesComponent } from "./components/employes/admin/main-page/pages/settings/card-types/card-types.component";
 import { AppVersionComponent } from "./components/employes/admin/main-page/pages/settings/app-version/app-version.component";
+import { GooglePaySettingsComponent } from "./components/employes/admin/main-page/pages/settings/google-pay-settings/google-pay-settings.component";
 import { CardLogoComponent } from "./components/shared/card-logo/card-logo.component";
 import { MccComponent } from "./components/employes/admin/main-page/pages/settings/mcc/mcc.component";
 import { GroupsComponent } from "./components/employes/admin/main-page/pages/settings/groups/groups.component";
@@ -183,6 +184,7 @@ const appRouts: Routes = [
           { path: "employees", component: EmployeesComponent },
           { path: "card-types", component: CardTypesComponent },
           { path: "app-version", component: AppVersionComponent },
+          { path: "google-pay", component: GooglePaySettingsComponent },
           { path: "change-password", component: AdminChangePasswordComponent },
           { path: "groups/new-group", component: AddGroupComponent },
         ],
@@ -281,6 +283,7 @@ const appRouts: Routes = [
     DomainsComponent,
     CardTypesComponent,
     AppVersionComponent,
+    GooglePaySettingsComponent,
     CardLogoComponent,
     MccComponent,
     GroupsComponent,

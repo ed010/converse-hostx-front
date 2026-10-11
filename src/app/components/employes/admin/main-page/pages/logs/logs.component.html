@@ -26,7 +26,7 @@
         [class.active]="activeTab === 'hostx'"
         (click)="setTab('hostx')"
       >
-        HostX / Apple Pay
+        HostX / Wallets
       </button>
       <button
         class="tab-btn"
@@ -95,8 +95,17 @@
         class="form-control form-control-sm"
         [(ngModel)]="filter.apiType"
         placeholder="apiType (e.g. register.do)"
+        list="arca-api-types"
         (keyup.enter)="applyFilters()"
       />
+      <datalist id="arca-api-types">
+        <option value="register.do"></option>
+        <option value="getOrderStatusExtended.do"></option>
+        <option value="reverse.do"></option>
+        <option value="refund.do"></option>
+        <option value="applepay/payment"></option>
+        <option value="googlepay/payment"></option>
+      </datalist>
       <input
         *ngIf="activeTab === 'arca'"
         class="form-control form-control-sm"
@@ -109,8 +118,19 @@
         class="form-control form-control-sm"
         [(ngModel)]="filter.action"
         placeholder="action (e.g. register)"
+        list="hostx-actions"
         (keyup.enter)="applyFilters()"
       />
+      <datalist id="hostx-actions">
+        <option value="register"></option>
+        <option value="check_status"></option>
+        <option value="HostX/Reverse"></option>
+        <option value="HostX/Refund"></option>
+        <option value="ApplePay"></option>
+        <option value="Payment/GooglePayConfig"></option>
+        <option value="Payment/ProcessGooglePayTransaction"></option>
+        <option value="GooglePay"></option>
+      </datalist>
       <input
         *ngIf="activeTab === 'hostx'"
         class="form-control form-control-sm"

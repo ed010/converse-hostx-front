@@ -17,6 +17,7 @@ import {
   normalizeArmenianPhoneNumber,
 } from "src/app/models/merchantUser.model";
 import { ApplePayService } from "src/app/services/applePay.service";
+import { GooglePayService } from "src/app/services/googlePay.service";
 import { MerchantService } from "src/app/services/merchant.service";
 import { MerchantGroupService } from "src/app/services/merchantGroup.service";
 import { MerchantUserService } from "src/app/services/merchantUser.service";
@@ -71,6 +72,7 @@ export class MercahntInfoComponent implements OnInit, OnDestroy {
     private userService: MerchantUserService,
     private merchantGroupService: MerchantGroupService,
     private applePayService: ApplePayService,
+    private googlePayService: GooglePayService,
     private _snackBar: MatSnackBar,
     private dialog: MatDialog,
     private fb: FormBuilder
@@ -119,6 +121,27 @@ export class MercahntInfoComponent implements OnInit, OnDestroy {
       (res) => {},
       (err) => {
         let errmer = err?.error?.message;
+        this._snackBar.open(errmer, "", {
+          duration: 7000,
+        });
+      }
+    );
+  }
+
+  /** Shows or hides the Google Pay button on this merchant's payment pages (off by default). */
+  changeGooglePayStatus(e) {
+    const input = e.target as HTMLInputElement;
+    const enabled = input.checked;
+    this.googlePayService.setMerchantEnabled(this.merchant.merchantId, enabled).subscribe(
+      () => {
+        this.merchant.isGooglePayEnabled = enabled;
+        this._snackBar.open(enabled ? "Google Pay enabled" : "Google Pay disabled", "", {
+          duration: 3000,
+        });
+      },
+      (err) => {
+        input.checked = !enabled;
+        let errmer = err?.error?.errorMessage ?? err?.error?.message;
         this._snackBar.open(errmer, "", {
           duration: 7000,
         });

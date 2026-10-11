@@ -1,0 +1,74 @@
+<div class="wrapper">
+  <span class="hint">
+    Used by the Google Pay button on the payment pages; changes apply on the next page load.
+    Keep <b>TEST</b> (dummy cards, nothing is charged) until Google approves the integration, then switch to
+    <b>PRODUCTION</b> with the merchant ID from the Google Pay &amp; Wallet Console.
+    The button is also switched on per merchant (merchant page → Google Pay).
+  </span>
+
+  <app-loading *ngIf="loading"></app-loading>
+
+  <form class="block" *ngIf="settings" (ngSubmit)="save()">
+    <div class="row g-3">
+      <div class="col-md-3">
+        <label class="form-label" for="gp-environment">Environment</label>
+        <select class="form-select" id="gp-environment" name="environment" [(ngModel)]="settings.environment">
+          <option value="TEST">TEST</option>
+          <option value="PRODUCTION">PRODUCTION</option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label" for="gp-merchant">Google merchant ID</label>
+        <input class="form-control" id="gp-merchant" name="merchantId" [(ngModel)]="settings.merchantId"
+          placeholder="Required for PRODUCTION" />
+      </div>
+      <div class="col-md-3">
+        <label class="form-label" for="gp-gateway">Gateway</label>
+        <input class="form-control" id="gp-gateway" name="gateway" [(ngModel)]="settings.gateway" placeholder="epgarca" />
+      </div>
+      <div class="col-md-2">
+        <label class="form-label" for="gp-country">Country code</label>
+        <input class="form-control" id="gp-country" name="countryCode" maxlength="2" [(ngModel)]="settings.countryCode"
+          placeholder="AM" />
+      </div>
+    </div>
+
+    <div class="row g-3 checks">
+      <div class="col-md-6">
+        <label class="form-label">Card networks</label>
+        <div class="options">
+          <label class="form-check" *ngFor="let network of settings.supportedCardNetworks">
+            <input class="form-check-input" type="checkbox" [name]="'network-' + network"
+              [checked]="isSelected(settings.allowedCardNetworks, network)"
+              (change)="toggle(settings.allowedCardNetworks, network, $event)" />
+            <span class="form-check-label">{{ network }}</span>
+          </label>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Auth methods</label>
+        <div class="options">
+          <label class="form-check" *ngFor="let method of settings.supportedAuthMethods">
+            <input class="form-check-input" type="checkbox" [name]="'auth-' + method"
+              [checked]="isSelected(settings.allowedAuthMethods, method)"
+              (change)="toggle(settings.allowedAuthMethods, method, $event)" />
+            <span class="form-check-label">{{ method }}</span>
+          </label>
+        </div>
+        <span class="hint small">
+          PAN_ONLY: cards saved in the Google account (may need 3-D Secure). CRYPTOGRAM_3DS: Android device tokens.
+        </span>
+      </div>
+    </div>
+
+    <div class="actions">
+      <span class="hint small" *ngIf="settings.updatedAt">
+        Last saved {{ settings.updatedAt | date: 'dd.MM.yyyy HH:mm' }}
+        <ng-container *ngIf="settings.updatedBy">by employee #{{ settings.updatedBy }}</ng-container>
+      </span>
+      <button type="submit" class="btn my-btn-color" [disabled]="saving">
+        {{ saving ? 'Saving…' : 'Save' }}
+      </button>
+    </div>
+  </form>
+</div>

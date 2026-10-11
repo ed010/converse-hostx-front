@@ -30,3 +30,22 @@ export interface ProcessGooglePayResponse {
   hashOrderId?: string;
   message?: string;
 }
+
+/** GET/PUT /api/GooglePay/Settings: admin-editable Google Pay settings. */
+export interface GooglePaySettings {
+  environment: "TEST" | "PRODUCTION";
+  merchantId: string;
+  gateway: string;
+  allowedCardNetworks: string[];
+  allowedAuthMethods: string[];
+  countryCode: string;
+  updatedAt?: string;
+  updatedBy?: string | null;
+  supportedCardNetworks?: string[];
+  supportedAuthMethods?: string[];
+}
+
+export type GooglePaySettingsRequest = Pick<
+  GooglePaySettings,
+  "environment" | "merchantId" | "gateway" | "allowedCardNetworks" | "allowedAuthMethods" | "countryCode"
+>;

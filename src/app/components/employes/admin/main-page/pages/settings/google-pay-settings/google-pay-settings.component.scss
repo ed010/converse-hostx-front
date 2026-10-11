@@ -1,0 +1,43 @@
+.wrapper {
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+}
+
+.hint {
+  color: #6c757d;
+  font-size: 0.9em;
+
+  &.small {
+    font-size: 0.8em;
+  }
+}
+
+.block {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 12px 16px;
+
+  .checks {
+    margin-top: 4px;
+  }
+
+  .options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+  }
+
+  .actions {
+    margin-top: 12px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 16px;
+  }
+}
+
+.my-btn-color {
+  color: white;
+  background-color: var(--maibhover-color);
+}

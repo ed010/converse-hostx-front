@@ -23,5 +23,7 @@ export class Merchant {
   sphereOfActivity: string;
   canChangeComment: boolean;
   isEpg: boolean;
+  /** Google Pay button shown on this merchant's payment pages (admin switch, off by default). */
+  isGooglePayEnabled?: boolean;
   currencies?: string[];
 }

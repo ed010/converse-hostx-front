@@ -70,6 +70,7 @@ export class MerchantService {
       bank: raw.bank ?? ({ id: 0, title: '' } as any),
       domain: raw.domain ?? ({ id: 0, title: '' } as any),
       isEpg: !!(raw.isEpg ?? raw.isEPG),
+      isGooglePayEnabled: !!raw.isGooglePayEnabled,
       currencies: Array.isArray(raw.currencies) ? raw.currencies : [],
       canChangeComment: !!raw.canChangeComment,
       status: this.normalizeMerchantStatus(raw.status),
