@@ -99,6 +99,7 @@ import { UserLoginComponent } from "./components/login/user-login/user-login.com
 import { AdminLoginComponent } from "./components/login/admin-login/admin-login.component";
 import { FooterLoginComponent } from "./components/login/footer-login/footer-login.component";
 import { ApplePayComponent } from "./components/new-deals/apple-pay/apple-pay.component";
+import { GooglePayComponent } from "./components/new-deals/google-pay/google-pay.component";
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -305,6 +306,7 @@ const appRouts: Routes = [
     AdminLoginComponent,
     FooterLoginComponent,
     ApplePayComponent,
+    GooglePayComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),

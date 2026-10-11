@@ -117,7 +117,7 @@
         </div>
       </ng-container>
 
-      <div *ngIf="!onlyApplePay" class="info-box pay_card_cont">
+      <div *ngIf="!onlyWallet" class="info-box pay_card_cont">
         <!-- <p>{{ "deals.PAY_WITH_CARD" | translate }}</p> -->
         <button (click)="payByCard()">
           <mat-spinner *ngIf="isSmallLoading" [diameter]="20"></mat-spinner>
@@ -144,6 +144,20 @@
             (onApplePayCompleted)="onApplePayCompleted($event)"
           ></app-apple-pay>
         </div>
+      </div>
+
+      <!-- Stays hidden until the component reports that Google Pay can be used for this transaction in this browser. -->
+      <div
+        class="info-box google-pay-cont"
+        style="width: 100%"
+        [style.display]="showGooglePayButton ? '' : 'none'"
+      >
+        <app-google-pay
+          style="width: 100%"
+          [transactionHash]="transferId"
+          [canRedirectToURL]="canRedirectToURL"
+          (availabilityChange)="onGooglePayAvailabilityChange($event)"
+        ></app-google-pay>
       </div>
 
       <!-- <div class="info-box converse_pay_cont">

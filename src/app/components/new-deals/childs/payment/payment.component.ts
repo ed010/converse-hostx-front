@@ -43,8 +43,9 @@ export class PaymentComponent implements OnInit, OnDestroy {
   getNotification: Subscription;
 
   showApplePayButton: boolean = false;
+  showGooglePayButton: boolean = false;
 
-  onlyApplePay: boolean = false;
+  onlyWallet: boolean = false;
   canRedirectToURL: boolean = false;
 
   constructor(
@@ -63,7 +64,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
       if (!this.transferId) {
         this.route.queryParamMap.subscribe({
           next: (queryParamMap) => {
-            this.onlyApplePay = true;
+            this.onlyWallet = true;
             this.transferId = queryParamMap.get("pxNumber");
             this.canRedirectToURL = true;
           },
@@ -210,6 +211,10 @@ export class PaymentComponent implements OnInit, OnDestroy {
     let domainPattern = /^(http:\/\/)([^\/]+)(.*)$/;
     let newUrl = originalUrl.replace(domainPattern, "$1pay.conversebank.am$3");
     return newUrl;
+  }
+
+  onGooglePayAvailabilityChange(available: boolean) {
+    this.showGooglePayButton = available;
   }
 
   onApplePayCompleted(data: ApplePayComponentResponse) {

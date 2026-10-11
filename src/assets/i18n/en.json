@@ -115,6 +115,7 @@
     "goBack": "Go to previous page",
     "PAY_WITH_CARD": "Pay with your card",
     "PAY_CARD": "Pay by card",
+    "GOOGLE_PAY_FAILED": "Payment failed. Please try another card.",
     "comment": "Comment",
     "paymentCompleted": "Payment Completed",
     "paymentCompletedMessage": "Your payment was successful. You can proceed with your shopping.",

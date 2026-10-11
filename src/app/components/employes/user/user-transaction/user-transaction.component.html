@@ -244,6 +244,8 @@
               {{
                 transaction?.appName == "applepay"
                   ? "Apple Pay"
+                  : transaction?.appName == "googlepay"
+                  ? "Google Pay"
                   : transaction?.appName
               }}
             </td>
@@ -445,6 +447,8 @@
                 {{
                   showData?.appName == "applepay"
                     ? "Apple Pay"
+                    : showData?.appName == "googlepay"
+                    ? "Google Pay"
                     : showData?.appName
                 }}
               </h5>
@@ -580,6 +584,8 @@
                     ? "-"
                     : currentTransaction.appName == "applepay"
                     ? "Apple Pay"
+                    : currentTransaction.appName == "googlepay"
+                    ? "Google Pay"
                     : currentTransaction.appName
                 }}
               </h5>

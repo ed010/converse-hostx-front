@@ -1,0 +1,6 @@
+/* Same footprint as the Apple Pay button; Google's button fills it (buttonSizeMode: fill). */
+.google-pay {
+  display: flex;
+  width: 100%;
+  height: 48px;
+}

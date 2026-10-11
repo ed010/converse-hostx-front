@@ -495,6 +495,8 @@
               {{
                 transaction?.appName == "applepay"
                   ? "Apple Pay"
+                  : transaction?.appName == "googlepay"
+                  ? "Google Pay"
                   : transaction?.appName
               }}
             </td>
