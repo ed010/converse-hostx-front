@@ -21,7 +21,8 @@ const BASE_REQUEST = { apiVersion: 2, apiVersionMinor: 0 };
  * Google Pay button. Renders nothing (and emits availabilityChange(false)) unless the backend says the
  * transaction can be paid with Google Pay AND Google says this browser can pay. The token goes to
  * ProcessGooglePayTransaction while the sheet is still open, so a decline is shown in the sheet and
- * the payer can pick another card.
+ * the payer can pick another card. On the HostX wallet page (canRedirectToURL) a payer who gives up after a
+ * decline is sent to the partner's returnUrl when the sheet closes, the same as after a payment.
  */
 @Component({
   selector: "app-google-pay",
@@ -41,6 +42,8 @@ export class GooglePayComponent implements OnInit {
   private paymentsClient!: google.payments.api.PaymentsClient;
   /** Result of the payment authorized in the sheet, acted on once the sheet closes. */
   private result: ProcessGooglePayResponse | null = null;
+  /** Partner returnUrl of the last declined attempt (wallet page only), followed if the payer closes the sheet. */
+  private failedRedirectUrl: string | null = null;
 
   constructor(
     private googlePayService: GooglePayService,
@@ -92,6 +95,7 @@ export class GooglePayComponent implements OnInit {
   /** Must call loadPaymentData synchronously, so the click still counts as a user gesture. */
   private onGooglePayClicked() {
     this.result = null;
+    this.failedRedirectUrl = null;
     this.paymentsClient
       .loadPaymentData({
         ...BASE_REQUEST,
@@ -109,8 +113,13 @@ export class GooglePayComponent implements OnInit {
         callbackIntents: ["PAYMENT_AUTHORIZATION"],
       })
       .then(() => this.afterSheetClosed())
-      // Rejected when the payer closes the sheet (statusCode CANCELED): stay on the page.
-      .catch(() => {});
+      // Rejected when the payer closes the sheet (statusCode CANCELED): stay on the page, unless a payment was
+      // declined on the wallet page, which then goes back to the partner like a paid one.
+      .catch(() => {
+        if (this.failedRedirectUrl) {
+          location.href = this.failedRedirectUrl;
+        }
+      });
   }
 
   private async onPaymentAuthorized(
@@ -126,6 +135,9 @@ export class GooglePayComponent implements OnInit {
       if (res?.status === "Success" || res?.status === "Redirect") {
         this.result = res;
         return { transactionState: "SUCCESS" };
+      }
+      if (this.canRedirectToURL) {
+        this.failedRedirectUrl = resolvePaymentRedirectUrl(res?.redirectUrl);
       }
     } catch {
       // Handled below like a decline.

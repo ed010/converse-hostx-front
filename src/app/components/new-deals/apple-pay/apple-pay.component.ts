@@ -89,12 +89,13 @@ export class ApplePayComponent implements OnInit {
 
           session.completePayment(result);
 
-          if (this.canRedirectToURL) {
-            const redirectUrl = resolvePaymentRedirectUrl(res.redirectUrl);
-            if (redirectUrl) {
-              location.href = redirectUrl;
-            }
-            // return;
+          const partnerRedirectUrl = this.canRedirectToURL
+            ? resolvePaymentRedirectUrl(res.redirectUrl)
+            : null;
+          if (partnerRedirectUrl) {
+            location.href = partnerRedirectUrl;
+          } else if (this.canRedirectToURL && res.status == "Failed") {
+            // No partner page to go back to: the sheet has already shown the failure.
           } else {
             if (res.status == "Failed") {
               location.href = `/400?transactionId=${this.transactionHash}`;
