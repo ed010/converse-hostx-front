@@ -32,6 +32,9 @@ export class Transactions {
   receiver?: string;
   refundedAmount?: number;
   refundedHistory?: { date: string; refundedAmount: number }[];
+  /** Payment page only: the merchant's admin wallet switches. */
+  isApplePayEnabled?: boolean;
+  isGooglePayEnabled?: boolean;
 }
 
 export class Card {

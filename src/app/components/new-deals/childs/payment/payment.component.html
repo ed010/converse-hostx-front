@@ -148,6 +148,7 @@
 
       <!-- Stays hidden until the component reports that Google Pay can be used for this transaction in this browser. -->
       <div
+        *ngIf="googlePayEnabled"
         class="info-box google-pay-cont"
         style="width: 100%"
         [style.display]="showGooglePayButton ? '' : 'none'"

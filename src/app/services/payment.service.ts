@@ -89,6 +89,8 @@ export class PaymentService {
     const isMulti = !!b?.isMulti;
     const merchantName = String(b?.merchantName ?? "").trim();
     const merchantId = Number(b?.merchantId ?? 0);
+    const isApplePayEnabled = !!b?.isApplePayEnabled;
+    const isGooglePayEnabled = !!b?.isGooglePayEnabled;
     const idFromQuery = String(merchantUserId ?? "").trim();
     const idFromBody = String(b?.merchantUserId ?? "").trim();
     const resolvedMerchantUserId = idFromQuery || idFromBody;
@@ -136,6 +138,8 @@ export class PaymentService {
         payxFee: 0,
         transactionOutOrLocal: 0,
         merchantName,
+        isApplePayEnabled,
+        isGooglePayEnabled,
         merchantUsername: "",
         hashOrderId: transactionHash,
         card: {

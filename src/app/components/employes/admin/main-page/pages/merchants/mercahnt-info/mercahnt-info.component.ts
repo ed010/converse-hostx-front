@@ -128,6 +128,27 @@ export class MercahntInfoComponent implements OnInit, OnDestroy {
     );
   }
 
+  /** Shows or hides the Apple Pay button on this merchant's payment pages (off by default). */
+  changeApplePayStatus(e) {
+    const input = e.target as HTMLInputElement;
+    const enabled = input.checked;
+    this.applePayService.setMerchantEnabled(this.merchant.merchantId, enabled).subscribe(
+      () => {
+        this.merchant.isApplePayEnabled = enabled;
+        this._snackBar.open(enabled ? "Apple Pay enabled" : "Apple Pay disabled", "", {
+          duration: 3000,
+        });
+      },
+      (err) => {
+        input.checked = !enabled;
+        let errmer = err?.error?.errorMessage ?? err?.error?.message;
+        this._snackBar.open(errmer, "", {
+          duration: 7000,
+        });
+      }
+    );
+  }
+
   /** Shows or hides the Google Pay button on this merchant's payment pages (off by default). */
   changeGooglePayStatus(e) {
     const input = e.target as HTMLInputElement;

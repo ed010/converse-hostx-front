@@ -44,6 +44,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   showApplePayButton: boolean = false;
   showGooglePayButton: boolean = false;
+  /** Admin switch for this merchant; the Google Pay component (and pay.js) is only loaded when it is on. */
+  googlePayEnabled: boolean = false;
 
   onlyWallet: boolean = false;
   canRedirectToURL: boolean = false;
@@ -72,10 +74,6 @@ export class PaymentComponent implements OnInit, OnDestroy {
       }
 
       this.getTransactionDetails(this.transferId);
-
-      if (typeof ApplePaySession !== "undefined") {
-        this.showApplePayButton = true;
-      }
     });
   }
 
@@ -107,6 +105,10 @@ export class PaymentComponent implements OnInit, OnDestroy {
           return;
         }
         this.newComment = this.transaction.comment;
+        // Wallet buttons: only the ones the admin switched on for this merchant, and Apple Pay only where the browser has it.
+        this.showApplePayButton =
+          !!this.transaction.isApplePayEnabled && typeof ApplePaySession !== "undefined";
+        this.googlePayEnabled = !!this.transaction.isGooglePayEnabled;
         this.getNotification = this.dataEx.getNotification().subscribe(
           (res) => {
             if (res["isPaid"] == "true") {

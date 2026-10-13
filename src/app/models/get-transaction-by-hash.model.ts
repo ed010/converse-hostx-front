@@ -14,4 +14,7 @@ export interface GetTransactionByHashResponse {
   merchantName?: string;
   /** Internal merchant id — Apple Pay merchant validation (GetSessionToken) needs it. */
   merchantId?: number;
+  /** The merchant's admin switches: render only the wallet buttons that are on. */
+  isApplePayEnabled?: boolean;
+  isGooglePayEnabled?: boolean;
 }

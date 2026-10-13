@@ -25,5 +25,7 @@ export class Merchant {
   isEpg: boolean;
   /** Google Pay button shown on this merchant's payment pages (admin switch, off by default). */
   isGooglePayEnabled?: boolean;
+  /** Apple Pay button shown on this merchant's payment pages (admin switch, off by default). */
+  isApplePayEnabled?: boolean;
   currencies?: string[];
 }

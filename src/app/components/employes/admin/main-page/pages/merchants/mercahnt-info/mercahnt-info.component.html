@@ -294,6 +294,19 @@
           </div>
 
           <div class="bl">
+            <div class="name">Apple Pay:&nbsp;</div>
+            <div class="data">
+              <input
+                (change)="changeApplePayStatus($event)"
+                class="form-check-input"
+                [checked]="merchant?.isApplePayEnabled"
+                type="checkbox"
+                title="Show the Apple Pay button on this merchant's payment pages"
+              />
+            </div>
+          </div>
+
+          <div class="bl">
             <div class="name">Google Pay:&nbsp;</div>
             <div class="data">
               <input

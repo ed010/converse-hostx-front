@@ -31,6 +31,11 @@ export class ApplePayService {
     );
   }
 
+  /** Admin: show or hide the Apple Pay button for one merchant. */
+  setMerchantEnabled(merchantId: number, enabled: boolean) {
+    return this.http.put("/api/v1/Merchant/SetApplePay", { merchantId, enabled });
+  }
+
   validateMerchant(merchantIdentifier: string) {
     return this.http.post<any>("/api/Payment/GetSessionToken", {
       merchantIdentifier,
