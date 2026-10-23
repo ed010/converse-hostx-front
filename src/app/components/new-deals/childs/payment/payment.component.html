@@ -14,7 +14,7 @@
             [ngClass]="{ 'amount-error': amountError }"
             type="text"
             class="price"
-            suffix=" ֏"
+            [suffix]="' ' + ((transaction?.currency | currencySymbol) || '֏')"
             mask="separator.2"
             thousandSeparator=","
             [(ngModel)]="changedAmount"
@@ -127,38 +127,43 @@
         </button>
       </div>
 
+      <!-- One card for the wallets; with both on they sit side by side under a title. Google Pay stays hidden until the component reports it can be used in this browser. -->
       <div
-        *ngIf="showApplePayButton"
-        class="info-box apple-pay-cont"
-        style="width: 100%"
+        *ngIf="showApplePayButton || googlePayEnabled"
+        class="info-box wallets-cont"
+        [class.both]="showApplePayButton && showGooglePayButton"
+        [style.display]="showApplePayButton || showGooglePayButton ? '' : 'none'"
       >
-        <div class="apple-pay" style="width: 100%">
-          <app-apple-pay
-            style="width: 100%"
-            [merchantId]="merchantInfo.merchant"
-            [transactionHash]="transferId"
-            [transactionAmount]="transaction.amount"
-            [transactionComment]="transaction.comment"
-            [canRedirectToURL]="canRedirectToURL"
-            [currency]="transaction.currency"
-            (onApplePayCompleted)="onApplePayCompleted($event)"
-          ></app-apple-pay>
+        <p *ngIf="showApplePayButton && showGooglePayButton" class="wallets-title">
+          {{ "deals.QUICK_PAY_WITH" | translate }}
+        </p>
+        <div class="wallets">
+          <div *ngIf="showApplePayButton" class="wallet apple-pay">
+            <app-apple-pay
+              style="width: 100%"
+              [merchantId]="merchantInfo.merchant"
+              [transactionHash]="transferId"
+              [transactionAmount]="transaction.amount"
+              [transactionComment]="transaction.comment"
+              [canRedirectToURL]="canRedirectToURL"
+              [currency]="transaction.currency"
+              (onApplePayCompleted)="onApplePayCompleted($event)"
+            ></app-apple-pay>
+          </div>
+          <div
+            *ngIf="googlePayEnabled"
+            class="wallet"
+            [style.display]="showGooglePayButton ? '' : 'none'"
+          >
+            <app-google-pay
+              style="width: 100%"
+              [transactionHash]="transferId"
+              [canRedirectToURL]="canRedirectToURL"
+              [compact]="showApplePayButton"
+              (availabilityChange)="onGooglePayAvailabilityChange($event)"
+            ></app-google-pay>
+          </div>
         </div>
-      </div>
-
-      <!-- Stays hidden until the component reports that Google Pay can be used for this transaction in this browser. -->
-      <div
-        *ngIf="googlePayEnabled"
-        class="info-box google-pay-cont"
-        style="width: 100%"
-        [style.display]="showGooglePayButton ? '' : 'none'"
-      >
-        <app-google-pay
-          style="width: 100%"
-          [transactionHash]="transferId"
-          [canRedirectToURL]="canRedirectToURL"
-          (availabilityChange)="onGooglePayAvailabilityChange($event)"
-        ></app-google-pay>
       </div>
 
       <!-- <div class="info-box converse_pay_cont">

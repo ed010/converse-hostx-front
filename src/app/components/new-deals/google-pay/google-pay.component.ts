@@ -32,6 +32,8 @@ const BASE_REQUEST = { apiVersion: 2, apiVersionMinor: 0 };
 export class GooglePayComponent implements OnInit {
   @Input() transactionHash!: string;
   @Input() canRedirectToURL!: boolean;
+  /** Half-width next to Apple Pay: logo-only button. */
+  @Input() compact = false;
 
   @Output() availabilityChange = new EventEmitter<boolean>();
 
@@ -84,7 +86,7 @@ export class GooglePayComponent implements OnInit {
       onClick: () => this.onGooglePayClicked(),
       allowedPaymentMethods: [this.cardPaymentMethod()],
       buttonColor: "black",
-      buttonType: "pay",
+      buttonType: this.compact ? "plain" : "pay",
       buttonSizeMode: "fill",
       buttonLocale: "en",
     });

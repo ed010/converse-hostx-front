@@ -6,7 +6,7 @@
           <p class="brand_name">
             {{ transaction?.merchantName }}
           </p>
-          <p class="price">{{ transaction?.amount }} ֏</p>
+          <p class="price">{{ transaction?.amount }} {{ (transaction?.currency | currencySymbol) || "֏" }}</p>
         </div>
         <div class="right">
           <ng-container *ngIf="!transaction || !transaction.logo || transaction.logo.trim() === ''">
