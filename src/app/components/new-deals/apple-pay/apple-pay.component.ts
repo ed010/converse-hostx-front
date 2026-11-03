@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { ApplePayComponentResponse } from "src/app/models/apple-pay/ApplePayComponentResponse.model";
 import { ProcessApplePay } from "src/app/models/apple-pay/ProcessApplePay.model";
 import { ApplePayService } from "src/app/services/applePay.service";
+import { isRecipientEmailOk } from "src/app/utils/email.util";
 import { resolvePaymentRedirectUrl } from "src/app/utils/payment-redirect.util";
 
 interface ApplePaySessionRequest {
@@ -28,8 +29,12 @@ export class ApplePayComponent implements OnInit {
   @Input() transactionAmount!: string;
   @Input() transactionComment!: string;
   @Input() canRedirectToURL!: boolean;
+  /** Receipt address; undefined when the payer did not ask for a receipt. */
+  @Input() recipientEmail?: string;
 
   @Output() onApplePayCompleted = new EventEmitter<ApplePayComponentResponse>();
+  /** The receipt address is bad, so the sheet was not opened. */
+  @Output() invalidRecipientEmail = new EventEmitter<void>();
 
   constructor(private applePayService: ApplePayService) {}
 
@@ -40,6 +45,11 @@ export class ApplePayComponent implements OnInit {
   applePayClicked() {
     if (!ApplePaySession) {
       alert("Apple Pay is not supported on this device/browser.");
+      return;
+    }
+    // Checked before the sheet: once the payer approves, a bad address only comes back as a 400.
+    if (!isRecipientEmailOk(this.recipientEmail)) {
+      this.invalidRecipientEmail.emit();
       return;
     }
 
@@ -74,6 +84,7 @@ export class ApplePayComponent implements OnInit {
     session.onpaymentauthorized = (event) => {
       let payload: any = event.payment.token;
       payload.transactionHash = this.transactionHash;
+      payload.recipientEmail = this.recipientEmail;
       this.processApplePayTransaction(payload)
         .then((res) => {
           let result: any;

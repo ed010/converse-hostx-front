@@ -11,12 +11,14 @@ import { TranslateService } from "@ngx-translate/core";
 import { Subscription } from "rxjs";
 import { ApplePayComponentResponse } from "src/app/models/apple-pay/ApplePayComponentResponse.model";
 import { MerchantPaymentInfoModel } from "src/app/models/merchantInfoPayment.model";
+import { PaymentPayRequest } from "src/app/models/payment-pay-request.model";
 import { readPayApiErrorMessage } from "src/app/models/payment-pay-response.model";
 import { Transactions } from "src/app/models/transactions.model";
 import { DataExchangeService } from "src/app/services/dataExchange.service";
 import { PaymentService } from "src/app/services/payment.service";
 import { SignalRService } from "src/app/services/signalR.service";
 import { normalizeLanguageCode } from "src/app/utils/language.util";
+import { isRecipientEmailOk } from "src/app/utils/email.util";
 import { resolvePaymentRedirectUrl } from "src/app/utils/payment-redirect.util";
 
 @Component({
@@ -26,6 +28,8 @@ import { resolvePaymentRedirectUrl } from "src/app/utils/payment-redirect.util";
 })
 export class PaymentComponent implements OnInit, OnDestroy {
   showEmailField: boolean = false;
+  receiptEmail: string = "";
+  emailError: boolean = false;
   transferId!: string;
 
   transaction!: Transactions;
@@ -136,11 +140,25 @@ export class PaymentComponent implements OnInit, OnDestroy {
     );
   }
 
+  /** Receipt address sent with every payment: undefined while the switch is off. */
+  get recipientEmail(): string | undefined {
+    return this.showEmailField ? (this.receiptEmail || "").trim() : undefined;
+  }
+
+  /** Shows the field error; false when the payment must not start. */
+  checkReceiptEmail(): boolean {
+    this.emailError = !isRecipientEmailOk(this.recipientEmail);
+    return !this.emailError;
+  }
+
   checkAmount() {
     console.log(typeof this.changedAmount);
   }
 
   payByCard() {
+    if (!this.checkReceiptEmail()) {
+      return;
+    }
     this.isSmallLoading = true;
     if (this.transaction.amount == 0) {
       if (
@@ -170,10 +188,11 @@ export class PaymentComponent implements OnInit, OnDestroy {
       this.transaction.amount == 0
         ? Number.parseInt(this.changedAmount, 10)
         : this.transaction.amount;
-    const payBody = {
+    const payBody: PaymentPayRequest = {
       amount,
       transferId: Number(this.transaction.transactionId ?? 0),
       comment: this.newComment != null ? String(this.newComment) : "",
+      recipientEmail: this.recipientEmail,
     };
     this.paymentService.pay(payBody).subscribe(
       (res) => {

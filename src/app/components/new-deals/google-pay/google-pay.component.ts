@@ -13,6 +13,7 @@ import {
   ProcessGooglePayResponse,
 } from "src/app/models/google-pay/google-pay.model";
 import { GooglePayService } from "src/app/services/googlePay.service";
+import { isRecipientEmailOk } from "src/app/utils/email.util";
 import { resolvePaymentRedirectUrl } from "src/app/utils/payment-redirect.util";
 
 const BASE_REQUEST = { apiVersion: 2, apiVersionMinor: 0 };
@@ -34,8 +35,12 @@ export class GooglePayComponent implements OnInit {
   @Input() canRedirectToURL!: boolean;
   /** Half-width next to Apple Pay: logo-only button. */
   @Input() compact = false;
+  /** Receipt address; undefined when the payer did not ask for a receipt. */
+  @Input() recipientEmail?: string;
 
   @Output() availabilityChange = new EventEmitter<boolean>();
+  /** The receipt address is bad, so the sheet was not opened. */
+  @Output() invalidRecipientEmail = new EventEmitter<void>();
 
   @ViewChild("buttonContainer", { static: true })
   buttonContainer!: ElementRef<HTMLDivElement>;
@@ -96,6 +101,11 @@ export class GooglePayComponent implements OnInit {
 
   /** Must call loadPaymentData synchronously, so the click still counts as a user gesture. */
   private onGooglePayClicked() {
+    // Checked before the sheet: once the payer approves, a bad address only comes back as a 400.
+    if (!isRecipientEmailOk(this.recipientEmail)) {
+      this.invalidRecipientEmail.emit();
+      return;
+    }
     this.result = null;
     this.failedRedirectUrl = null;
     this.paymentsClient
@@ -132,6 +142,7 @@ export class GooglePayComponent implements OnInit {
         .processGooglePayTransaction({
           transactionHash: this.transactionHash,
           paymentToken: paymentData.paymentMethodData.tokenizationData.token,
+          recipientEmail: this.recipientEmail,
         })
         .toPromise();
       if (res?.status === "Success" || res?.status === "Redirect") {

@@ -107,11 +107,15 @@ p {
             align-items: center;
             justify-content: space-between;
 
+            &.error {
+              border-color: #e5484d;
+            }
+
             .input_container {
               position: relative;
               display: flex;
               flex-direction: column;
-              width: 90%;
+              width: 100%;
 
               //   &:focus-within label {
               //     transform: translate(0, 5px) scale(0.8);
@@ -128,7 +132,7 @@ p {
                 position: absolute;
                 pointer-events: none;
                 display: flex;
-                transform: translate(0, 20px) scale(1);
+                transform: translate(0, 8px) scale(0.875);
                 transform-origin: top left;
                 transition: 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;
                 color: #677482;
@@ -144,7 +148,9 @@ p {
               input {
                 border-radius: 12px;
                 border: none;
-                padding: 37px 16px 4px 16px;
+                width: 100%;
+                padding: 26px 16px 6px 16px;
+                color: #070b11;
                 font-size: 16px;
                 line-height: 1;
                 outline: none;
@@ -153,6 +159,11 @@ p {
                 background-color: rgb(255, 255, 255, 0);
               }
             }
+          }
+          .email_error {
+            margin-top: 4px;
+            font-size: 12px;
+            color: #e5484d;
           }
         }
       }

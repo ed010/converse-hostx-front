@@ -73,22 +73,36 @@
         </div>
       </div>
 
-      <!-- <div class="info-box send_emil_cont">
+      <div class="info-box send_emil_cont">
         <div class="receiptEmail">
-          <p>Send payment receipt by email</p>
-          <mat-slide-toggle [(ngModel)]="showEmailField"></mat-slide-toggle>
+          <p>{{ "deals.send" | translate }}</p>
+          <mat-slide-toggle
+            [(ngModel)]="showEmailField"
+            (ngModelChange)="emailError = false"
+          ></mat-slide-toggle>
         </div>
         <div class="checked" [ngClass]="{ show: showEmailField }">
-          <div class="continer">
+          <div class="continer" [class.error]="emailError">
             <div class="input_container">
-              <input type="text" style="padding-bottom: 24px" />
-              <label for="">
-                <p>Email</p>
+              <input
+                id="receiptEmail"
+                type="email"
+                inputmode="email"
+                autocomplete="email"
+                [(ngModel)]="receiptEmail"
+                (ngModelChange)="emailError = false"
+                (blur)="checkReceiptEmail()"
+              />
+              <label for="receiptEmail">
+                <p>{{ "deals.mail" | translate }}</p>
               </label>
             </div>
           </div>
+          <p *ngIf="emailError" class="email_error">
+            {{ "transactions.emailerror" | translate }}
+          </p>
         </div>
-      </div> -->
+      </div>
 
       <ng-container *ngIf="transaction.canChangeComment">
         <div class="info-box converse_pay_cont">
@@ -147,6 +161,8 @@
               [transactionComment]="transaction.comment"
               [canRedirectToURL]="canRedirectToURL"
               [currency]="transaction.currency"
+              [recipientEmail]="recipientEmail"
+              (invalidRecipientEmail)="emailError = true"
               (onApplePayCompleted)="onApplePayCompleted($event)"
             ></app-apple-pay>
           </div>
@@ -160,6 +176,8 @@
               [transactionHash]="transferId"
               [canRedirectToURL]="canRedirectToURL"
               [compact]="showApplePayButton"
+              [recipientEmail]="recipientEmail"
+              (invalidRecipientEmail)="emailError = true"
               (availabilityChange)="onGooglePayAvailabilityChange($event)"
             ></app-google-pay>
           </div>

@@ -18,6 +18,8 @@ export interface ProcessGooglePay {
   transactionHash: string;
   /** Google's paymentMethodData.tokenizationData.token, unmodified. */
   paymentToken: string;
+  /** Receipt address; omitted when the payer did not ask for a receipt. */
+  recipientEmail?: string;
 }
 
 /**
