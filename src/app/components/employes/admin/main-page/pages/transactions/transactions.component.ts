@@ -5,8 +5,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Transactionfilter } from 'src/app/models/transactionfilter';
 import { Transactions } from 'src/app/models/transactions.model';
 import { ShowTransactionsService } from 'src/app/services/showTransactions.service';
-import { DatePipe } from '@angular/common';
-import { toGmt4 } from 'src/app/pipes/gmt4-date.pipe';
+import { DatePipe, formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-transactions',
@@ -675,7 +674,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       return "-";
     }
 
-    return toGmt4(date, "dd/MM/yy HH:mm", this.locale);
+    return formatDate(date, "dd/MM/yy HH:mm", this.locale);
   }
 
   checkTransactionStatus(transaction: Transactions) {
