@@ -220,14 +220,6 @@ export class LogsComponent implements OnInit {
     }
   }
 
-  formatUtc(value: string): string {
-    if (!value) {
-      return "";
-    }
-    const hasZone = /Z|[+-]\d{2}:?\d{2}$/.test(value);
-    return hasZone ? value : value + "Z";
-  }
-
   private buildFilter(): LogsFilter {
     const params: LogsFilter = {
       page: this.page,
@@ -238,12 +230,6 @@ export class LogsComponent implements OnInit {
       let value = (this.filter as any)[key];
       if (value === null || value === undefined || value === "") {
         return;
-      }
-      if ((key === "from" || key === "to") && typeof value === "string") {
-        const asDate = new Date(value);
-        if (!isNaN(asDate.getTime())) {
-          value = asDate.toISOString();
-        }
       }
       (params as any)[key] = value;
     });

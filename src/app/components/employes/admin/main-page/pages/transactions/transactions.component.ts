@@ -5,7 +5,8 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Transactionfilter } from 'src/app/models/transactionfilter';
 import { Transactions } from 'src/app/models/transactions.model';
 import { ShowTransactionsService } from 'src/app/services/showTransactions.service';
-import { DatePipe, formatDate } from '@angular/common';
+import { DatePipe } from '@angular/common';
+import { gmt4DayEnd, gmt4DayStart, parseFilterDay, toGmt4 } from 'src/app/pipes/gmt4-date.pipe';
 
 @Component({
   selector: 'app-transactions',
@@ -490,31 +491,21 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     if (!value) {
       return null;
     }
-    const parsed = new Date(value);
-    if (Number.isNaN(parsed.getTime())) {
-      return null;
-    }
-    return new Date(
-      parsed.getUTCFullYear(),
-      parsed.getUTCMonth(),
-      parsed.getUTCDate()
-    );
+    return parseFilterDay(value);
   }
 
   private isLegacyCreateDateStart(value: string): boolean {
     return !value || value.startsWith("2018-03-24T10:49");
   }
 
+  /** Start of the picked day as sent to the API (GMT+4 clock, no zone), e.g. 2026-06-21 → 2026-06-21T00:00:00 */
   private toUtcMidnightIso(date: Date): string {
-    return new Date(
-      Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
-    ).toISOString();
+    return gmt4DayStart(date);
   }
 
+  /** End of the picked day as sent to the API, e.g. 2026-06-26 → 2026-06-26T23:59:59 */
   private toUtcEndOfDayIso(date: Date): string {
-    return new Date(
-      Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 0, 0)
-    ).toISOString();
+    return gmt4DayEnd(date);
   }
 
   aaa(){
@@ -674,7 +665,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       return "-";
     }
 
-    return formatDate(date, "dd/MM/yy HH:mm", this.locale);
+    return toGmt4(date, "dd/MM/yy HH:mm", this.locale);
   }
 
   checkTransactionStatus(transaction: Transactions) {

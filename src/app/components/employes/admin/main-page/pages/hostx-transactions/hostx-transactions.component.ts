@@ -6,6 +6,7 @@ import { Transactionfilter } from 'src/app/models/transactionfilter';
 import { Transactions } from 'src/app/models/transactions.model';
 import { TransactionsToExcel } from 'src/app/models/transactionsToExcel';
 import { ShowTransactionsService } from 'src/app/services/showTransactions.service';
+import { gmt4DayEnd, gmt4DayStart } from 'src/app/pipes/gmt4-date.pipe';
 
 
 
@@ -202,11 +203,10 @@ export class HostxTransactionsComponent implements OnInit {
     if(end.getFullYear() == 1970)
     {
       end = new Date(start)
-      end.setDate(start.getDate())
     }
-    end.setDate(end.getDate() + 2)
-    this.filterSearch.creationDateStart = start.toISOString()
-    this.filterSearch.creationDateEnd = end.toISOString()
+    // Whole picked days, sent without a zone (the API reads them as GMT+4).
+    this.filterSearch.creationDateStart = gmt4DayStart(start)
+    this.filterSearch.creationDateEnd = gmt4DayEnd(end)
     this.filter()
     // this.transactionsForDateFilter = this.transactions.filter((filter_data) => {
     //   let object_start_time = new Date(filter_data.createDate).getTime();
@@ -235,13 +235,9 @@ export class HostxTransactionsComponent implements OnInit {
     if(end.getFullYear() == 1970)
     {
       end = new Date(start)
-      end.setDate(start.getDate())
     }
-    end.setDate(end.getDate() + 2)
-    this.filterSearch.paymentDateStart = start.toISOString()
-    this.filterSearch.paymentDateEnd = end.toISOString()
-    console.log(this.filterSearch.paymentDateStart)
-    console.log(this.filterSearch.paymentDateEnd)
+    this.filterSearch.paymentDateStart = gmt4DayStart(start)
+    this.filterSearch.paymentDateEnd = gmt4DayEnd(end)
     this.filter()
     // this.transactionsForDateFilter = this.transactions.filter((filter_data) => {
     //   let object_start_time = new Date(filter_data.createDate).getTime();

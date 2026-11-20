@@ -242,8 +242,8 @@
           <tr>
           <tr *ngFor="let transaction of transactions">
             <th *ngIf="show_transactionId" scope="row">{{transaction.transactionId}}</th>
-            <td *ngIf="show_createDate">{{transaction.createDate | date: 'dd/MM/yy HH:mm'}}</td>
-            <td *ngIf="show_transactionDate">{{transaction.transactionDate | date: 'dd/MM/yy HH:mm'}}</td>
+            <td *ngIf="show_createDate">{{transaction.createDate | gmt4: 'dd/MM/yy HH:mm'}}</td>
+            <td *ngIf="show_transactionDate">{{transaction.transactionDate | gmt4: 'dd/MM/yy HH:mm'}}</td>
             <td *ngIf="show_trxnType">{{transaction.transactionType == 0 ? 'Debet' : 'Credit'}}</td>
             <td *ngIf="show_transactionStatus">{{transaction.transactionStatus == 2 ? 'Paid' : 'Reversed'}}</td>
             <td *ngIf="show_amount">{{transaction.amount}}</td>

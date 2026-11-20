@@ -25,6 +25,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { ActivatedRoute, Params, Router } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
+import { gmt4DayEnd, gmt4DayStart } from "src/app/pipes/gmt4-date.pipe";
 
 @Component({
   selector: "app-user-transaction",
@@ -665,18 +666,14 @@ export class UserTransactionComponent
     this.filter();
   }
 
-  /** Sends calendar date as UTC midnight, e.g. 2026-06-21 → 2026-06-21T00:00:00.000Z */
+  /** Start of the picked day as sent to the API (GMT+4 clock, no zone), e.g. 2026-06-21 → 2026-06-21T00:00:00 */
   private toUtcMidnightIso(date: Date): string {
-    return new Date(
-      Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
-    ).toISOString();
+    return gmt4DayStart(date);
   }
 
-  /** End of selected calendar day in UTC, e.g. 2026-06-26 → 2026-06-26T23:59:00.000Z */
+  /** End of the picked day as sent to the API, e.g. 2026-06-26 → 2026-06-26T23:59:59 */
   private toUtcEndOfDayIso(date: Date): string {
-    return new Date(
-      Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 0, 0)
-    ).toISOString();
+    return gmt4DayEnd(date);
   }
 
   private buildDefaultApiDateFilters(): { start: string; end: string } {

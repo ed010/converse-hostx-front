@@ -63,7 +63,7 @@
 
     <div class="actions">
       <span class="hint small" *ngIf="settings.updatedAt">
-        Last saved {{ settings.updatedAt | date: 'dd.MM.yyyy HH:mm' }}
+        Last saved {{ settings.updatedAt | gmt4: 'dd.MM.yyyy HH:mm' }}
         <ng-container *ngIf="settings.updatedBy">by employee #{{ settings.updatedBy }}</ng-container>
       </span>
       <button type="submit" class="btn my-btn-color" [disabled]="saving">
