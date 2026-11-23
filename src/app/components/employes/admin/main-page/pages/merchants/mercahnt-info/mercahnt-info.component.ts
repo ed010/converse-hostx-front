@@ -403,9 +403,22 @@ export class MercahntInfoComponent implements OnInit, OnDestroy {
     }
     this.applePayService
       .registerMerchant(registerMerchantApplePayBody)
-      .subscribe((res) => {
-        this.registerMerchantDialog.close();
-      });
+      .subscribe(
+        (res) => {
+          this.registerMerchantDialog.close();
+        },
+        (err) => {
+          let errmer = err?.error?.errorMessage ?? err?.error?.message ?? "Apple Pay registration failed";
+          // Apple refused the registration, so the backend switched Apple Pay off; it can be ticked back on.
+          if (err?.error?.errorCode === "REGISTER_MERCHANT_TO_APPLEPAY_ERROR") {
+            this.merchant.isApplePayEnabled = false;
+            errmer += ". Apple Pay was switched off for this merchant.";
+          }
+          this._snackBar.open(errmer, "", {
+            duration: 7000,
+          });
+        }
+      );
   }
 
   ngOnDestroy(): void {
