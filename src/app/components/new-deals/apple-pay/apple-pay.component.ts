@@ -26,13 +26,16 @@ export class ApplePayComponent implements OnInit {
   @Input() merchantId!: number;
   @Input() transactionHash!: string;
   @Input() currency!: string;
-  @Input() transactionAmount!: string;
+  /** Shown in the sheet and charged: the link's amount, or the one the payer typed; null while that is not valid. */
+  @Input() transactionAmount!: number | null;
   @Input() transactionComment!: string;
   @Input() canRedirectToURL!: boolean;
   /** Receipt address; undefined when the payer did not ask for a receipt. */
   @Input() recipientEmail?: string;
 
   @Output() onApplePayCompleted = new EventEmitter<ApplePayComponentResponse>();
+  /** No valid amount to pay (an open-amount link with nothing typed), so the sheet was not opened. */
+  @Output() invalidAmount = new EventEmitter<void>();
   /** The receipt address is bad, so the sheet was not opened. */
   @Output() invalidRecipientEmail = new EventEmitter<void>();
 
@@ -45,6 +48,12 @@ export class ApplePayComponent implements OnInit {
   applePayClicked() {
     if (!ApplePaySession) {
       alert("Apple Pay is not supported on this device/browser.");
+      return;
+    }
+    // The amount the sheet shows and the backend charges, fixed at the click.
+    const amount = this.transactionAmount;
+    if (amount === null || amount === undefined) {
+      this.invalidAmount.emit();
       return;
     }
     // Checked before the sheet: once the payer approves, a bad address only comes back as a 400.
@@ -61,7 +70,7 @@ export class ApplePayComponent implements OnInit {
       total: {
         label: this.transactionComment,
         type: "final",
-        amount: this.transactionAmount,
+        amount: String(amount),
       },
     };
 
@@ -85,6 +94,7 @@ export class ApplePayComponent implements OnInit {
       let payload: any = event.payment.token;
       payload.transactionHash = this.transactionHash;
       payload.recipientEmail = this.recipientEmail;
+      payload.amount = amount;
       this.processApplePayTransaction(payload)
         .then((res) => {
           let result: any;

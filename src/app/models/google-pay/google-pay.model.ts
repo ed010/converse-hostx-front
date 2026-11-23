@@ -20,6 +20,8 @@ export interface ProcessGooglePay {
   paymentToken: string;
   /** Receipt address; omitted when the payer did not ask for a receipt. */
   recipientEmail?: string;
+  /** The amount the sheet showed: charged for an open-amount link, must match a fixed one. */
+  amount: number;
 }
 
 /**

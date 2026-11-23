@@ -21,6 +21,9 @@ import { normalizeLanguageCode } from "src/app/utils/language.util";
 import { isRecipientEmailOk } from "src/app/utils/email.util";
 import { resolvePaymentRedirectUrl } from "src/app/utils/payment-redirect.util";
 
+/** Highest amount (exclusive) a payer may type into an open-amount link. */
+const MAX_TYPED_AMOUNT = 100000000000;
+
 @Component({
   selector: "app-payment",
   templateUrl: "./payment.component.html",
@@ -155,41 +158,45 @@ export class PaymentComponent implements OnInit, OnDestroy {
     console.log(typeof this.changedAmount);
   }
 
+  /** The amount typed into an open-amount (0) link's field; null while it is missing, 0 or too large. */
+  private get typedAmount(): number | null {
+    const typed = Number.parseInt(this.changedAmount, 10);
+    return typed > 0 && typed < MAX_TYPED_AMOUNT ? typed : null;
+  }
+
+  /**
+   * What the payer is charged, by card, Apple Pay or Google Pay: the link's own amount, or for an open-amount
+   * link the typed one (null until it is valid).
+   */
+  get payAmount(): number | null {
+    return this.transaction.amount != 0 ? this.transaction.amount : this.typedAmount;
+  }
+
+  /** Shows why the typed amount can't be paid; false when the payment must not start. */
+  checkTypedAmount(): boolean {
+    if (this.payAmount !== null) {
+      return true;
+    }
+    if (Number.parseInt(this.changedAmount, 10) >= MAX_TYPED_AMOUNT) {
+      this._snackBar.open("Max amount will be less than 100,000,000,000", "", {
+        duration: 7000,
+      });
+    } else {
+      this.amountError = true;
+    }
+    return false;
+  }
+
   payByCard() {
     if (!this.checkReceiptEmail()) {
       return;
     }
-    this.isSmallLoading = true;
-    if (this.transaction.amount == 0) {
-      if (
-        Number.parseInt(this.changedAmount) == 0 ||
-        Number.parseInt(this.changedAmount) == undefined ||
-        Number.isNaN(this.changedAmount) ||
-        this.changedAmount == null
-      ) {
-        this.amountError = true;
-        this.isSmallLoading = false;
-        return;
-      }
-      if (this.changedAmount.toString().length > 11) {
-        this._snackBar.open(
-          "Max amount will be less than 100,000,000,000",
-          "",
-          {
-            duration: 7000,
-          }
-        );
-        this.isSmallLoading = false;
-        return;
-      }
+    if (!this.checkTypedAmount()) {
+      return;
     }
-
-    const amount =
-      this.transaction.amount == 0
-        ? Number.parseInt(this.changedAmount, 10)
-        : this.transaction.amount;
+    this.isSmallLoading = true;
     const payBody: PaymentPayRequest = {
-      amount,
+      amount: this.payAmount,
       transferId: Number(this.transaction.transactionId ?? 0),
       comment: this.newComment != null ? String(this.newComment) : "",
       recipientEmail: this.recipientEmail,

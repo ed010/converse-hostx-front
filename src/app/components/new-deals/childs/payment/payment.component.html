@@ -157,11 +157,12 @@
               style="width: 100%"
               [merchantId]="merchantInfo.merchant"
               [transactionHash]="transferId"
-              [transactionAmount]="transaction.amount"
+              [transactionAmount]="payAmount"
               [transactionComment]="transaction.comment"
               [canRedirectToURL]="canRedirectToURL"
               [currency]="transaction.currency"
               [recipientEmail]="recipientEmail"
+              (invalidAmount)="checkTypedAmount()"
               (invalidRecipientEmail)="emailError = true"
               (onApplePayCompleted)="onApplePayCompleted($event)"
             ></app-apple-pay>
@@ -176,7 +177,9 @@
               [transactionHash]="transferId"
               [canRedirectToURL]="canRedirectToURL"
               [compact]="showApplePayButton"
+              [amount]="payAmount"
               [recipientEmail]="recipientEmail"
+              (invalidAmount)="checkTypedAmount()"
               (invalidRecipientEmail)="emailError = true"
               (availabilityChange)="onGooglePayAvailabilityChange($event)"
             ></app-google-pay>

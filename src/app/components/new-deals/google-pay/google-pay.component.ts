@@ -35,10 +35,14 @@ export class GooglePayComponent implements OnInit {
   @Input() canRedirectToURL!: boolean;
   /** Half-width next to Apple Pay: logo-only button. */
   @Input() compact = false;
+  /** Shown in the sheet and charged: the link's amount, or the one the payer typed; null while that is not valid. */
+  @Input() amount: number | null = null;
   /** Receipt address; undefined when the payer did not ask for a receipt. */
   @Input() recipientEmail?: string;
 
   @Output() availabilityChange = new EventEmitter<boolean>();
+  /** No valid amount to pay (an open-amount link with nothing typed), so the sheet was not opened. */
+  @Output() invalidAmount = new EventEmitter<void>();
   /** The receipt address is bad, so the sheet was not opened. */
   @Output() invalidRecipientEmail = new EventEmitter<void>();
 
@@ -47,6 +51,8 @@ export class GooglePayComponent implements OnInit {
 
   private config!: GooglePayConfig;
   private paymentsClient!: google.payments.api.PaymentsClient;
+  /** The amount shown in the open sheet, sent with its token. */
+  private sheetAmount: number | null = null;
   /** Result of the payment authorized in the sheet, acted on once the sheet closes. */
   private result: ProcessGooglePayResponse | null = null;
   /** Partner returnUrl of the last declined attempt (wallet page only), followed if the payer closes the sheet. */
@@ -101,6 +107,10 @@ export class GooglePayComponent implements OnInit {
 
   /** Must call loadPaymentData synchronously, so the click still counts as a user gesture. */
   private onGooglePayClicked() {
+    if (this.amount === null || this.amount === undefined) {
+      this.invalidAmount.emit();
+      return;
+    }
     // Checked before the sheet: once the payer approves, a bad address only comes back as a 400.
     if (!isRecipientEmailOk(this.recipientEmail)) {
       this.invalidRecipientEmail.emit();
@@ -108,6 +118,7 @@ export class GooglePayComponent implements OnInit {
     }
     this.result = null;
     this.failedRedirectUrl = null;
+    this.sheetAmount = this.amount;
     this.paymentsClient
       .loadPaymentData({
         ...BASE_REQUEST,
@@ -118,7 +129,7 @@ export class GooglePayComponent implements OnInit {
         },
         transactionInfo: {
           totalPriceStatus: "FINAL",
-          totalPrice: this.config.totalPrice,
+          totalPrice: this.sheetAmount.toFixed(2),
           currencyCode: this.config.currencyCode,
           countryCode: this.config.countryCode,
         },
@@ -143,6 +154,7 @@ export class GooglePayComponent implements OnInit {
           transactionHash: this.transactionHash,
           paymentToken: paymentData.paymentMethodData.tokenizationData.token,
           recipientEmail: this.recipientEmail,
+          amount: this.sheetAmount,
         })
         .toPromise();
       if (res?.status === "Success" || res?.status === "Redirect") {
